@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web Animations 1.0</title>
+    <meta http-equiv='Content-Type' content='text/html;charset=utf-8'/>
+    <script src='http://dev.w3.org/2009/dap/ReSpec.js/js/respec.js'
+      class='remove'></script>
+    <script class='remove'>
+      var respecConfig = {
+          // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use
+          // ED.
+          specStatus: "unofficial",
+
+          // the specification's short name, as in
+          // http://www.w3.org/TR/short-name/
+          // shortName:            "web-anim",
+
+          // if your specification has a subtitle that goes below the main
+          // formal title, define it here
+          // subtitle   :  "an excellent document",
+
+          // if you wish the publication date to be other than today, set this
+          // publishDate:  "2009-08-06",
+
+          // if the specification's copyright date is a range of years, specify
+          // the start date here:
+          // copyrightStart: "2005"
+
+          // if there is a previously published draft, uncomment this and set
+          // its YYYY-MM-DD date and its maturity status
+          // previousPublishDate: "1977-03-15",
+          // previousMaturity: "WD",
+
+          // if there a publicly available Editor's Draft, this is the link
+          // edDraftURI:
+          // "http://dev.w3.org/2009/dap/ReSpec.js/documentation.html",
+
+          // if this is a LCWD, uncomment and set the end of its review period
+          // lcEnd: "2009-08-05",
+
+          // if you want to have extra CSS, append them to this list
+          // it is recommended that the respec.css stylesheet be kept
+          extraCSS: ["http://dev.w3.org/2009/dap/ReSpec.js/css/respec.css"],
+
+          // editors, add as many as you like
+          // only "name" is required
+          // XXX I've only put this in because the template requires it. I'm not
+          // sure how important the order is but for now I've done it in
+          // alphabetical order
+          editors:  [
+              { name: "Brian Birtles", mailto: "bbirtles@mozilla.com",
+                company: "Mozilla", companyURL: "http://mozilla.org/" },
+              { name: "Rik Cabanier", mailto: "cabanier@adobe.com",
+                company: "Adobe Systems", companyURL: "http://www.adobe.com/" },
+              { name: "Alex Danilo", mailto: "alexd???@google.com",
+                company: "Google, Inc", companyURL: "http://www.google.com/" },
+              { name: "Shane Stephens", mailto: "shans@google.com",
+                company: "Google, Inc", companyURL: "http://www.google.com/" },
+          ],
+
+          // authors, add as many as you like.
+          // This is optional, uncomment if you have authors as well as editors.
+          // only "name" is required. Same format as editors.
+
+          //authors:  [
+          //    { name: "Your Name", url: "http://example.org/",
+          //      company: "Your Company", companyURL: "http://example.com/" },
+          //],
+
+          // XXX If we continue using ReSpec then we need to tweak it to support
+          // multiple working groups. It includes updating the patent section
+          // prose to say "groups" instead of "group" etc.
+          // name of the WG
+          // wg: "CSS Working Group (part of the Style Activity) and the SVG " +
+          //     "Working Group (part of the Graphics Activity)",
+
+          // URI of the public WG page
+          // wgURI: "http://www.w3.org/Graphics/fx/",
+
+          // name (without the @w3c.org) of the public mailing to which comments
+          // are due
+          wgPublicList: "public-fx",
+
+          // URI of the patent status for this WG, for Rec-track documents
+          // !!!! IMPORTANT !!!!
+          // This is important for Rec-track documents, do not copy a patent URI
+          // from a random document unless you know what you're doing. If in
+          // doubt ask your friendly neighbourhood Team Contact.
+          wgPatentURI:  "",
+
+          noIDLSorting: true,
+          noIDLIn: true
+      };
+    </script>
+  </head>
+  <body>
+    <section id='abstract'>
+      This is the abstract for your specification.
+    </section>
+
+    <section>
+      <h2>Introduction</h2>
+      <p>
+        Your text...
+      </p>
+      <section>
+        <h3>Relationship to other specifications</h3>
+        <p>
+          CSS Transitions, CSS Animations, SVG, SMIL
+        </p>
+      </section>
+    </section>
+
+    <section>
+      <h2>The animation timeline</h2>
+      <p>
+        There is a timeline to which animations are added. What is the
+        zero-point of the time graph? When added, animations have a definite
+        start time (although such a time might be calculated based on
+        a less precise time such as when style resolution occurs).
+      </p>
+      <p>
+        Lots of pretty pictures of graphs here.
+      </p>
+      <p>
+        End-point exclusive timing
+      </p>
+      <p>
+        When does the graph start? Document load, or can it start beforehand?
+      </p>
+      <section>
+        <h3>The <code>WebAnimationTimeline</code> interface</h3>
+        <p>
+          Is this needed? The difficulty with this interface is defining it in
+          such a way so that implementations are not required to hold on to
+          every <code>WebAnimation</code> object that was ever created.
+        </p>
+        <p>
+          Or is this just the <code>WebTimeContainer</code> that corresponds to
+          the document root plus, perhaps, some extra methods for getting all
+          the current active animations etc.?
+        </p>
+        <p>
+          <dl title="interface WebAnimationTimeline : WebTimeContainer"
+            class="idl">
+            <dt>sequence&lt;WebAnimation&gt; getActiveAnimations ()</dt>
+            <dd>
+              Probably return an <code>HTMLCollection</code>-like class here.
+              i.e. a live, read-only list
+            </dd>
+            <dt>sequence&lt;WebAnimation&gt; getAnimationsForElement (Element
+            targetElement)</dt>
+            <dd>
+              Likewise here, a live, read-only list
+            </dd>
+          </dl>
+        </p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Animations in the timeline</h2>
+      <p>
+        Animations in the time graph are represented by
+        <code>WebAnimation</code> objects.
+      </p>
+      <section>
+        <h3>The <code>WebAnimation</code> interface</h3>
+        <p>
+          All the stuff in the WebTimedItem interface here should be
+          a snapshot of what was in the <code>WebAnimator</code> from which this
+          object was minted. That's not to say it's readonly though.
+          <dl title="interface WebAnimation : WebTimedItem" class="idl">
+            <dt>readonly attribute WebAnimationFunctionCollection functions</dt>
+            <dd>
+              A readonly snapshot of the animation functions copied from
+              <code>animator</code>, one per target property / attribute. As
+              with the <code>WebAnimator</code> interface, in ECMAScript you can
+              just do <code>functions["height"]</code>.
+            </dd>
+            <dt>readonly attribute WebAnimator animator</dt>
+            <dd>
+              The <code>WebAnimator</code> object from which this object was
+              minted.
+            </dd>
+            <dt>readonly attribute Element targetElement</dt>
+            <dd>
+              The element being animated by this object. Can this be null?
+              Presumably yes? i.e. this isn't an owning reference?
+            </dd>
+            <dt>void cancel ()</dt>
+            <dd>
+              Completely removes this animation from the timeline. It seems like
+              this should go on the <code>WebTimedItem</code> interface an apply
+              to containers as well but then you get in a strange state. For
+              example, <code>&lt;animate&gt;</code> maps to
+              a <code>WebAnimator</code> object so if you kill
+              a <code>WebAnimation</code> it doesn't care. But <code>&lt;g
+                animation-time-container="par"&gt;</code> maps to
+              <code>WebAnimationTimeContainer</code> so if you kill the
+              corresponding item in the timeline, how do you get that group back
+              again? Maybe <code>&lt;g&gt;</code> style containers should also
+              generate <code>WebAnimationTimeContainers</code>??? Not sure yet
+              how this works.
+            </dd>
+          </dl>
+        </p>
+        <p>
+          Describe liveness (what can you change when)
+        </p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Creating animations</h2>
+      <p>
+        <code>WebAnimation</code> objects are not created directly, but via
+        a separate <code>WebAnimator</code> object. The <code>WebAnimator</code>
+        object acts a template allowing the same set of animation parameters to
+        be used a number of times and on a number of different elements.
+      </p>
+      <section>
+        <h3>The <code>WebAnimator</code> interface</h3>
+        <p>
+          <dl title="[Constructor] interface WebAnimator" class="idl">
+            <dt>attribute float? simpleDuration</dt>
+            <dd>
+              See the description on the WebTimedItem interface.
+            </dd>
+            <dt>attribute float iterationCount</dt>
+            <dd>
+              See the description on the WebTimedItem interface.
+            </dd>
+            <dt>attribute unsigned short direction/reversing</dt>
+            <dd>
+              See the description on the WebTimedItem interface.
+            </dd>
+            <dt>attribute float startDelay</dt>
+            <dd>
+              See the description on the WebTimedItem interface.
+            </dd>
+            <dt>attribute WebAnimationFunctionCollection functions</dt>
+            <dd>
+              A series of animation functions, one per target property
+              / attribute. As with <code>HTMLCollection</code>, in ECMAScript
+              you should be able to just use <code>functions["height"]</code> to
+              get the appropriate function (rather than
+              <code>functions.nameItem("height")</code>.
+            </dd>
+            <dt>sequence&lt;WebAnimation&gt; animate (NodeList
+              targetElements)</dt>
+            <dd>
+              Creates a series of <code>WebAnimation</code> objects, one for
+              each element in <code>targetElements</code>. Once created, these
+              <code>WebAnimation</code> objects behave independently of this
+              object. Changes made to parameters here do not update animations
+              minted off this object and vice versa. 
+            </dd>
+          </dl>
+        </p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Timing animations</h2>
+      <p>
+        Explanation about timing stuff, active time, simple time etc.
+      </p>
+      <section>
+        <h3>The <code>WebTimedItem</code> interface</h3>
+        <p>
+          Represents the timing properties and methods of an element in the
+          timeline: either a <code>WebAnimation</code> or
+          a <code>WebTimeContainer</code>. Is <code>WebTimelineItem</code>
+          better? <code>WebSeekable</code>?
+        <p>
+          <dl title="interface WebTimedItem" class="idl">
+            <dt>attribute float? simpleDuration</dt>
+            <dd>
+              The duration in seconds of a single iteration. null if the
+              duration is indefinite (not sure about this--I think we need
+              adaptive duration for syncing with <code>&lt;video&gt;</code>,
+              making the <code>pace</code> feature useful etc. Do we just
+              represent this by setting <code>simpleDuration</code> to null? Or
+              might we want other possibilities in the future?)
+            </dd>
+            <dt>attribute float iterationCount</dt>
+            <dd>
+              A real number greater than or equal to 0 representing the number
+              of times to repeat the animation.
+            </dd>
+            <dt>attribute unsigned short currentIteration</dt>
+            <dd>
+              The number of iterations that have completed. Equivalent to
+              <code>floor(activeTime / simpleDuration)</code>.
+            </dd>
+            <dt>attribute unsigned short direction/reversing</dt>
+            <dd>
+              TBD. I think we want more control than just "When it finishes, go
+              backwards." We want to be able to trigger the reverse the
+              animation on demand. Maybe we can have direction here as per CSS
+              Animations and then add a parameter on <code>WebAnimator</code>
+              that runs the animation in reverse? In SVG/CSS you could specify
+              different conditions that trigger the reverse effect?
+            </dd>
+            <dt>attribute float startTime</dt>
+            <dd>
+              The time at which the animation becomes active expressed in
+              seconds relative to the parent time container.
+            </dd>
+            <dt>attribute float endTime</dt>
+            <dd>
+              The time at which the animation ceases to be active expressed in
+              seconds relative to the parent time container.
+            </dd>
+            <dt>attribute unsigned long? simpleTime</dt>
+            <dd>
+              The number of seconds that have elapsed since the start of the
+              current repeat iteration. This is equivalent to
+              <code>activeTime % simpleDuration</code>. If the animation is not
+              yet active, returns null.
+            </dd>
+            <dt>attribute unsigned long? activeTime</dt>
+            <dd>
+              The number of seconds that have elapsed since startTime. If the
+              animation is not yet active, returns null.
+            </dd>
+            <dt>attribute unsigned long startDelay</dt>
+            <dd>
+              I'm not sure about this. It seems like you should just use
+              startTime instead. Need to be careful how to define "active" and
+              so on however to get the right fill behavior.
+            </dd>
+            <dt>readonly attribute WebTimeContainer parentTimeContainer</dt>
+            <dd>
+              The parent time container
+            </dd>
+            <dt>attribute bool pauseState</dt>
+            <dd>
+              If <code>false</code>, this animation will Returns
+              <code>true</code> if this animation is currently in the paused
+              state, false otherwise. Setting this has the effect of pausing or
+              resuming the animation. If the animation is not currently active,
+              setting this attribute will affect the object if the animation
+              plays again (e.g. by calling <code>seek</code>).
+            </dd>
+            <dt>bool isPaused ()</dt>
+            <dd>
+              Returns <code>true</code> if the <code>pauseState</code> of this
+              object <em>or one of its ancestor time containers</em> is
+              <code>true</code>.
+            </dd>
+            <dt>void seek (unsigned long activeTime)</dt>
+            <dd>
+              seek
+            </dd>
+          </dl>
+        </p>
+        <p>
+          Probably want methods for getting the startTime etc. in document time
+          (i.e. in terms of the root time container). Or is it ok just to have
+          a method on the parent time container you pass your time to and it
+          does the conversion? Note that the conversion is not necessarily as
+          trivial as it seems if the parent time container is paused.
+        </p>
+        <p>
+          Probably need a way of telling if the animation is currently active
+          too. This needs a bit more thought---if an animation has finished but
+          it has a fill mode of "forwards", do we really need to keep the
+          animation object alive just for that? Maybe that's an implementation
+          detail. That implementations can use a compact way of storing
+          fill values and generate the <code>WebAnimation</code> object
+          as-needed?
+        </p>
+      </section>
+      <p>
+        Need to add:
+        <ul>
+          <li>Adaptive duration</li>
+          <li>Repeat by duration (i.e. iterationDuration)</li>
+          <li>Pre-defined timing functions, spline-based timing functions etc.
+          (want to allow a series of splines, not just four points)</li>
+          <li>Custom easing functions</li>
+          <li>Pace control (e.g. <code>pace="10px/s"</code>?)</li>
+          <li>Reversing</li>
+          <li>Speed control (only belongs on containers?)</li>
+        </ul>
+      </p>
+    </section>
+
+    <section>
+      <h2>Grouping animations and synchronization</h2>
+      <p>
+        Time containers
+      </p>
+      <p>
+        Integration with <code>&lt;video&gt;</code> etc.
+      </p>
+      <p>
+        Define API for pausing, seeking etc. on time containers. The document
+        itself should be a time container.
+      </p>
+      <section>
+        <h3>The <code>WebTimeContainer</code> interface</h3>
+        <p>
+          Add methods for adding children, removing children, converting time to
+          parent / document time. The document itself should implement this
+          interface.
+          <dl title="[Constructor] interface WebTimeContainer : WebTimedItem"
+            class="idl">
+          </dl>
+        </p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Animation values</h2>
+      <section>
+        <h3>The <code>WebAnimationFunction</code> interface</h3>
+        <p>
+          I think most of the members of the interface, perhaps all, should be
+          readonly when this object is returned from a <code>WebAnimation</code>
+          object. Objects returned from a <code>WebAnimator</code>, however,
+          are live.
+        </p>
+        <p>
+          <dl title="[Constructor] interface WebAnimationFunction" class="idl">
+            <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
+              <dd>
+                No fill
+              </dd>
+            </dt>
+            <dt>const unsigned short WEBA_FILL_FORWARDS = 1</dt>
+              <dd>
+                Fill forwards (=<code>fill="freeze"</code> in SVG speak)
+              </dd>
+            </dt>
+            <dt>const unsigned short WEBA_FILL_BACKWARDS = 2</dt>
+              <dd>
+                Fill backwards
+              </dd>
+            </dt>
+            <dt>const unsigned short WEBA_FILL_FORWARDS = 3</dt>
+              <dd>
+                Fill backwards and forwards
+              </dd>
+            </dt>
+            <dt>attribute DOMString property</dt>
+            <dd>
+              The target attribute / property. <code>property</code> is probably
+              a reserved word we should avoid though.
+            </dd>
+            <dt>attribute WebAnimationFrameList frames</dt>
+            <dd>
+              The series of values that make up this function sorted by their
+              offset within the simple duration of the animation.
+            </dd>
+            <dt>attribute unsigned short additive</dt>
+            <dd>
+              This depends how addition works
+            </dd>
+            <dt>attribute unsigned short accumulate</dt>
+            <dd>
+              This also depends how addition works
+            </dd>
+            <dt>attribute unsigned short fill</dt>
+            <dd>
+              Fill mode as specified by one of the WEBA_FILL_* constants defined
+              in this interface.
+            </dd>
+            <dt>attribute DOMString? pace</dt>
+            <dd>
+              This is just a placeholder for some kind of <i>whole-animation
+              -function</i> timing control. For example, SVG has
+              <code>calcMode="paced"</code> which looks at all the frames in the
+              animation and adjusts the timing so the pace of change is
+              constant (this is especially useful for motion on a path).<br>
+              The example here could take values <code>null</code> (default),
+              "auto", or something like "1px/s" (not sure what the datatype
+              should be here). Not sure yet how this will work with adaptive
+              duration if other animation functions use also this.
+            </dd>
+          </dl>
+        </p>
+      </section>
+      <section>
+        <h3>The <code>WebAnimationFunctionCollection</code> interface</h3>
+        <p>
+          Yeah, the name is a mouthful, but like <code>HTMLCollection</code> you
+          rarely use this directly. I'm not sure if &lsquo;collection&rsquo; is
+          the right terminology. It's basically an unordered list.
+          <dl title="interface WebAnimationFunctionCollection" class="idl">
+            <dt>readonly attribute unsigned long length</dt>
+            <dd>
+              The number of functions in the collection.
+            </dd>
+            <dt>WebAnimationFunction? item(unsigned long index)</dt>
+            <dd>
+              Gets the function at <code>index</code> if it exists. We only
+              have this so you can enumerate the list. But the danger is then
+              apps start to assume the list is in a certain order. So wherever
+              we use this we really should define that order.
+            </dd>
+            <dt>WebAnimationFunction? namedItem(DOMString propertyName)</dt>
+            <dd>
+              Returns the <code>WebAnimationFunction</code> with
+              <code>property</code> = <code>propertyName</code> or null
+              otherwise. 
+            </dd>
+            <dt>WebAnimationFunction add(WebAnimationFunction function)</dt>
+            <dd>
+              Adds <code>function</code> to the collection. If there is already
+              a function in the collection targetting the same property (do we
+              compare properties in a case-insensitive manner? After stripping
+              whitespace?) it will be removed before this is added. If
+              <code>function</code> already exists in this collection no change
+              will be made?? Does that break assumptions about order though? We
+              could just say it will be moved to the end of the list
+            </dd>
+          </dl>
+        </p>
+      </section>
+      <section>
+        <h3>The <code>WebAnimationFrame</code> interface</h3>
+        <p>
+          <dl title="[Constructor] interface WebAnimationFrame" class="idl">
+            <dt>attribute any value</dt>
+            <dd>
+              The attribute / property value for the given frame
+            </dd>
+            <dt>attribute float offset</dt>
+            <dd>
+              A value between 0 and 1 (inclusive) representing the offset within
+              the simple duration of the animation where this value should
+              appear. Ignored if we're using paced timing?<br>
+              What happens if you change it? The array returned by the
+              <code>WebAnimationFunction</code> is updated? I guess that's fine
+              if it's just an array. Any already-returned arrays wouldn't need
+              to be updated.<br>
+              What happens if you have two values with the same offset? It would
+              be nice if the result was deterministic rather than just left up
+              in the air (since the more you leave undefined, the more you let
+              the Web define it for you).
+            </dd>
+            <dt>attribute WebTimingFunction timingFunction</dt>
+            <dd>
+              The function to use for this segment. Would a string do here? E.g.
+              "ease" or "cubic-bezier(1 0 0.3 1)"? Probably not. It's a little
+              too CSS-specific for a start, and we want to allow this to
+              potentially be a function pointer.<br>
+              Ignored if we're using paced timing
+            </dd>
+          </dl>
+        </p>
+      </section>
+      <section>
+        <h3>The <code>WebAnimationFrameList</code> interface</h3>
+        <p>
+          <dl title="interface WebAnimationFrameList" class="idl">
+            <dt>readonly attribute unsigned long length</dt>
+            <dd>
+              The number of frames in the list.
+            </dd>
+            <dt>WebAnimationFrameList? item(unsigned long index)</dt>
+            <dd>
+              Returns the frame at <code>index</code> if it exists or null.
+            </dd>
+            <dt>WebAnimationFrameList? add(WebAnimationFrame frame)</dt>
+            <dd>
+              Adds <code>frame</code> to the list such that the list is sorted
+              by the offset of the frames. If there's already a frame with the
+              same offset? This one comes after?
+            </dd>
+            <dt>WebAnimationFrameList? remove(unsigned long index)</dt>
+            <dd>
+              Adds <code>frame</code> to the list such that the list is sorted
+              by the offset of the frames. If there's already a frame with the
+              same offset? This one comes after?
+            </dd>
+          </dl>
+        </p>
+        <p>
+          Not sure about the <code>remove</code> method. Do we want:
+          <ul>
+            <li><code>remove(WebAnimationFrame frame)</code>?</li>
+            <li><code>removeAtOffset(unsigned long offset)</code>?</li>
+            <li><code>itemAtOffset(unsigned long offset)</code>?</li>
+          </ul>
+        </p>
+      </section>
+      <p>
+        Need to add:
+        <ul>
+          <li>Pre-defined timing functions, spline-based timing functions etc.
+          (want to allow a series of splines, not just four points)</li>
+          <li>Custom easing functions</li>
+          <li>Pace control (e.g. <code>pace="10px/s"</code>?)</li>
+          <li>Motion on a path</li>
+          <li>General functional syntax</li>
+          <li>&lsquo;to&rsquo; animation</li>
+        </ul>
+      </p>
+      <p>
+        Somewhere we need to describe how animated values get stored in the DOM.
+        i.e. can you access them at all? what's the interaction with various
+        override stylesheets etc.
+      </p>
+      <p>
+        Need to add a way for getting animation values of motion-on-a-path
+        animations
+      </p>
+    </section>
+
+    <section>
+      <h2>Combining animations</h2>
+      <p>
+        Animation addition
+      </p>
+    </section>
+
+    <section>
+      <h2>Animation state</h2>
+      <p>
+        State machines
+      </p>
+    </section>
+
+    <section>
+      <h2>Animation events</h2>
+      <p>
+        Need to consider how to align with existing
+        <code>TransitionEvent</code>s, <code>AnimationEvent</code>s and
+        <code>TimeEvent</code>s. It might make sense to have our events inherit
+        from one or more of these interfaces or have implementations dispatch
+        both (especially if their synchronization properties differ).
+      </p>
+      <section>
+        <h3>Synchronizing event handlers</h3>
+        <p>
+          Your text...
+        </p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Animation of common data types</h2>
+      <p>
+        Need to describe how to interpolate/add both:
+        <ol>
+          <li>Integers, floats, strings etc.</li>
+          <li>CSS and SVG types (colors etc.)</li>
+          <ul><li>Support for HSL (if the colors are specified in HSL we should
+            interpolate in that notation; but it should also be possible to
+            do so regardless of how the colors are specified)</li></ul>
+        </ol>
+      </p>
+      <p>
+        For transforms I think it's defined elsewhere so we can either just
+        point to that spec, or just refer to the fact that other specs should
+        define how their types should be supported (or not) for animation.
+      </p>
+      <p>
+        Need to provide facility for smooth interpolation of arbitrary paths.
+      </p>
+    </section>
+
+    <section>
+      <h2>Animation style</h2>
+      <section>
+        <h3>The <code>transition-*</code> properties</h3>
+        <p>
+          Your text...
+        </p>
+      </section>
+      <section>
+        <h3>The <code>animation-*</code> properties</h3>
+        <p>
+          Your text...
+        </p>
+      </section>
+      <section>
+        <h3>The <code>CSSAnimator</code> interface</h3>
+        <p>
+          <dl title="interface CSSAnimator : WebAnimator" class="idl">
+          </dl>
+        </p>
+      </section>
+      <section>
+        <h3>Querying the animated style</h3>
+        <p>
+          Need to describe <code>window.getAnimatedStyle(DOMString
+            selector)</code> here.
+        </p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Animation elements</h2>
+      <section>
+        <h3>The <code>&lsquo;animate&rsquo;</code> element</h3>
+        <p>
+          Your text...
+        </p>
+      </section>
+      <section>
+        <h3>The <code>&lsquo;set&rsquo;</code> element</h3>
+        <p>
+          Your text...
+        </p>
+        <p>
+          The <code>&lsquo;animateColor&rsquo;</code> and
+          <code>&lsquo;animateTransform&rsquo;</code> elements are deprecated.
+          Can we get rid of <code>&lsquo;animateMotion&rsquo;</code> too?
+        </p>
+      </section>
+      <section>
+        <h3>The <code>SVGAnimationElement</code> interface</h3>
+        <p>
+          <dl title="interface SVGAnimationElement : WebAnimator" class="idl">
+          </dl>
+        </p>
+        <p>
+          Need to describe how to set up named animations using these elements.
+        </p>
+      </section>
+    </section>
+
+    <section>
+      <h2>Making animation accessible</h2>
+      <p>
+        Describe how to integrate with the <a
+          href="http://www.whatwg.org/specs/web-apps/current-work/#timed-text-tracks">Timed
+          Text API</a> and give examples of how to author content so it is
+        accessible.
+      </p>
+    </section>
+
+    <section>
+      <h2>Definitions</h2>
+      <p>
+        Need to define active time, simple time etc. here
+      </p>
+    </section>
+
+    <section class='appendix'>
+      <h2>Acknowledgements</h2>
+    </section>
+  </body>
+</html>
