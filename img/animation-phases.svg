@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
+  viewBox="0 0 600 280">
+  <defs>
+    <style type="text/css">
+    svg {
+      font-size: 1.2em;
+    }
+    .arrowLine, .dottedArrow {
+      stroke: black;
+      stroke-width: 1.5;
+      marker-end: url(#arrow);
+      fill: none;
+    }
+    .dottedArrow {
+      stroke-dasharray: 4 4;
+      stroke-width: 2;
+    }
+    .activeSpan  {
+      fill: lightgrey;
+      stroke: black;
+    }
+    .animatingSpan  {
+      fill: aqua;
+      stroke: black;
+    }
+    .timeLabel, .regionLabel {
+      text-anchor: middle;
+    }
+    .bracket {
+      stroke: black;
+      stroke-width: 1.5;
+      fill: none;
+    }
+    </style>
+    <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
+      markerHeight="5">
+      <path d="M0-5l10 5l-10 5z"/>
+    </marker>
+  </defs>
+  <!-- Timeline -->
+  <g>
+    <text x="1em" y="1.1em">Time</text>
+    <line x1="4em" x2="97%" y1="0.8em" y2="0.8em" class="arrowLine"/>
+  </g>
+  <!-- A single animation -->
+  <g transform="translate(100 20)">
+    <!-- Text labels -->
+    <g transform="translate(0 40)">
+      <text class="timeLabel">active</text>
+      <text x="100" class="timeLabel">start</text>
+      <text x="300" class="timeLabel">end</text>
+      <text x="400" class="timeLabel">inactive</text>
+    </g>
+    <!-- Arrows -->
+    <g transform="translate(0 50)">
+      <path d="M0 0v34" class="dottedArrow"/>
+      <path d="M100 0v34" class="dottedArrow"/>
+      <path d="M300 0v34" class="dottedArrow"/>
+      <path d="M400 0v34" class="dottedArrow"/>
+    </g>
+    <!-- Animation shaded areas -->
+    <g transform="translate(0 100)">
+      <rect width="400" height="60" class="activeSpan"/>
+      <rect x="100" width="200" height="60" class="animatingSpan"/>
+    </g>
+    <!-- Region labels -->
+    <g transform="translate(0 170)">
+      <path d="M2 0s0 7 7 7h34s7 0 7 7c0 0 0-7 7-7h34s7 0 7-7" class="bracket"/>
+      <path d="M102 0s0 7 7 7h84s7 0 7 7c0 0 0-7 7-7h84s7 0 7-7"
+        class="bracket"/>
+      <path d="M302 0s0 7 7 7h34s7 0 7 7c0 0 0-7 7-7h34s7 0 7-7"
+        class="bracket"/>
+      <g transform="translate(0 34)">
+        <text x="50" class="regionLabel">delay</text>
+        <text x="200" class="regionLabel">animating</text>
+        <text x="350" class="regionLabel">forwards fill</text>
+      </g>
+    </g>
+    <!-- Active region label -->
+    <g transform="translate(0 220)">
+      <path d="M0 0s0 7 7 7h186s7 0 7 7c0 0 0-7 7-7h186s7 0 7-7"
+        class="bracket"/>
+      <text x="200" y="35" class="regionLabel">active</text>
+    </g>
+  </g>
+</svg>
