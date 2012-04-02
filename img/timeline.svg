@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  width="100%" height="100%" viewBox="0 0 600 280">
+  width="100%" height="100%" viewBox="0 0 600 380">
   <defs>
     <style type="text/css">
     svg {
@@ -14,12 +14,13 @@
     }
     .active {
       fill: orange;
-      stroke: red;
+      stroke: black;
       stroke-width: 2;
     }
     .inactive {
       fill: lightgrey;
       stroke: black;
+      stroke-width: 2;
     }
     .animationLabel {
       text-anchor: start;
@@ -70,27 +71,33 @@
     <line x1="4em" x2="97%" y1="0.8em" y2="0.8em" class="arrowLine"/>
   </g>
   <!-- A -->
-  <g transform="translate(120 60)">
+  <g transform="translate(140 60)">
     <rect width="270" height="50" class="active"/>
     <text x="15" y="35" class="animationLabel">A</text>
     <use xlink:href="#star"/>
     <text x="8" y="-8" class="startTimeLabel">start</text>
   </g>
   <!-- B -->
-  <g transform="translate(220 135)" mask="url(#fadeout)">
+  <g transform="translate(240 135)" mask="url(#fadeout)">
     <rect width="360" height="50" class="active"/>
     <text x="15" y="35" class="animationLabel">B</text>
     <use xlink:href="#star"/>
   </g>
   <!-- C -->
-  <g transform="translate(100 210)">
+  <g transform="translate(120 210)">
     <rect width="200" height="50" class="inactive"/>
     <text x="15" y="35" class="animationLabel">C</text>
     <use xlink:href="#star"/>
   </g>
+  <!-- D -->
+  <g transform="translate(420 285)" mask="url(#fadeout)">
+    <rect width="150" height="50" class="inactive"/>
+    <text x="15" y="35" class="animationLabel">D</text>
+    <use xlink:href="#star"/>
+  </g>
   <!-- Dotted 't' line -->
-  <g transform="translate(330 30)">
-    <path d="M0 0v245" class="tLine"/>
-    <text x="13" y="240" class="tLineLabel">t</text>
+  <g transform="translate(350 30)">
+    <path d="M0 0v350" class="tLine"/>
+    <text x="13" y="340" class="tLineLabel">t</text>
   </g>
 </svg>
