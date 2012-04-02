@@ -52,7 +52,7 @@
                 company: "Mozilla", companyURL: "http://mozilla.org/" },
               { name: "Rik Cabanier", mailto: "cabanier@adobe.com",
                 company: "Adobe Systems", companyURL: "http://www.adobe.com/" },
-              { name: "Alex Danilo", mailto: "alexd???@google.com",
+              { name: "Alex Danilo", mailto: "adanilo@google.com",
                 company: "Google, Inc", companyURL: "http://www.google.com/" },
               { name: "Shane Stephens", mailto: "shans@google.com",
                 company: "Google, Inc", companyURL: "http://www.google.com/" },
@@ -136,12 +136,12 @@
           every <code>WebAnimation</code> object that was ever created.
         </p>
         <p>
-          Or is this just the <code>WebTimeContainer</code> that corresponds to
+          Or is this just the <code>WebAnimationGroup</code> that corresponds to
           the document root plus, perhaps, some extra methods for getting all
           the current active animations etc.?
         </p>
         <p>
-          <dl title="interface WebAnimationTimeline : WebTimeContainer"
+          <dl title="interface WebAnimationTimeline : WebAnimationGroup"
             class="idl">
             <dt>sequence&lt;WebAnimation&gt; getActiveAnimations ()</dt>
             <dd>
@@ -271,7 +271,7 @@
         <p>
           Represents the timing properties and methods of an element in the
           timeline: either a <code>WebAnimation</code> or
-          a <code>WebTimeContainer</code>. Is <code>WebTimelineItem</code>
+          a <code>WebAnimationGroup</code>. Is <code>WebTimelineItem</code>
           better? <code>WebSeekable</code>?
         <p>
           <dl title="interface WebTimedItem" class="idl">
@@ -331,7 +331,7 @@
               startTime instead. Need to be careful how to define "active" and
               so on however to get the right fill behavior.
             </dd>
-            <dt>readonly attribute WebTimeContainer parentTimeContainer</dt>
+            <dt>readonly attribute WebAnimationGroup parentGroup</dt>
             <dd>
               The parent time container
             </dd>
@@ -401,12 +401,12 @@
         itself should be a time container.
       </p>
       <section>
-        <h3>The <code>WebTimeContainer</code> interface</h3>
+        <h3>The <code>WebAnimationGroup</code> interface</h3>
         <p>
           Add methods for adding children, removing children, converting time to
           parent / document time. The document itself should implement this
           interface.
-          <dl title="[Constructor] interface WebTimeContainer : WebTimedItem"
+          <dl title="[Constructor] interface WebAnimationGroup : WebTimedItem"
             class="idl">
           </dl>
         </p>
