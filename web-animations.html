@@ -241,20 +241,20 @@
         <h3>The <code>WebAnimation</code> interface</h3>
         <p>
           All the stuff in the WebTimedItem interface here should be
-          a snapshot of what was in the <code>WebAnimator</code> from which this
-          object was minted. That's not to say it's readonly though.
+          a snapshot of what was in the <code>WebAnimationTemplate</code> from
+          which this object was minted. That's not to say it's readonly though.
           <dl title="interface WebAnimation : WebTimedItem" class="idl">
             <dt>readonly attribute WebAnimationFunctionCollection functions</dt>
             <dd>
               A readonly snapshot of the animation functions copied from
-              <code>animator</code>, one per target property / attribute. As
-              with the <code>WebAnimator</code> interface, in ECMAScript you can
-              just do <code>functions["height"]</code>.
+              <code>template</code>, one per target property / attribute. As
+              with the <code>WebAnimationTemplate</code> interface, in
+              ECMAScript you can just do <code>functions["height"]</code>.
             </dd>
-            <dt>readonly attribute WebAnimator animator</dt>
+            <dt>readonly attribute WebAnimationTemplate template</dt>
             <dd>
-              The <code>WebAnimator</code> object from which this object was
-              minted.
+              The <code>WebAnimationTemplate</code> object from which this
+              object was minted.
             </dd>
             <dt>readonly attribute Element targetElement</dt>
             <dd>
@@ -267,7 +267,7 @@
               this should go on the <code>WebTimedItem</code> interface an apply
               to containers as well but then you get in a strange state. For
               example, <code>&lt;animate&gt;</code> maps to
-              a <code>WebAnimator</code> object so if you kill
+              a <code>WebAnimationTemplate</code> object so if you kill
               a <code>WebAnimation</code> it doesn't care. But <code>&lt;g
                 animation-time-container="par"&gt;</code> maps to
               <code>WebAnimationTimeContainer</code> so if you kill the
@@ -288,14 +288,15 @@
       <h2>Creating animations</h2>
       <p>
         <code>WebAnimation</code> objects are not created directly, but via
-        a separate <code>WebAnimator</code> object. The <code>WebAnimator</code>
-        object acts a template allowing the same set of animation parameters to
-        be used a number of times and on a number of different elements.
+        a separate <code>WebAnimationTemplate</code> object. The
+        <code>WebAnimationTemplate</code> object acts a cookie-cutter allowing
+        the same set of animation parameters to be used a number of times and on
+        a number of different elements.
       </p>
       <section>
-        <h3>The <code>WebAnimator</code> interface</h3>
+        <h3>The <code>WebAnimationTemplate</code> interface</h3>
         <p>
-          <dl title="[Constructor] interface WebAnimator" class="idl">
+          <dl title="[Constructor] interface WebAnimationTemplate" class="idl">
             <dt>attribute float? simpleDuration</dt>
             <dd>
               See the description on the WebTimedItem interface.
@@ -372,9 +373,10 @@
               TBD. I think we want more control than just "When it finishes, go
               backwards." We want to be able to trigger the reverse the
               animation on demand. Maybe we can have direction here as per CSS
-              Animations and then add a parameter on <code>WebAnimator</code>
-              that runs the animation in reverse? In SVG/CSS you could specify
-              different conditions that trigger the reverse effect?
+              Animations and then add a parameter on
+              <code>WebAnimationTemplate</code> that runs the animation in
+              reverse? In SVG/CSS you could specify different conditions that
+              trigger the reverse effect?
             </dd>
             <dt>attribute float startTime</dt>
             <dd>
@@ -499,8 +501,8 @@
         <p>
           I think most of the members of the interface, perhaps all, should be
           readonly when this object is returned from a <code>WebAnimation</code>
-          object. Objects returned from a <code>WebAnimator</code>, however,
-          are live.
+          object. Objects returned from a <code>WebAnimationTemplate</code>,
+          however, are live.
         </p>
         <p>
           <dl title="[Constructor] interface WebAnimationFunction" class="idl">
@@ -758,9 +760,10 @@
         </p>
       </section>
       <section>
-        <h3>The <code>CSSAnimator</code> interface</h3>
+        <h3>The <code>CSSAnimationTemplate</code> interface</h3>
         <p>
-          <dl title="interface CSSAnimator : WebAnimator" class="idl">
+          <dl title="interface CSSAnimationTemplate : WebAnimationTemplate"
+            class="idl">
           </dl>
         </p>
       </section>
@@ -795,7 +798,8 @@
       <section>
         <h3>The <code>SVGAnimationElement</code> interface</h3>
         <p>
-          <dl title="interface SVGAnimationElement : WebAnimator" class="idl">
+          <dl title="interface SVGAnimationElement : WebAnimationTemplate"
+            class="idl">
           </dl>
         </p>
         <p>
