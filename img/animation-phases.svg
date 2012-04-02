@@ -43,7 +43,7 @@
     <line x1="4em" x2="97%" y1="0.8em" y2="0.8em" class="arrowLine"/>
   </g>
   <!-- A single animation -->
-  <g transform="translate(100 20)">
+  <g transform="translate(120 20)">
     <!-- Text labels -->
     <g transform="translate(0 40)">
       <text class="timeLabel">active</text>
