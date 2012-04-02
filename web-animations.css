@@ -1,0 +1,24 @@
+div.figure {
+  margin: 2.5em 0;
+  text-align: center;
+  page-break-inside: avoid;
+}
+div.figure img {
+  display: block;
+  margin: auto;
+  max-width: 100%;
+}
+img {
+  border-style: none;
+}
+div.figure {
+  text-align: center;
+}
+p.caption:before {
+  content: "Figure " counter(figure, decimal) ". ";
+}
+p.caption {
+  counter-increment: figure;
+  font-style: italic;
+  text-align: center;
+}

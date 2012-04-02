@@ -40,7 +40,14 @@
 
           // if you want to have extra CSS, append them to this list
           // it is recommended that the respec.css stylesheet be kept
-          extraCSS: ["http://dev.w3.org/2009/dap/ReSpec.js/css/respec.css"],
+          extraCSS: ["http://dev.w3.org/2009/dap/ReSpec.js/css/respec.css",
+                     "web-animations.css"],
+
+          // Turning off inlineCSS for now since if extraCSS points to
+          // a relative URL your testing from a file URL the XHR will fail.
+          // Probably should turn this back on once this is hosted on a server
+          // somewhere.
+          inlineCSS: false,
 
           // editors, add as many as you like
           // only "name" is required
@@ -111,34 +118,91 @@
       </section>
     </section>
 
-    <section>
+    <section class="informative">
       <h2>The animation timeline</h2>
       <p>
-        There is a timeline to which animations are added. What is the
-        zero-point of the time graph? When added, animations have a definite
-        start time (although such a time might be calculated based on
-        a less precise time such as when style resolution occurs).
+        Each document contains a timeline to which animations may be added. Each
+        animation has a start time which determines when the animation becomes
+        active. After the animation is finished, the animation will become
+        inactive unless it is defined to sustain its effect indefinitely (see
+        <a href="#animation-fill-behavior" class="sectionRef"></a>).
+      </p>
+      <div class="figure">
+        <img src="img/timeline.svg" width="600">
+      </div>
+      <p class="caption">
+        At time <em>t</em> animations A and B are active. Animation C has
+        already completed and is now inactive.
       </p>
       <p>
-        Lots of pretty pictures of graphs here.
+        TODO: End-point exclusive timing
       </p>
       <p>
-        End-point exclusive timing
-      </p>
-      <p>
-        When does the graph start? Document load, or can it start beforehand?
+        TODO: Define when the timeline starts&mdash;is it document load, or can
+        it start beforehand?
       </p>
       <section>
         <h3>The <code>WebAnimationTimeline</code> interface</h3>
         <p>
-          Is this needed? The difficulty with this interface is defining it in
-          such a way so that implementations are not required to hold on to
-          every <code>WebAnimation</code> object that was ever created.
+          I think what you want here is:
+          <ul>
+            <li>get all active animations&mdash;you can do this manually?
+              <ul><li>just add this to the animation group interface?</li></ul>
+            </li>
+            <li>get all animations between two times??&mdash;you can do this
+            manually?
+              <ul><li>probably not needed?</li></ul>
+            </li>
+            <li>get all active animations for a given element</li>
+          </ul>
         </p>
         <p>
-          Or is this just the <code>WebAnimationGroup</code> that corresponds to
-          the document root plus, perhaps, some extra methods for getting all
-          the current active animations etc.?
+          This needs more thought.
+          <ul>
+            <li>Do animations remove themself from the container when they
+            become inactive? At first I thought yes, but now I think, no, they
+            don't.
+          </ul>
+        </p>
+        <p>
+          Once an animation has become inactive, ideally all you need to store
+          is:
+        </p>
+        <ul>
+          <li>start time</li>
+          <li>pause intervals</li>
+          <li>end time (it might have been cancelled so you can just calculate
+              this)</li>
+          <li>target element</li>
+          <li>parent time container</li>
+          <li>pointer to animation template</li>
+        </ul>
+        <p>
+          However, we have this idea that animations copy their shared data from
+          their template when they are created (or is it when they become
+          active?) So, if the template was changed, we should preserve the
+          changed information too.
+        </p>
+        <p>
+          (The copy <em>can't</em> take place when the animation becomes active
+          since you can create animations, put them on the timeline with
+          a future time, then change the template and create a new animation.
+          You expect the first animation to remain untouched.)
+        </p>
+        <p>
+          However, it seems like if you change all these animation functions and
+          rewind to the beginning then when you play through again you use the
+          new functions? No---maybe not.
+        </p>
+        <p>
+          Ultimately I think <b>we don't need this interface</b>. We can just
+          add a method to animation groups to get active animations and then
+          we'd have everything except the getAnimationsForElement method. Maybe
+          we can add that to the group interface too??
+        </p>
+        <p>
+          TODO: Need to define backwards seeking somewhere including the
+          5 minute limit.
         </p>
         <p>
           <dl title="interface WebAnimationTimeline : WebAnimationGroup"
@@ -161,7 +225,7 @@
     <section>
       <h2>Animations in the timeline</h2>
       <p>
-        Animations in the time graph are represented by
+        Animations in the timeline are represented by
         <code>WebAnimation</code> objects.
       </p>
       <section>
@@ -245,7 +309,7 @@
               / attribute. As with <code>HTMLCollection</code>, in ECMAScript
               you should be able to just use <code>functions["height"]</code> to
               get the appropriate function (rather than
-              <code>functions.nameItem("height")</code>.
+              <code>functions.nameItem("height")</code>).
             </dd>
             <dt>sequence&lt;WebAnimation&gt; animate (NodeList
               targetElements)</dt>
@@ -391,7 +455,7 @@
     <section>
       <h2>Grouping animations and synchronization</h2>
       <p>
-        Time containers
+        Time containers--need pictures
       </p>
       <p>
         Integration with <code>&lt;video&gt;</code> etc.
@@ -399,6 +463,9 @@
       <p>
         Define API for pausing, seeking etc. on time containers. The document
         itself should be a time container.
+      </p>
+      <p>
+        Describe how repetition works.
       </p>
       <section>
         <h3>The <code>WebAnimationGroup</code> interface</h3>
@@ -415,6 +482,9 @@
 
     <section>
       <h2>Animation values</h2>
+      <section>
+        <h3>Animation fill behavior</h3>
+      </section>
       <section>
         <h3>The <code>WebAnimationFunction</code> interface</h3>
         <p>
@@ -737,6 +807,32 @@
 
     <section>
       <h2>Definitions</h2>
+      <dl>
+        <dt>active interval</dt>
+        <dd>
+          <p>
+            The interval during which a timed item may affect its animation
+            targets.
+          </p>
+          <p>
+            The start of this interval is the start time specified on
+            the timed item. For an animation with no start delay, this will be
+            coincident with the start of animation.
+          </p>
+          <p>
+            The end of this interval is the first moment after the start time
+            when the timed item and all of its children have ceased animating
+            and applying fill effects. For timed items with infinite duration or
+            forwards fill effects, the end time is infinite.
+          </p>
+        </dd>
+        <dt>animation time</dt>
+        <dd>
+        </dd>
+        <dt>simple time</dt>
+        <dd>
+        </dd>
+      </dl>
       <p>
         Need to define active time, simple time etc. here
       </p>
