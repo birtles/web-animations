@@ -341,16 +341,115 @@
               get the appropriate function (rather than
               <code>functions.nameItem("height")</code>).
             </dd>
-            <dt>sequence&lt;WebAnimation&gt; animate (NodeList
-              targetElements)</dt>
+            <dt>sequence&lt;webanimation&gt; animate (any target,
+              optional float startTime)</dt>
             <dd>
-              Creates a series of <code>WebAnimation</code> objects, one for
-              each element in <code>targetElements</code>. Once created, these
-              <code>WebAnimation</code> objects behave independently of this
-              object as described in <a href="#creating-animations"
-                class="sectionRef"></a>.
+              <p>
+                Creates a series of <code>WebAnimation</code> objects, one for
+                each element in <code>target</code>. For each
+                <code>element</code> in <code>target</code> the associated
+                animation is appended to the animation group corresponding to
+                <code>element.ownerDocument.animationRoot</code>.
+              </p>
+              <p>
+                <code>target</code> may be one of the following types:
+                <code>Element</code>, <code>NodeList</code>,
+                <code>Element[]</code>. If <code>target</code> is of type
+                <code>NodeList</code> all nodes in the list that are not of type
+                <code>ELEMENT_NODE</code> are ignored.
+              </p>
+              <p>
+                <code>startTime</code> represents a time in the context of the
+                <code>WebAnimationGroup</code> to which it is appended. If this
+                parameter is not specified it will default to the current time
+                of the animation group to which it is appended.
+              </p>
+              <p>
+                The <code>WebAnimation</code> objects created by this method
+                behave independently of this object as described in <a
+                  href="#creating-animations" class="sectionRef"></a>.
+              </p>
+            </dd>
+            <dt>sequence&lt;webanimation&gt; animateWithParent (any target,
+              WebAnimationGroup? parentGroup, optional float startTime)</dt>
+            <dd>
+              <p>
+                Similar to <code>animate</code>, this method creates one
+                <code>WebAnimation</code> objects for each element in
+                <code>target</code> but then appends the resulting
+                <code>WebAnimation</code> objects as children of the given
+                <code>parentGroup</code>, if provided. If
+                <code>parentGroup</code> is null, the <code>WebAnimation</code>
+                objects will not be added to any group.
+              </p>
+              <p>
+                The handling of <code>target</code> is the same as for
+                <code>animate</code>.
+              </p>
+              <p>
+                <code>startTime</code> represents a time in the context of the
+                <code>WebAnimationGroup</code> to which it will be appended. In
+                this case that <code>parentGroup</code> is not null, this will
+                be <code>parentGroup</code>.
+                If this parameter is not specified it will default to the
+                current time of <code>parentGroup</code> if it is not null,
+                otherwise it will default to 0.
+              </p>
             </dd>
           </dl>
+          <div class="feedbackWanted">
+            <p>
+              The requirements for the <code>animate</code> is as follows.
+              Regarding the animation target(s) we want to support:
+            </p>
+            <pre>
+              template.animate(document.getElementById("a"));
+              template.animate(document.querySelectorAll("div.warning"));</pre>
+            <p>
+              That is we want to support at least:
+            </p>
+            <ul>
+              <li>Element</li>
+              <li>NodeList (for <code>querySelectorAll</code>,
+              <code>getElementsByTagName</code>, <code>Node.childNodes</code>
+              etc.)</li>
+            </ul>
+            <p>
+              It would be nice to also support an array of Elements.
+            </p>
+            <p>
+              Regarding start time, it is necessary to be able to specify it.
+              However, it is probably very useful to have a default behaviour
+              that uses the current time of the container. That is, ideally this
+              parameter should be optional.
+            </p>
+            <p>
+              Regarding the parent animation group, there are three possible
+              scenarios we probably want to support:
+            </p>
+            <ul>
+              <li>Specify an explicit parent group</li>
+              <li>Use the default animation group (<code>animationRoot</code>)
+              of the element's <code>ownerDocument</code></li>
+              <li>Have no parent group (This is particularly important
+              animations destined for sequential animation groups containers
+              where the order of children is important and so you might want to
+              insert the animation yourself at a particular position. It's also
+              likely there will be situations where you want to make the
+              animation and attach it later such as a helper function that
+              returns an animation object for the caller to insert.)</li>
+            </ul>
+            <p>
+              That gives you up to 18 permutations of ways of calling
+              <code>animate</code>. At the same time, we want
+              <code>animate</code> to be as simple to use as possible. The above
+              interface is an attempt to balance these requirements. It depends
+              on WebIDL and ECMAScript either being able to do overloading by
+              parameter type or accepting an "any" type and then checking the
+              type of the argument. I'm not sure what the best way is to do
+              this.
+            </p>
+          </div>
         </p>
       </section>
     </section>
