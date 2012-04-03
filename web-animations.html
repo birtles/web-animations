@@ -301,8 +301,17 @@
         <code>WebAnimation</code> objects are not created directly, but via
         a separate <code>WebAnimationTemplate</code> object. The
         <code>WebAnimationTemplate</code> object acts a cookie-cutter allowing
-        the same set of animation parameters to be used a number of times and on
-        a number of different elements.
+        the same set of animation parameters to be used multiple times with
+        multiple target elements.
+      </p>
+      <p>
+        The <code>WebAnimation</code> objects created by the
+        <code>animate</code> method of a <code>WebAnimationTemplate</code>
+        do not share data with the <code>WebAnimationTemplate</code> object from
+        which they were minted or with other <code>WebAnimation</code> objects
+        created from the same <code>WebAnimationTemplate</code>. Their
+        properties are independent and unique copies such that comparing their
+        object identities will return false.
       </p>
       <section>
         <h3>The <code>WebAnimationTemplate</code> interface</h3>
@@ -338,8 +347,8 @@
               Creates a series of <code>WebAnimation</code> objects, one for
               each element in <code>targetElements</code>. Once created, these
               <code>WebAnimation</code> objects behave independently of this
-              object. Changes made to parameters here do not update animations
-              minted off this object and vice versa. 
+              object as described in <a href="#creating-animations"
+                class="sectionRef"></a>.
             </dd>
           </dl>
         </p>
