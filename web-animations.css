@@ -52,6 +52,6 @@ div.feedbackWanted, p.feedbackWanted {
 /*
  * todo
  */
-span.todo {
+.todo {
   background: #FFB;
 }
