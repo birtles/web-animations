@@ -475,7 +475,7 @@
     </section>
 
     <section>
-      <h2>Grouping animations and synchronization</h2>
+      <h2>Grouping and synchronization</h2>
       <p>
         Describe basic properties: can be seeked etc.
       </p>
@@ -490,11 +490,15 @@
         Integration with <code>&lt;video&gt;</code> etc.
       </p>
       <p>
-        Describe how the timeline itself is itself just a group (but has the
-        special properties that it can't be appended as a child of another
-        group). It also has a "special" parent in that its startTime represents
-        real-world time??? And is read-only? Maybe this belongs somewhere else?
+        Describe how the timeline itself is itself just a group but has the
+        following special properties:
       </p>
+      <ul>
+        <li>It cannot be appended as a child of another group. As a result the
+        <code>parentGroup</code> property returns <code>null</code>.</li>
+        <li>It's startTime represents real-world time??? Can we align with the
+        timestamps used in DOM (e.g. for events) here?</li>
+      </ul>
       <section>
         <h3>The <code>WebAnimationGroup</code> interface</h3>
         <p>
@@ -901,6 +905,28 @@
           Your text...
         </p>
       </section>
+    </section>
+
+    <section>
+      <h2>Extensions to Document interfaces</h2>
+      <p>
+        Since the document acts as a root animation group user agents MUST add
+        an <code>animationRoot</code> member to the document interface for each
+        document type where animation is supported. For example, HTMLDocument
+        and SVGDocument.
+      </p>
+      <p>
+        The definition of this member is given below.
+      </p>
+      <dl title="interface HTMLDocument" class="idl">
+        <dt>readonly attribute WebAnimationGroup animationRoot</dt>
+        <dd>
+          The animation group corresponding to the root of the document. This
+          group exhibits the special behaviour described for a root animation
+          group in
+          <a href="#grouping-and-synchronization" class="sectionRef"></a>.
+        </dd>
+      </dl>
     </section>
 
     <section>
