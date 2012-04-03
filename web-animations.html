@@ -562,9 +562,9 @@
               </li>
               <li>
                 Calculate the effective start time of each child in the group
-                using the new synchronization type (XXX Need a cross-reference
-                to somewhere where we describe this behaviour and define things
-                like "effective start time".)
+                using the new synchronization type <span class="todo">(Need
+                a cross-reference to somewhere where we describe this
+                behaviour and define things like "effective start time".)</span>
               </li>
               <li>
                 Seek the container time to the previously recorded time.
@@ -612,8 +612,8 @@
             <p>Exceptions:</p>
             <ul>
               <li>HIERARCHY_REQUEST_ERR: Raised if <code>newItem</code> is
-              a root animation group for a document (XXX need cross-ref
-              here).</li>
+              a root animation group for a document <span class="todo">(need
+              cross-ref here)</span>.</li>
               <li>NOT_FOUND_ERR: Raised if <code>refItem</code> is not a child
               of this group.</li>
             </ul>
@@ -623,9 +623,9 @@
             Returns the item at <code>index</code>. If <code>index</code> is
             greater than or equal to <code>length</code> returns
             <code>null</code>. Equivalent to
-            <code>WebAnimationGroup[index]</code>. (XXX Need to work out how to
-            define this behavior&mdash;i.e. that you can use the subscript
-            operator)
+            <code>WebAnimationGroup[index]</code>. <span class="todo">(Need to
+            work out how to define this behavior&mdash;i.e. that you can use the
+            subscript operator)</span>
           </dd>
           <dt>WebTimedItem? remove (WebTimedItem removedItem)</dt>
           <dd>
@@ -648,8 +648,8 @@
             <code>targetElement</code> is <code>elem</code>. As with
             <code>getActiveAnimations</code>, the returned sequence is
             a snapshot (i.e. not live) representing the state of the animation
-            tree when this method was called. (XXX Need to define "animation
-            tree" or find another word?)
+            tree when this method was called. <span class="todo">(Need to define
+            "animation tree" or find another word?)</span>
           </dd>
         </dl>
       </section>

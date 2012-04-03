@@ -48,3 +48,10 @@ div.feedbackWanted, p.feedbackWanted {
   margin: 1em 0 0;
   padding: 1em;
 }
+
+/*
+ * todo
+ */
+span.todo {
+  background: #FFB;
+}
