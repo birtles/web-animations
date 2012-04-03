@@ -451,123 +451,121 @@
           timeline: either a <a>WebAnimation</a> or
           a <a>WebAnimationGroup</a>.
         </p>
-        <p>
-          <dl title="interface WebTimedItem" class="idl">
-            <dt>attribute float? simpleDuration</dt>
-            <dd>
-              The duration in seconds of a single iteration. If the duration is
-              infinite this will be <code>null</code>.
-              <span class="todo">(I'm not sure about this&mdash;I think we need
-              adaptive duration for syncing with <code>&lt;video&gt;</code>,
-              making the <code>pace</code> feature useful etc. Do we just
-              represent this by setting <code>simpleDuration</code> to null? Or
-              might we want other possibilities in the future?)</span>
-            </dd>
-            <dt>readonly attribute float? animationDuration</dt>
-            <dd>
-              This is roughly equivalent to <code>simpleDuration
-                * iterationCount</code> but I think it's more complicated than
-              that. If the animation is cancelled part way through, should this
-              update?
-            </dd>
-            <dt>readonly attribute float iterationCount</dt>
-            <dd>
-              A real number greater than or equal to 0 representing the number
-              of times to repeat the animation.
-            </dd>
-            <dt>readonly attribute unsigned short currentIteration</dt>
-            <dd>
-              The number of iterations that have completed. Equivalent to
-              <code>floor(animationTime / simpleDuration)</code>.
-            </dd>
-            <dt>attribute unsigned short direction/reversing</dt>
-            <dd>
-              TBD. I think we want more control than just "When it finishes, go
-              backwards." We want to be able to trigger the reverse animation on
-              demand. Maybe we can have direction here as per CSS Animations and
-              then add a parameter on <code>WebAnimationTemplate</code> that
-              runs the animation in reverse? In SVG/CSS you could specify
-              different conditions that trigger the reverse effect?
-            </dd>
-            <dt>attribute float startTime</dt>
-            <dd>
-              The time at which the animation becomes active expressed in
-              seconds relative to the parent animation group.
-              <span class="todo">Need to define what happens when you change
-                this for an animation in flight.</span>
-            </dd>
-            <dt>readonly attribute float endTime</dt>
-            <dd>
-              The time at which the animation ceases to be active expressed in
-              seconds relative to the parent time container.
-            </dd>
-            <dt>readonly attribute float? simpleTime</dt>
-            <dd>
-              The number of seconds that have elapsed since the start of the
-              current repeat iteration. This is equivalent to
-              <code>animationTime % simpleDuration</code>. If the animation is
-              not yet active, returns null.
-              <span class="todo">I think we should define this such that it is
-                0 during delay, and fixed at the final value during forwards
-                fill. That way you can test if an animation is active with
-                <code>simpleTime != null</code>. Defining it as
-                <code>animationTime % simpleDuration</code> doesn't work if
-                <code>animationTime</code> is <code>null</code> during the
-                delay</span>
-            </dd>
-            <dt>readonly attribute float? animationTime</dt>
-            <dd>
-              The number of seconds that have elapsed since startTime
-              + startDelay. If the animation is not yet active, returns null.
-              <span class="todo">I think we should define this such that it is
-                null during delay, and null during forwards fill. That way you
-                can test if an animation is animating with <code>animationTime
-                  != null</code></span>
-            </dd>
-            <dt>attribute float startDelay</dt>
-            <dd>
-              The number of seconds from <code>startTime</code> until the timed
-              item should begin executing.
-              <span class="todo">Need to define what happens when you change
-                this for an animation in flight.</span>
-            </dd>
-            <dt>readonly attribute WebAnimationGroup parentGroup</dt>
-            <dd>
-              The parent animation group
-            </dd>
-            <dt>void setPauseState (bool pauseState)</dt>
-            <dd>
-              Sets the pause state of this timed item.
-              <span class="todo">Need to define how this works somewhere. e.g.
-                for sequence containers, you just keep playing and then get
-                stuck when you hit a paused one I guess. Also, need to define
-                the interaction with <code>seek</code>.</span>
-            </dd>
-            <dt>bool getPauseState ()</dt>
-            <dd>
-              Retrusn the pause state of this timed item. Note that even if this
-              returns false, the timed item might still be effectively paused by
-              an ancestor animation group.
-            </dd>
-            <dt>bool isPaused ()</dt>
-            <dd>
-              Returns <code>true</code> if the pause state of this
-              object <em>or one of its ancestor animation groups</em> is
-              <code>true</code>.
-            </dd>
-            <dt>void seek (unsigned long activeTime)</dt>
-            <dd>
-              <span class="todo">TBD</span>
-            </dd>
-            <dt>void cancel ()</dt>
-            <dd>
-              Terminates the item and all its descendents such that they become
-              inactive. Currently active items will have their
-              <code>endTime</code> set to the current time of their parent
-              group.
-            </dd>
-          </dl>
-        </p>
+        <dl title="interface WebTimedItem" class="idl">
+          <dt>attribute float? simpleDuration</dt>
+          <dd>
+            The duration in seconds of a single iteration. If the duration is
+            infinite this will be <code>null</code>.
+            <span class="todo">(I'm not sure about this&mdash;I think we need
+            adaptive duration for syncing with <code>&lt;video&gt;</code>,
+            making the <code>pace</code> feature useful etc. Do we just
+            represent this by setting <code>simpleDuration</code> to null? Or
+            might we want other possibilities in the future?)</span>
+          </dd>
+          <dt>readonly attribute float? animationDuration</dt>
+          <dd>
+            This is roughly equivalent to <code>simpleDuration
+              * iterationCount</code> but I think it's more complicated than
+            that. If the animation is cancelled part way through, should this
+            update?
+          </dd>
+          <dt>readonly attribute float iterationCount</dt>
+          <dd>
+            A real number greater than or equal to 0 representing the number
+            of times to repeat the animation.
+          </dd>
+          <dt>readonly attribute unsigned short currentIteration</dt>
+          <dd>
+            The number of iterations that have completed. Equivalent to
+            <code>floor(animationTime / simpleDuration)</code>.
+          </dd>
+          <dt>attribute unsigned short direction/reversing</dt>
+          <dd>
+            TBD. I think we want more control than just "When it finishes, go
+            backwards." We want to be able to trigger the reverse animation on
+            demand. Maybe we can have direction here as per CSS Animations and
+            then add a parameter on <code>WebAnimationTemplate</code> that
+            runs the animation in reverse? In SVG/CSS you could specify
+            different conditions that trigger the reverse effect?
+          </dd>
+          <dt>attribute float startTime</dt>
+          <dd>
+            The time at which the animation becomes active expressed in
+            seconds relative to the parent animation group.
+            <span class="todo">Need to define what happens when you change
+              this for an animation in flight.</span>
+          </dd>
+          <dt>readonly attribute float endTime</dt>
+          <dd>
+            The time at which the animation ceases to be active expressed in
+            seconds relative to the parent time container.
+          </dd>
+          <dt>readonly attribute float? simpleTime</dt>
+          <dd>
+            The number of seconds that have elapsed since the start of the
+            current repeat iteration. This is equivalent to
+            <code>animationTime % simpleDuration</code>. If the animation is
+            not yet active, returns null.
+            <span class="todo">I think we should define this such that it is
+              0 during delay, and fixed at the final value during forwards
+              fill. That way you can test if an animation is active with
+              <code>simpleTime != null</code>. Defining it as
+              <code>animationTime % simpleDuration</code> doesn't work if
+              <code>animationTime</code> is <code>null</code> during the
+              delay</span>
+          </dd>
+          <dt>readonly attribute float? animationTime</dt>
+          <dd>
+            The number of seconds that have elapsed since startTime
+            + startDelay. If the animation is not yet active, returns null.
+            <span class="todo">I think we should define this such that it is
+              null during delay, and null during forwards fill. That way you
+              can test if an animation is animating with <code>animationTime
+                != null</code></span>
+          </dd>
+          <dt>attribute float startDelay</dt>
+          <dd>
+            The number of seconds from <code>startTime</code> until the timed
+            item should begin executing.
+            <span class="todo">Need to define what happens when you change
+              this for an animation in flight.</span>
+          </dd>
+          <dt>readonly attribute WebAnimationGroup parentGroup</dt>
+          <dd>
+            The parent animation group
+          </dd>
+          <dt>void setPauseState (bool pauseState)</dt>
+          <dd>
+            Sets the pause state of this timed item.
+            <span class="todo">Need to define how this works somewhere. e.g.
+              for sequence containers, you just keep playing and then get
+              stuck when you hit a paused one I guess. Also, need to define
+              the interaction with <code>seek</code>.</span>
+          </dd>
+          <dt>bool getPauseState ()</dt>
+          <dd>
+            Retrusn the pause state of this timed item. Note that even if this
+            returns false, the timed item might still be effectively paused by
+            an ancestor animation group.
+          </dd>
+          <dt>bool isPaused ()</dt>
+          <dd>
+            Returns <code>true</code> if the pause state of this
+            object <em>or one of its ancestor animation groups</em> is
+            <code>true</code>.
+          </dd>
+          <dt>void seek (unsigned long activeTime)</dt>
+          <dd>
+            <span class="todo">TBD</span>
+          </dd>
+          <dt>void cancel ()</dt>
+          <dd>
+            Terminates the item and all its descendents such that they become
+            inactive. Currently active items will have their
+            <code>endTime</code> set to the current time of their parent
+            group.
+          </dd>
+        </dl>
         <div class="todo">
           <p>
             Similar to <code>cancel</code>, do we want a method to terminate and
