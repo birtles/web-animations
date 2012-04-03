@@ -633,6 +633,24 @@
             <code>removedItem</code> is not part of this group, returns
             <code>null</code>.
           </dd>
+          <dt>sequence&lt;WebAnimation&gt; getActiveAnimations ()</dt>
+          <dd>
+            Returns all descendent WebAnimation objects that are active. The
+            returned sequence is a snapshot (i.e. not live) representing the
+            state of animations at the time returned by the
+            <code>currentTime</code> property of this WebAnimationGroup object
+            when this method was called.
+          </dd>
+          <dt>sequence&lt;WebAnimation&gt; getAnimationsForElement (Element
+            elem)</dt>
+          <dd>
+            Returns all descendent WebAnimation objects whose
+            <code>targetElement</code> is <code>elem</code>. As with
+            <code>getActiveAnimations</code>, the returned sequence is
+            a snapshot (i.e. not live) representing the state of the animation
+            tree when this method was called. (XXX Need to define "animation
+            tree" or find another word?)
+          </dd>
         </dl>
       </section>
     </section>
