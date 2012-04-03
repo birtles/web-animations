@@ -467,28 +467,173 @@
     <section>
       <h2>Grouping animations and synchronization</h2>
       <p>
-        Time containers--need pictures
+        Describe basic properties: can be seeked etc.
+      </p>
+      <p>
+        Describe different types: par, seq, mediagroup. Do we need a concept of
+        "effective start time" for seq?
+      </p>
+      <p>
+        Describe how repetition works.
       </p>
       <p>
         Integration with <code>&lt;video&gt;</code> etc.
       </p>
       <p>
-        Define API for pausing, seeking etc. on time containers. The document
-        itself should be a time container.
-      </p>
-      <p>
-        Describe how repetition works.
+        Describe how the timeline itself is itself just a group (but has the
+        special properties that it can't be appended as a child of another
+        group). It also has a "special" parent in that its startTime represents
+        real-world time??? And is read-only? Maybe this belongs somewhere else?
       </p>
       <section>
         <h3>The <code>WebAnimationGroup</code> interface</h3>
         <p>
-          Add methods for adding children, removing children, converting time to
-          parent / document time. The document itself should implement this
-          interface.
-          <dl title="[Constructor] interface WebAnimationGroup : WebTimedItem"
-            class="idl">
-          </dl>
+          Represents a list of timed items which may be animations or
+          nested animation groups. Order is significant only when
+          <code>type</code> is <code>WEBA_SYNC_SEQ</code>.
         </p>
+        <div class="feedbackWanted">
+          <p>
+            For adding and removing items this interface relies on passing in
+            actual <a>WebTimedItem</a> objects. This is similar to the Element
+            interface but differs from many SVG interfaces which use numeric
+            indices instead.
+          </p>
+          <p>
+            Using objects instead of indices is generally more useful since,
+            even if you only know the index you can easily convert it to an
+            object (e.g. <code>remove(group.getItem(2))</code>) but the reverse
+            conversion is more difficult. However, there are performance costs
+            associated with creating these objects in situations where indices
+            are sufficient.
+          </p>
+          <p>
+            Also, the use of exceptions below is perhaps a little inconsistent.
+            I've used exceptions for cases which are exceptional. For
+            <code>item</code> I think it's reasonable to return null (like
+            <code>NodeList</code>). Likewise, for <code>remove</code> I think
+            it's useful to just return <code>null</code> rather than throwing
+            an exception (e.g. if it has already been removed / not yet added).
+            Maybe you really want to return null if it has no parent and throw
+            an exception if it belongs to another group?
+          </p>
+        </div>
+        <dl title="[Constructor] interface WebAnimationGroup : WebTimedItem"
+          class="idl">
+          <dt>const unsigned short WEBA_SYNC_PAR = 0</dt>
+          <dd>
+            Parallel synchronization.
+          </dd>
+          <dt>const unsigned short WEBA_SYNC_SEQ = 1</dt>
+          <dd>
+            Sequence synchronization.
+          </dd>
+          <dt>const unsigned short WEBA_SYNC_MEDIA = 2</dt>
+          <dd>
+            Media group synchronization.
+          </dd>
+          <dt>readonly attribute unsigned long length</dt>
+          <dd>
+            The number of timed items in the group.
+          </dd>
+          <dt>attribute unsigned short type</dt>
+          <dd>
+            <p>
+              The type of synchronization provided by this animation group
+              as specified by one of the <code>WEBA_SYNC_*</code> constants
+              defined in this interface.
+            </p>
+            <p>
+              Setting this value has the following effect:
+            </p>
+            <ol>
+              <li>
+                If <code>type</code> is set to the same value as the previous
+                value return.
+              </li>
+              <li>
+                Record the current container time.
+              </li>
+              <li>
+                For each child in the group, call <code>cancel</code>.
+              </li>
+              <li>
+                Seek the container time to zero.
+              </li>
+              <li>
+                Calculate the effective start time of each child in the group
+                using the new synchronization type (XXX Need a cross-reference
+                to somewhere where we describe this behaviour and define things
+                like "effective start time".)
+              </li>
+              <li>
+                Seek the container time to the previously recorded time.
+              </li>
+            </ol>
+            <p class="feedbackWanted">
+              Note that a consequence of the above is that, for example, if you
+              change a container from type <code>par</code> to
+              <code>mediaGroup</code> you could potentially generate a lot of
+              end events followed by a lot of begin events despite the fact that
+              the animation might not produce any different visual result. We
+              could change the behaviour so that it effectively records the
+              play state of each item before and then after the "seek"
+              dispatches the appropriate events.
+            </p>
+          </dd>
+          <dt>void clear ()</dt>
+          <dd>
+            Removes all child timed items from the group.
+          </dd>
+          <dt>WebTimedItem append (WebTimedItem newItem)</dt>
+          <dd>
+            Add <code>newItem</code> as the last item in the group. If
+            <code>newItem</code> already belongs to a group (including this
+            group) it will first be removed from that group before being added
+            to this group. Returns <code>newItem</code>.
+          </dd>
+          <dt>WebTimedItem insertBefore (WebTimedItem newItem,
+            WebTimedItem? refItem)</dt>
+          <dd>
+            <p>
+              Inserts <code>newItem</code> before the existing
+              <code>refItem</code>. If <code>refItem</code> is null,
+              <code>newChild</code> is added to the end of the list. If
+              <code>newItem</code> already belongs to a group (including this
+              group) it will first be removed from that group before being added
+              to this group. If <code>newItem</code> and <code>refItem</code>
+              are the same object then no change is made. Returns
+              <code>newItem</code>.
+            </p>
+            <p class="feedbackWanted">
+              What events are fired? If <code>newChild</code> is removed from
+              a group then fire end event?
+            </p>
+            <p>Exceptions:</p>
+            <ul>
+              <li>HIERARCHY_REQUEST_ERR: Raised if <code>newItem</code> is
+              a root animation group for a document (XXX need cross-ref
+              here).</li>
+              <li>NOT_FOUND_ERR: Raised if <code>refItem</code> is not a child
+              of this group.</li>
+            </ul>
+          </dd>
+          <dt>WebTimedItem? item (unsigned long index)</dt>
+          <dd>
+            Returns the item at <code>index</code>. If <code>index</code> is
+            greater than or equal to <code>length</code> returns
+            <code>null</code>. Equivalent to
+            <code>WebAnimationGroup[index]</code>. (XXX Need to work out how to
+            define this behavior&mdash;i.e. that you can use the subscript
+            operator)
+          </dd>
+          <dt>WebTimedItem? remove (WebTimedItem removedItem)</dt>
+          <dd>
+            Removes <code>removedItem</code> from the group and returns it. If
+            <code>removedItem</code> is not part of this group, returns
+            <code>null</code>.
+          </dd>
+        </dl>
       </section>
     </section>
 
@@ -508,25 +653,21 @@
         <p>
           <dl title="[Constructor] interface WebAnimationFunction" class="idl">
             <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
-              <dd>
-                No fill
-              </dd>
-            </dt>
+            <dd>
+              No fill
+            </dd>
             <dt>const unsigned short WEBA_FILL_FORWARDS = 1</dt>
-              <dd>
-                Fill forwards (=<code>fill="freeze"</code> in SVG speak)
-              </dd>
-            </dt>
+            <dd>
+              Fill forwards (=<code>fill="freeze"</code> in SVG speak)
+            </dd>
             <dt>const unsigned short WEBA_FILL_BACKWARDS = 2</dt>
-              <dd>
-                Fill backwards
-              </dd>
-            </dt>
+            <dd>
+              Fill backwards
+            </dd>
             <dt>const unsigned short WEBA_FILL_FORWARDS = 3</dt>
-              <dd>
-                Fill backwards and forwards
-              </dd>
-            </dt>
+            <dd>
+              Fill backwards and forwards
+            </dd>
             <dt>attribute DOMString property</dt>
             <dd>
               The target attribute / property. <code>property</code> is probably
