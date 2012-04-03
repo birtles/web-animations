@@ -518,6 +518,16 @@
             are sufficient.
           </p>
           <p>
+            With the interface defined below, it's really hard to (a) remove and
+            re-add an item in the same place, (b) move an item forward one
+            place. DOM doesn't have this problem because it has
+            <code>nextSibling</code> and co. The SVG interfaces also don't have
+            this problem because they use indexes but they <em>do</em> have
+            the problem that working with a passed in object is very difficult
+            (because you don't know its index). Maybe we need nextSibling? Or
+            something to take an item and find its index?
+          </p>
+          <p>
             Also, the use of exceptions below is perhaps a little inconsistent.
             I've used exceptions for cases which are exceptional. For
             <code>item</code> I think it's reasonable to return null (like
