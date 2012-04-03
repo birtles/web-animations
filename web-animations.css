@@ -1,3 +1,6 @@
+/*
+ * Figures
+ */
 body {
   counter-reset: figure;
 }
@@ -24,4 +27,24 @@ p.caption {
   counter-increment: figure;
   font-style: italic;
   text-align: center;
+}
+
+/*
+ * Feedback wanted
+ */
+div.feedbackWanted:before, p.feedbackWanted:before {
+  display: block;
+  content: "Feedback wanted";
+  background: white;
+  border: 1px solid #F88;
+  font-weight: bold;
+  margin: -1.5em 0 0.5em;
+  padding: 3px 1em;
+  width: 150px;
+}
+div.feedbackWanted, p.feedbackWanted {
+  display: block;
+  background: #FEE;
+  margin: 1em 0 0;
+  padding: 1em;
 }
