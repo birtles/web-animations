@@ -51,6 +51,16 @@
     .simpleTimeDotted {
       stroke-dasharray: 3 6;
     }
+    .excludedPoint {
+      fill: none;
+      stroke: green;
+      stroke-width: 2;
+    }
+    .includedPoint {
+      fill: green;
+      stroke: green;
+      stroke-width: 2;
+    }
     .legendText {
       font-size: 0.7em;
     }
@@ -104,8 +114,14 @@
       <!-- Animation time -->
       <path d="M100 0l200-120" class="animationTime"/>
       <!-- Simple time solid parts -->
-      <path d="M0 0h100l80-48m0 48l80-48m0 48l40-24h100" class="simpleTime"/>
-      <path d="M180-48v48m80-48v48" class="simpleTimeDotted"/>
+      <path d="M0 0h100l75.5-45.3M180 0l75.5-45.3M260 0l40-24h100"
+        class="simpleTime"/>
+      <path d="M180-43v43m80-43v43" class="simpleTimeDotted"/>
+      <!-- End-points to demonstrate end-point exlcusive timing -->
+      <circle cx="180" cy="-48" r="4" class="excludedPoint"/>
+      <circle cx="180" cy="0" r="3" class="includedPoint"/>
+      <circle cx="260" cy="-48" r="4" class="excludedPoint"/>
+      <circle cx="260" cy="0" r="3" class="includedPoint"/>
     </g>
     <!-- Legend -->
     <g transform="translate(100 235)">
