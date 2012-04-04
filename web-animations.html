@@ -445,6 +445,148 @@
         Explanation about timing stuff, active time, simple time etc.
       </p>
       <section>
+        <h3>Animation phases</h3>
+        <p>
+          Move graph here
+        </p>
+      </section>
+      <section>
+        <h3>Simple time and animation time</h3>
+        <p>
+          Include a picture of how the two interact
+        </p>
+      </section>
+      <section>
+        <h3>Calculating the simple duration</h3>
+        <p>
+          Need to talk about intrinsic duration
+        </p>
+        <p>
+          Need to separate the concepts of the specified simple duration and
+          a simple duration calculated from the intrinsic duration.
+        </p>
+        <p>
+          If we support <code>pace="10px/s"</code> this is where it would go.
+        </p>
+      </section>
+      <section>
+        <h3>Calculating the animation duration</h3>
+      </section>
+      <section>
+        <h3>Calculating the animation time</h3>
+      </section>
+      <section>
+        <h3>Calculating the simple time</h3>
+        <p class="note">
+          We don't need to worry about pause times here, they will be taken care
+          of when we calculate the animation time.
+        </p>
+        <p>
+          The simple time is calculated according to the following steps:
+        </p>
+        <ol>
+          <li>
+            If the animation is inactive, return <code>null</code>.
+          </li>
+          <li>
+            If the simple duration is infinite,
+            <ol>
+              <li>If the direction is normal or alternate, return 0.</li>
+              <li>Otherwise, return <code>Infinity</code>.</li>
+            </ol>
+          </li>
+          <li>
+            <p>
+              Calculate the <var>forwards simple time</var> using the first
+              matching condition from the following list:
+            </p>
+            <dl class="switch">
+              <dt>
+                If the animation is in the delay phase,
+              </dt>
+              <dd>Let <var>forwards simple time</var> be 0.</dd>
+              <dt>
+                If the simple duration is zero,
+              </dt>
+              <dd>
+                Let <var>forwards simple time</var> be the simple duration.</dd>
+              <dt>
+                If the animation is animating,
+              </dt>
+              <dd>Let <var>forwards simple time</var> be <code>animationTime
+                % simpleDuration</code>.</dd>
+              <dt>
+                If <code>animationDuration</code> is a positive multiple of
+                <code>simpleDuration</code>
+              </dt>
+              <dd>Let <var>forwards simple time</var> be simpleDuration.
+              <dt>
+                Otherwise,
+              </dt>
+              <dd>
+                Let <var>forwards simple time</var> be
+                <code>animationDuration % simpleDuration</code>.
+              </dd>
+            </dl>
+          </li>
+          <li>
+            <p>
+              Calculate the <var>current direction</var> using the first
+              matching condition from the following list:
+            </p>
+            <dl class="switch">
+              <dt>
+                If the direction is normal,
+              </dt>
+              <dd>Let the <var>current direction</var> be forwards.</dd>
+              <dt>
+                If the direction is reverse,
+              </dt>
+              <dd>Let the <var>current direction</var> be reverse.</dd>
+              <dt>
+                If the animation is in the delay phase,
+              </dt>
+              <dd>Let the <var>current direction</var> be forwards if the
+                  direction is alternate, reverse otherwise.</dd>
+              <dt>
+                Otherwise,
+              </dt>
+              <dd>
+                <ol>
+                  <li>
+                    If the simple duration is zero, let <var>d</var> be
+                    <code>floor(iterationCount)</code>.
+                    <p>Otherwise, let <var>d</var> be <code>floor(<var>t</var>
+                    / simpleDuration)</code> where <var>t</var> is
+                    <code>animationTime</code> time if the animation is
+                    animating, or <code>animationDuration</code>. otherwise</p>
+                  </li>
+                  <li>If the direction is alternate-reverse increment
+                      <var>d</var> by 1.</li>
+                      <li>If the animation is not animating, and
+                      <code>animationDuration</code> is a positive multiple of
+                      <code>simpleDuration</code> increment <var>d</var> by
+                      1.</li>
+                  <li>If <var>d</var> is even (zero is considered even), let the
+                      <var>current direction</var> be forwards, otherwise let
+                      the <var>current direction</var> be reverse.</li>
+                </ol>
+              </dd>
+            </dl>
+          </li>
+          <li>
+            <p>
+              If the <var>current direction</var> is forwards then return
+              the <var>forwards simple time</var>.
+            </p>
+            <p>
+              Otherwise return <code>simpleDuration</code> - <var>forwards
+                simple time</var>.
+            </p>
+          </li>
+        </ul>
+      </section>
+      <section>
         <h3>The <code>WebTimedItem</code> interface</h3>
         <p>
           Represents the timing properties and methods of an element in the
@@ -452,22 +594,31 @@
           a <a>WebAnimationGroup</a>.
         </p>
         <dl title="interface WebTimedItem" class="idl">
-          <dt>attribute float? simpleDuration</dt>
+          <dt>attribute unrestricted float? simpleDuration</dt>
           <dd>
-            The duration in seconds of a single iteration. If the duration is
-            infinite this will be <code>null</code>.
-            <span class="todo">(I'm not sure about this&mdash;I think we need
-            adaptive duration for syncing with <code>&lt;video&gt;</code>,
-            making the <code>pace</code> feature useful etc. Do we just
-            represent this by setting <code>simpleDuration</code> to null? Or
-            might we want other possibilities in the future?)</span>
+            The duration in seconds of a single iteration. <span class="todo">We
+            can model a tri-state value here: defined time, infinite time (set
+            to <code>Infinite</code>), undefined (i.e. use implicit duration,
+            set to <code>null</code>). However, I think for the case of using an
+            implicit duration we want to know BOTH (a) that we are relying on
+            the implicit duration AND (b) what that implicit duration is. Maybe
+            we should have a separate member for <code>implicitDuration</code>?
+            But then, if you just want to know the calculated simple duration,
+            it's a pain to have to first check this value for <code>null</code>
+            and then check he implicit duration. Maybe this should always be the
+            calculated implicit duration and then have an extra flag to say,
+            "use the implicit duration." Then this member would no longer need
+            to accept a null value.</span>
           </dd>
           <dt>readonly attribute float? animationDuration</dt>
           <dd>
+            The amount of time in seconds the animation is in the animating
+            phase, minus any time it was paused.
             This is roughly equivalent to <code>simpleDuration
               * iterationCount</code> but I think it's more complicated than
             that. If the animation is cancelled part way through, should this
-            update?
+            update? I think it should (in order for this to be useful in
+            calculating the simple time / fill value).
           </dd>
           <dt>readonly attribute float iterationCount</dt>
           <dd>
@@ -500,19 +651,13 @@
             The time at which the animation ceases to be active expressed in
             seconds relative to the parent time container.
           </dd>
-          <dt>readonly attribute float? simpleTime</dt>
+          <dt>readonly attribute unrestricted float? simpleTime</dt>
           <dd>
-            The number of seconds that have elapsed since the start of the
-            current repeat iteration. This is equivalent to
-            <code>animationTime % simpleDuration</code>. If the animation is
-            not yet active, returns null.
-            <span class="todo">I think we should define this such that it is
-              0 during delay, and fixed at the final value during forwards
-              fill. That way you can test if an animation is active with
-              <code>simpleTime != null</code>. Defining it as
-              <code>animationTime % simpleDuration</code> doesn't work if
-              <code>animationTime</code> is <code>null</code> during the
-              delay</span>
+            <p>
+              The time in seconds representing the offset into the simple
+              duration using the steps described in <a
+                href="#calculating-the-simple-time" class="sectionRef"></a>.
+            </p>
           </dd>
           <dt>readonly attribute float? animationTime</dt>
           <dd>
@@ -521,7 +666,7 @@
             <span class="todo">I think we should define this such that it is
               null during delay, and null during forwards fill. That way you
               can test if an animation is animating with <code>animationTime
-                != null</code></span>
+              != null</code></span>
           </dd>
           <dt>attribute float startDelay</dt>
           <dd>
