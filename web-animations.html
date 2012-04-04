@@ -145,92 +145,14 @@
         already completed and is now inactive. Animation D has yet to begin and
         is also inactive.
       </p>
-      <p>
-        TODO: End-point exclusive timing
+      <p class="todo">
+        End-point exclusive timing&mdash;this probably belongs in the timed item
+        section.
       </p>
-      <p>
-        TODO: Define when the timeline starts&mdash;is it document load, or can
-        it start beforehand?
+      <p class="todo">
+        Define when the timeline starts&mdash;is it document load, or can it
+        start beforehand?
       </p>
-      <section>
-        <h3>The <code>WebAnimationTimeline</code> interface</h3>
-        <p>
-          I think what you want here is:
-          <ul>
-            <li>get all active animations&mdash;you can do this manually?
-              <ul><li>just add this to the animation group interface?</li></ul>
-            </li>
-            <li>get all animations between two times??&mdash;you can do this
-            manually?
-              <ul><li>probably not needed?</li></ul>
-            </li>
-            <li>get all active animations for a given element</li>
-          </ul>
-        </p>
-        <p>
-          This needs more thought.
-          <ul>
-            <li>Do animations remove themself from the container when they
-            become inactive? At first I thought yes, but now I think, no, they
-            don't.
-          </ul>
-        </p>
-        <p>
-          Once an animation has become inactive, ideally all you need to store
-          is:
-        </p>
-        <ul>
-          <li>start time</li>
-          <li>pause intervals</li>
-          <li>end time (it might have been cancelled so you can just calculate
-              this)</li>
-          <li>target element</li>
-          <li>parent time container</li>
-          <li>pointer to animation template</li>
-        </ul>
-        <p>
-          However, we have this idea that animations copy their shared data from
-          their template when they are created (or is it when they become
-          active?) So, if the template was changed, we should preserve the
-          changed information too.
-        </p>
-        <p>
-          (The copy <em>can't</em> take place when the animation becomes active
-          since you can create animations, put them on the timeline with
-          a future time, then change the template and create a new animation.
-          You expect the first animation to remain untouched.)
-        </p>
-        <p>
-          However, it seems like if you change all these animation functions and
-          rewind to the beginning then when you play through again you use the
-          new functions? No---maybe not.
-        </p>
-        <p>
-          Ultimately I think <b>we don't need this interface</b>. We can just
-          add a method to animation groups to get active animations and then
-          we'd have everything except the getAnimationsForElement method. Maybe
-          we can add that to the group interface too??
-        </p>
-        <p>
-          TODO: Need to define backwards seeking somewhere including the
-          5 minute limit.
-        </p>
-        <p>
-          <dl title="interface WebAnimationTimeline : WebAnimationGroup"
-            class="idl">
-            <dt>sequence&lt;WebAnimation&gt; getActiveAnimations ()</dt>
-            <dd>
-              Probably return an <code>HTMLCollection</code>-like class here.
-              i.e. a live, read-only list
-            </dd>
-            <dt>sequence&lt;WebAnimation&gt; getAnimationsForElement (Element
-            targetElement)</dt>
-            <dd>
-              Likewise here, a live, read-only list
-            </dd>
-          </dl>
-        </p>
-      </section>
     </section>
 
     <section>
@@ -588,6 +510,38 @@
         <p>
           It might make sense to describe the behaviour for an animation first,
           and then for an animation group.
+        </p>
+        <p>
+          Talk about how animations are not removed on a backwards seek so you
+          need to remove them yourself or detect them and not re-create them.
+          Perhaps we will have a seek event for this? Or a way of marking
+          animations as remove-on-seek (which would remove the animation if you
+          do a backwards seek past its startTime).
+        </p>
+        <p>
+          Talk about the 5-minute rule plus issues relating to not chewing up
+          more-and-more memory.
+        </p>
+        <p>
+          Once an animation has become inactive, ideally all you need to store
+          is:
+        </p>
+        <ul>
+          <li>start time</li>
+          <li>pause intervals</li>
+          <li>end time (it might have been cancelled so you can just calculate
+              this)</li>
+          <li>target element</li>
+          <li>parent time container</li>
+          <li>pointer to animation template (unless data has changed on the
+          template since this was made in which case you need to store the
+          modifications)</li>
+        </ul>
+        <p>
+          However, we have this idea that animations copy their shared data from
+          their template when they are created (or is it when they become
+          active?) So, if the template was changed, we should preserve the
+          changed information too.
         </p>
         <p>
           Need to talk about what happens with regards to events too.
