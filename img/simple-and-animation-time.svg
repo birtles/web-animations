@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
+  viewBox="0 0 600 280">
+  <defs>
+    <style type="text/css">
+    svg {
+      font-size: 1.2em;
+    }
+    .line, .arrowLine, .dottedArrow {
+      stroke: black;
+      stroke-width: 1.5;
+      fill: none;
+    }
+    .arrowLine, .dottedArrow {
+      marker-end: url(#arrow);
+    }
+    .dottedArrow {
+      stroke-dasharray: 4 4;
+      stroke-width: 2;
+    }
+    .activeSpan  {
+      fill: lightgrey;
+      stroke: black;
+    }
+    .animatingSpan  {
+      fill: aqua;
+      stroke: black;
+    }
+    .timeLabel {
+      text-anchor: middle;
+    }
+    .localTimelineLabel {
+      font-size: 0.7em;
+    }
+    .localTimelineTick {
+      font-size: 0.6em;
+      text-anchor: middle;
+    }
+    .animationTime {
+      stroke: orange;
+      stroke-width: 5;
+      fill: none;
+      stroke-linecap: round;
+    }
+    .simpleTime, .simpleTimeDotted {
+      stroke: green;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .simpleTimeDotted {
+      stroke-dasharray: 3 6;
+    }
+    .legendText {
+      font-size: 0.7em;
+    }
+    </style>
+    <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
+      markerHeight="5">
+      <path d="M0-5l10 5l-10 5z"/>
+    </marker>
+  </defs>
+  <!-- Timeline -->
+  <g>
+    <text x="1em" y="1.1em">Parent time</text>
+    <line x1="6.5em" x2="97%" y1="0.8em" y2="0.8em" class="arrowLine"/>
+  </g>
+  <!-- A single animation -->
+  <g transform="translate(120 10)">
+    <!-- Text labels -->
+    <g transform="translate(0 40)">
+      <text class="timeLabel">active</text>
+      <text x="100" class="timeLabel">start</text>
+      <text x="300" class="timeLabel">end</text>
+      <text x="400" class="timeLabel">inactive</text>
+    </g>
+    <!-- Arrows -->
+    <g transform="translate(0 50)">
+      <path d="M0 0v27" class="dottedArrow"/>
+      <path d="M100 0v27" class="dottedArrow"/>
+      <path d="M300 0v27" class="dottedArrow"/>
+      <path d="M400 0v27" class="dottedArrow"/>
+    </g>
+    <!-- Animation shaded areas -->
+    <g transform="translate(0 95)">
+      <rect width="400" height="120" class="activeSpan"/>
+      <rect x="100" width="200" height="120" class="animatingSpan"/>
+    </g>
+    <!-- Local timeline -->
+    <g transform="translate(-30 215)">
+      <text y="-0.8em" transform="rotate(-90)" class="localTimelineLabel">
+        Simple/animation time</text>
+      <path d="M0 0v-120" class="line"/>
+      <path d="M-2 0h4M-2-48h4M-2-96h4M-2-120h4" class="line"/>
+      <text y="1em" transform="rotate(-90)" class="localTimelineTick">
+        0
+        <tspan x="48">1</tspan>
+        <tspan x="96">2</tspan>
+        <tspan x="120">2.5</tspan>
+      </text>
+    </g>
+    <!-- Animation and simple time -->
+    <g transform="translate(0 215)">
+      <!-- Animation time -->
+      <path d="M100 0l200-120" class="animationTime"/>
+      <!-- Simple time solid parts -->
+      <path d="M0 0h100l80-48m0 48l80-48m0 48l40-24h100" class="simpleTime"/>
+      <path d="M180-48v48m80-48v48" class="simpleTimeDotted"/>
+    </g>
+    <!-- Legend -->
+    <g transform="translate(100 235)">
+      <path d="M0 0h40" class="animationTime"/>
+      <text x="50px" y="0.4em" class="legendText">Animation time</text>
+      <g transform="translate(0 18)">
+        <path d="M0 0h40" class="simpleTime"/>
+        <text x="50px" y="0.4em" class="legendText">Simple time</text>
+      </g>
+    </g>
+  </g>
+</svg>
