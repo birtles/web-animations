@@ -584,6 +584,16 @@
         </ul>
       </section>
       <section>
+        <h3>Seeking a timed item</h3>
+        <p>
+          It might make sense to describe the behaviour for an animation first,
+          and then for an animation group.
+        </p>
+        <p>
+          Need to talk about what happens with regards to events too.
+        </p>
+      </section>
+      <section>
         <h3>The <code>WebTimedItem</code> interface</h3>
         <p>
           Represents the timing properties and methods of an element in the
@@ -641,7 +651,8 @@
             The time at which the animation becomes active expressed in
             seconds relative to the parent animation group.
             <span class="todo">Need to define what happens when you change
-              this for an animation in flight.</span>
+              this for an animation in flight. Maybe it should be
+              read-only?</span>
           </dd>
           <dt>readonly attribute float endTime</dt>
           <dd>
@@ -661,16 +672,16 @@
             The number of seconds that have elapsed since startTime
             + startDelay. If the animation is not yet active, returns null.
             <span class="todo">I think we should define this such that it is
-              null during delay, and null during forwards fill. That way you
-              can test if an animation is animating with <code>animationTime
-              != null</code></span>
+              null during delay, and null during fill. That way you can test if
+              an animation is animating with <code>animationTime !=
+              null</code></span>
           </dd>
           <dt>attribute float startDelay</dt>
           <dd>
             The number of seconds from <code>startTime</code> until the timed
             item should begin executing.
             <span class="todo">Need to define what happens when you change
-              this for an animation in flight.</span>
+              this for an animation in flight. Make it read-only?</span>
           </dd>
           <dt>readonly attribute WebAnimationGroup parentGroup</dt>
           <dd>
