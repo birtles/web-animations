@@ -361,10 +361,35 @@
       <p>
         Explanation about timing stuff, active time, simple time etc.
       </p>
-      <section>
+      <section class="informative">
         <h3>Animation phases</h3>
         <p>
-          Description goes here.
+          An individual animation can be in one of four possible states, called
+          phases:
+        </p>
+        <dl>
+          <dt>Inactive</dt>
+          <dd>The animation has yet to start or has already finished. It has no
+          effect on its target.</dd>
+          <dt>Delayed (active)</dt>
+          <dd>The animation is waiting to start (assuming time is progressing
+          forwards). Depending on the animation's fill mode, it may apply
+          a backwards fill to its target at this time.</dd>
+          <dt>Animating (active)</dt>
+          <dd>The animation is executing, and will apply its effect to its
+          target.</dd>
+          <dt>Filling (active)</dt>
+          <dd>The animation has finished but continues to apply its final value
+          to the target element. The animation will only enter this phase if its
+          fill mode produces a forwards fill.</dd>
+        </dl>
+        <p>
+          At a more general level, if the animation is in any phase other than
+          <i>inactive</i>, it is said to be <i>active</i> even though it may not
+          be <i>animating</i>.
+        </p>
+        <p>
+          These phases can be visualized as follows:
         </p>
         <div class="figure">
           <object data="img/animation-phases.svg" width="600"></object>
