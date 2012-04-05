@@ -563,22 +563,9 @@
                 <dd>
                   <ol>
                     <li>
-                      <p>
-                        If the <var>simple duration</var> is zero, let
-                        <var>d</var> be <code>floor(iterationCount)</code>.
-                      </p>
-                      <p>
-                        Otherwise, let <var>d</var> be <code>floor(<var>t</var>
-                        / <var>simple duration</var>)</code> where <var>t</var>
-                        is the <var>animation time</var> if it is not
-                        <code>null</code>, otherwise it is the <var>animation
-                        duration</var>.
-                      </p>
-                      <p class="note">
-                        If the <var>simple duration</var> is infinite, the
-                        result of <code>floor(<var>t</var> / <var>simple
-                        duration</var>)</code> will be 0 as defined by IEEE 754.
-                      </p>
+                      Let <var>d</var> be the <var>current iteration</var> (see
+                      <a href="#calculating-the-current-iteration"
+                        class="sectionRef"></a>.
                     </li>
                     <li>
                       If the direction is alternate-reverse increment
@@ -615,6 +602,43 @@
             ease-in becomes ease-out on reverse, however it avoids jumps in
             values when reversing part-way.
           </p>
+        </section>
+        <section>
+          <h4>Calculating the current iteration</h4>
+          <p>
+            The <var>current iteration</var> can be calculated from the
+            following steps:
+          </p>
+          <ol>
+            <li>
+              If the <var>item time</var> is <code>null</code>, return
+              <code>null</code>.
+            </li>
+            <li>
+              If the <code><var>item time</var> &lt; <var>start
+              delay</var></code>, return zero.
+            </li>
+            <li>
+              If the <var>simple duration</var> is zero, return
+              <code>floor(<var>iteration count</var>)</code>.
+            </li>
+            <li>
+              If <var>animation time</var> is not <code>null</code>, let
+              <var>t</var> be the <var>animation time</var>, otherwise, let
+              <var>t</var> be the <var>animation duration</var>.
+            </li>
+            <li>
+              <p>
+                Return <code>floor(<var>t</var> / <var>simple
+                duration</var>)</code>.
+              </p>
+              <p class="note">
+                If the <var>simple duration</var> is infinite, the
+                result of <code>floor(<var>t</var> / <var>simple
+                duration</var>)</code> will be zero as defined by IEEE 754.
+              </p>
+            </li>
+          </ol>
         </section>
       </section>
       <section>
@@ -702,21 +726,18 @@
           <dt>readonly attribute float? animationDuration</dt>
           <dd>
             The amount of time in seconds the animation is schedule to animate
-            as described in <a href="#calculating-the-animation-duration"></a>.
+            as described in <a href="#calculating-the-animation-duration"
+              class="sectionRef"></a>.
           </dd>
           <dt>readonly attribute float iterationCount</dt>
           <dd>
             A real number greater than or equal to 0 representing the number
             of times to repeat the animation.
           </dd>
-          <dt>readonly attribute unsigned short currentIteration</dt>
+          <dt>readonly attribute unsigned long? currentIteration</dt>
           <dd>
-            The number of iterations that have completed. Equivalent to
-            <code>floor(animationTime / simpleDuration)</code>. If
-            <code>simpleDuration</code> is zero, <code>currentIteration</code>
-            will be set to <code>floor(iterationCount)</code>.
-            <!-- Factor out this definition, it's used elsewhere and it needs
-            the note about infinity -->
+            The number of iterations that have completed as described in <a
+              href="#calculating-the-current-iteration" class="sectionRef"></a>.
           </dd>
           <dt>attribute unsigned short direction/reversing</dt>
           <dd>
