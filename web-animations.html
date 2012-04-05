@@ -405,9 +405,70 @@
       </section>
       <section>
         <h3>Calculating the animation duration</h3>
+        <p>
+          This basically involves:
+        </p>
+        <ul>
+          <li>Multiplying the simple duration by the iteration count</li>
+          <li>Apply min and max (if they are supported)</li>
+          <li>Applying any speed functions that shorten or extend the effective
+              duration&mdash;or do they apply directly to the simple
+              duration?</li>
+        </ul>
       </section>
       <section>
         <h3>Calculating the animation time</h3>
+        <p>
+          This basically involves:
+        </p>
+        <ul>
+          <li>
+            Getting the <var>simple time</var> from the parent group
+            <ul>
+              <li>If the parent is doing a delay with no backwards fill then we
+              should return null. (See discussion below.)</li>
+            </ul>
+          </li>
+          <li>Subtracting the <var>start time</var></li>
+          <li>Subtracting the <var>start delay</var></li>
+          <li>If it's negative, we're not animating, return
+              <code>null</code>.</li>
+          <li>Subtract pause offsets
+            <ul>
+              <li>Basically, you subtract the duration of completed pause
+              intervals.</li>
+              <li>If we're in the middle of a pause interval, you subtract the
+              amount of paused time. The maths for this depends if we store
+              pause endpoints in parent time (not good if you move stuff around
+              in the tree), or offsets from the start time + a duration
+              (probably better).</li>
+            </ul>
+          </li>
+          <li>If the time is greater than the animating duration, we're not
+              animation, return <code>null</code>.</li>
+          <li>Return the resulting time</li>
+        </ul>
+        <div class="feedbackWanted">
+          <p>
+            I'm having second thoughts about whether animation time should be
+            defined during delay / fill. The algorithms for calculating the
+            simple time would be slightly simpler if it were defined. The main
+            reason for making it undefined is so you can test from the API
+            whether the animation is running or not by just checking that time.
+            Maybe we should separate the concepts of "local time" from
+            "animation time" where animation time is local time when it is
+            animating (and undefined otherwise)? Or call it "item time"?
+          </p>
+          <p>
+            It might also make sense to say that the simple time is not defined
+            during the delay phase if we're not doing a backwards fill but
+            I think that binds the timing and animation models too closely. The
+            "time" should still be defined. It's up to the animation model as to
+            what it does with it. Hmm, I'm not sure. It's nice if a group
+            can tell its children what to do by means of the simple time they
+            get.
+          </p>
+        </div>
       </section>
       <section>
         <h3>Calculating the simple time</h3>
