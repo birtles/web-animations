@@ -415,9 +415,8 @@
         <ul>
           <li>Multiplying the simple duration by the iteration count</li>
           <li>Apply min and max (if they are supported)</li>
-          <li>Applying any speed functions that shorten or extend the effective
-              duration&mdash;or do they apply directly to the simple
-              duration?</li>
+          <li>Applying any speed functions&mdash;or do they apply directly to
+              the simple duration?</li>
         </ul>
       </section>
       <section>
@@ -671,6 +670,22 @@
           a <a>WebAnimationGroup</a>.
         </p>
         <dl title="interface WebTimedItem" class="idl">
+          <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
+          <dd>
+            No fill
+          </dd>
+          <dt>const unsigned short WEBA_FILL_FORWARDS = 1</dt>
+          <dd>
+            Fill forwards (=<code>fill="freeze"</code> in SVG speak)
+          </dd>
+          <dt>const unsigned short WEBA_FILL_BACKWARDS = 2</dt>
+          <dd>
+            Fill backwards
+          </dd>
+          <dt>const unsigned short WEBA_FILL_FORWARDS = 3</dt>
+          <dd>
+            Fill backwards and forwards
+          </dd>
           <dt>attribute unrestricted float? simpleDuration</dt>
           <dd>
             The duration in seconds of a single iteration. <span class="todo">We
@@ -756,6 +771,11 @@
           <dt>attribute WebTimingFunction timingFunction</dt>
           <dd class="todo">
             TBD.
+          </dd>
+          <dt>attribute unsigned short fill</dt>
+          <dd>
+            Fill mode as specified by one of the WEBA_FILL_* constants defined
+            in this interface.
           </dd>
           <dt>readonly attribute WebAnimationGroup parentGroup</dt>
           <dd>
@@ -1055,22 +1075,6 @@
         </p>
         <p>
           <dl title="[Constructor] interface WebAnimationFunction" class="idl">
-            <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
-            <dd>
-              No fill
-            </dd>
-            <dt>const unsigned short WEBA_FILL_FORWARDS = 1</dt>
-            <dd>
-              Fill forwards (=<code>fill="freeze"</code> in SVG speak)
-            </dd>
-            <dt>const unsigned short WEBA_FILL_BACKWARDS = 2</dt>
-            <dd>
-              Fill backwards
-            </dd>
-            <dt>const unsigned short WEBA_FILL_FORWARDS = 3</dt>
-            <dd>
-              Fill backwards and forwards
-            </dd>
             <dt>attribute DOMString property</dt>
             <dd>
               The target attribute / property. <code>property</code> is probably
@@ -1088,11 +1092,6 @@
             <dt>attribute unsigned short accumulate</dt>
             <dd>
               This also depends how addition works
-            </dd>
-            <dt>attribute unsigned short fill</dt>
-            <dd>
-              Fill mode as specified by one of the WEBA_FILL_* constants defined
-              in this interface.
             </dd>
             <dt>attribute DOMString? pace</dt>
             <dd>
