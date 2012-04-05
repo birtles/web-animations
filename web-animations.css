@@ -55,3 +55,17 @@ div.feedbackWanted, p.feedbackWanted {
 .todo {
   background: #FFB;
 }
+
+/*
+ * Algorithm display
+ */
+li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+dl.switch > dt:before {
+  content: "↪";
+}
+dd ol {
+  padding-left: 0px;
+}
