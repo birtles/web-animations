@@ -23,7 +23,7 @@
     }
     .exampleLabel {
       text-anchor: end;
-      font-size: 1.6em;
+      font-size: 1.4em;
     }
     </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
