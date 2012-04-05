@@ -215,7 +215,7 @@
         <h3>The <code>WebAnimationTemplate</code> interface</h3>
         <p>
           <dl title="[Constructor] interface WebAnimationTemplate" class="idl">
-            <dt>attribute float? simpleDuration</dt>
+            <dt>attribute unrestricted float? specifiedDuration</dt>
             <dd>
               See the description on the WebTimedItem interface.
             </dd>
@@ -398,10 +398,6 @@
         <h3>Calculating the simple duration</h3>
         <p>
           Need to talk about intrinsic duration
-        </p>
-        <p>
-          Need to separate the concepts of the specified simple duration and
-          a simple duration calculated from the intrinsic duration.
         </p>
         <p>
           If we support <code>pace="10px/s"</code> this is where it would go.
@@ -589,9 +585,10 @@
                       <var>d</var> by 1.
                     </li>
                     <li>
-                      If the animation is not animating, and
-                      <code>animationDuration</code> is a positive multiple of
-                      <code>simpleDuration</code> increment <var>d</var> by 1.
+                      If the animation is not animating, and the
+                      <var>animation duration</var> is a positive multiple of
+                      the <var>simple duration</var> increment <var>d</var> by
+                      1.
                     </li>
                     <li>
                       If <code><var>d</var> % 2 != 0</code>, let the
@@ -608,7 +605,7 @@
                 the <var>scaled simple time</var>.
               </p>
               <p>
-                Otherwise return <code>simpleDuration</code> - <var>scaled 
+                Otherwise return the <var>simple duration</var> - <var>scaled 
                   simple time</var>.
               </p>
             </li>
@@ -686,31 +683,26 @@
           <dd>
             Fill backwards and forwards
           </dd>
-          <dt>attribute unrestricted float? simpleDuration</dt>
+          <dt>attribute unrestricted float? specifiedDuration</dt>
           <dd>
-            The duration in seconds of a single iteration. <span class="todo">We
-            can model a tri-state value here: defined time, infinite time (set
-            to <code>Infinite</code>), undefined (i.e. use implicit duration,
-            set to <code>null</code>). However, I think for the case of using an
-            implicit duration we want to know BOTH (a) that we are relying on
-            the implicit duration AND (b) what that implicit duration is. Maybe
-            we should have a separate member for <code>implicitDuration</code>?
-            But then, if you just want to know the calculated simple duration,
-            it's a pain to have to first check this value for <code>null</code>
-            and then check he implicit duration. Maybe this should always be the
-            calculated implicit duration and then have an extra flag to say,
-            "use the implicit duration." Then this member would no longer need
-            to accept a null value.</span>
+            The duration specified for a single iteration. This may be
+            <code>null</code> in which case the intrinsic duration will be used.
+            The duration in seconds of a single iteration. If set, it must be
+            greater than or equal to zero (including positive infinity).
+          </dd>
+          <dt>readonly attribute unrestricted float simpleDuration</dt>
+          <dd>
+            The simple duration calculated for this item. If
+            <code>specifiedDuration</code> is set and greater the or equal to
+            zero, this will match <code>specifiedDuration</code>. Otherwise,
+            this will reflect the calculated intrinsic duration of the item as
+            described in <a href="#calculating-the-simple-duration"
+              class="sectionRef"></a>.
           </dd>
           <dt>readonly attribute float? animationDuration</dt>
           <dd>
-            The amount of time in seconds the animation is in the animating
-            phase, minus any time it was paused.
-            This is roughly equivalent to <code>simpleDuration
-              * iterationCount</code> but I think it's more complicated than
-            that. If the animation is cancelled part way through, should this
-            update? I think it should (in order for this to be useful in
-            calculating the simple time / fill value).
+            The amount of time in seconds the animation is schedule to animate
+            as described in <a href="#calculating-the-animation-duration"></a>.
           </dd>
           <dt>readonly attribute float iterationCount</dt>
           <dd>
@@ -720,7 +712,11 @@
           <dt>readonly attribute unsigned short currentIteration</dt>
           <dd>
             The number of iterations that have completed. Equivalent to
-            <code>floor(animationTime / simpleDuration)</code>.
+            <code>floor(animationTime / simpleDuration)</code>. If
+            <code>simpleDuration</code> is zero, <code>currentIteration</code>
+            will be set to <code>floor(iterationCount)</code>.
+            <!-- Factor out this definition, it's used elsewhere and it needs
+            the note about infinity -->
           </dd>
           <dt>attribute unsigned short direction/reversing</dt>
           <dd>
