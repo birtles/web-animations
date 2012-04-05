@@ -412,113 +412,149 @@
       <section>
         <h3>Calculating the simple time</h3>
         <p class="note">
-          We don't need to worry about pause times here, they will be taken care
-          of when we calculate the animation time.
+          We don't need to be concerned about pause times here, they will be
+          taken care of when we calculate the animation time.
         </p>
         <p>
-          The simple time is calculated according to the following steps:
+          The simple time is calculated by first converting the <var>animation
+          time</var> down into intervals. This is called the <var>unscaled
+          simple time</var>. Following this, timing manipulations specified on
+          the timed item are applied to the <var>unscaled simple time</var> to
+          produce the <var>simple time</var>.
         </p>
-        <ol>
-          <li>
-            If the animation is inactive, return <code>null</code>.
-          </li>
-          <li>
-            If the simple duration is infinite,
-            <ol>
-              <li>If the direction is normal or alternate, return 0.</li>
-              <li>Otherwise, return <code>Infinity</code>.</li>
-            </ol>
-          </li>
-          <li>
-            <p>
-              Calculate the <var>forwards simple time</var> using the first
-              matching condition from the following list:
-            </p>
-            <dl class="switch">
-              <dt>
-                If the animation is in the delay phase,
-              </dt>
-              <dd>Let <var>forwards simple time</var> be 0.</dd>
-              <dt>
-                If the simple duration is zero,
-              </dt>
-              <dd>
-                Let <var>forwards simple time</var> be the simple duration.</dd>
-              <dt>
-                If the animation is animating,
-              </dt>
-              <dd>Let <var>forwards simple time</var> be <code>animationTime
-                % simpleDuration</code>.</dd>
-              <dt>
-                If <code>animationDuration</code> is a positive multiple of
-                <code>simpleDuration</code>
-              </dt>
-              <dd>Let <var>forwards simple time</var> be simpleDuration.
-              <dt>
-                Otherwise,
-              </dt>
-              <dd>
-                Let <var>forwards simple time</var> be
-                <code>animationDuration % simpleDuration</code>.
-              </dd>
-            </dl>
-          </li>
-          <li>
-            <p>
-              Calculate the <var>current direction</var> using the first
-              matching condition from the following list:
-            </p>
-            <dl class="switch">
-              <dt>
-                If the direction is normal,
-              </dt>
-              <dd>Let the <var>current direction</var> be forwards.</dd>
-              <dt>
-                If the direction is reverse,
-              </dt>
-              <dd>Let the <var>current direction</var> be reverse.</dd>
-              <dt>
-                If the animation is in the delay phase,
-              </dt>
-              <dd>Let the <var>current direction</var> be forwards if the
-                  direction is alternate, reverse otherwise.</dd>
-              <dt>
-                Otherwise,
-              </dt>
-              <dd>
-                <ol>
-                  <li>
-                    If the simple duration is zero, let <var>d</var> be
-                    <code>floor(iterationCount)</code>.
-                    <p>Otherwise, let <var>d</var> be <code>floor(<var>t</var>
-                    / simpleDuration)</code> where <var>t</var> is
-                    <code>animationTime</code> time if the animation is
-                    animating, or <code>animationDuration</code>. otherwise</p>
-                  </li>
-                  <li>If the direction is alternate-reverse increment
-                      <var>d</var> by 1.</li>
-                      <li>If the animation is not animating, and
+        <section>
+          <h4>Calculating the unscaled simple time</h4>
+          <p>
+            The <var>unscaled simple time</var> is calculated according to the
+            following steps:
+          </p>
+          <ol>
+            <li>
+              If the animation is inactive, return <code>null</code>.
+            </li>
+            <li>
+              If the simple duration is infinite, return zero.
+            </li>
+            <li>
+              If the animation is in the delay phase (i.e. <var>parent
+              time</var> &lt; <var>start time</var> + <var>start
+              delay)</var>, return zero.
+            </li>
+            <li>
+              If the simple duration is zero, return the <var>simple
+              duration</var>.
+            </li>
+            <li>
+              If <var>animation time</var> is not null (i.e. the animation is in
+              the animation phase), return <code><var>animation time</var>
+                % <var>simple duration</var></code>.
+            </li>
+            <li>
+              If the <var>animation duration</var> is a positive multiple of the
+              <var>simple duration</var>, return the <var>simple duration</var>.
+            </li>
+            <li>
+              Otherwise, return <code><var>animation duration</var>
+              % <var>simple duration</var></code>.
+            </li>
+          </ol>
+        </section>
+        <section>
+          <h4>Applying time manipulations</h4>
+          <p>
+            The <var>unscaled simple time</var> is converted into the
+            <var>simple time</var> using the following steps:
+          <ol>
+            <li>
+              If the <var>unscaled simple time</var> is <code>null</code>,
+              return <code>null</code>.
+            </li>
+            <li>
+              Let <var>scaled simple time</var> be the result of applying any
+              timing function defined for this timed element to the
+              <var>unscaled simple time</var>. <span class="todo">(Need more
+              detail here, or a link to where this is defined.)</span>
+            </li>
+            <li>
+              <p>
+                Calculate the <var>current direction</var> using the first
+                matching condition from the following list:
+              </p>
+              <dl class="switch">
+                <dt>
+                  If the direction is normal,
+                </dt>
+                <dd>Let the <var>current direction</var> be forwards.</dd>
+                <dt>
+                  If the direction is reverse,
+                </dt>
+                <dd>Let the <var>current direction</var> be reverse.</dd>
+                <dt>
+                  If the animation is in the delay phase (i.e. <var>parent
+                  time</var> &lt; <var>start time</var> + <var>start
+                  delay)</var>
+                </dt>
+                <dd>If the direction is alternate, let the <var>current
+                  direction</var> be forwards, otherwise, let the <var>current
+                  direction</var> be reverse.</dd>
+                <dt>
+                  Otherwise,
+                </dt>
+                <dd>
+                  <ol>
+                    <li>
+                      <p>
+                        If the <var>simple duration</var> is zero, let
+                        <var>d</var> be <code>floor(iterationCount)</code>.
+                      </p>
+                      <p>
+                        Otherwise, let <var>d</var> be <code>floor(<var>t</var>
+                        / <var>simple duration</var>)</code> where <var>t</var>
+                        is the <var>animation time</var> if it is not
+                        <code>null</code>, otherwise it is the <var>animation
+                        duration</var>.
+                      </p>
+                      <p class="note">
+                        If the <var>simple duration</var> is infinite, the
+                        result of <code>floor(<var>t</var> / <var>simple
+                        duration</var>)</code> will be 0 as defined by IEEE 754.
+                      </p>
+                    </li>
+                    <li>
+                      If the direction is alternate-reverse increment
+                      <var>d</var> by 1.
+                    </li>
+                    <li>
+                      If the animation is not animating, and
                       <code>animationDuration</code> is a positive multiple of
-                      <code>simpleDuration</code> increment <var>d</var> by
-                      1.</li>
-                  <li>If <var>d</var> is even (zero is considered even), let the
+                      <code>simpleDuration</code> increment <var>d</var> by 1.
+                    </li>
+                    <li>
+                      If <code><var>d</var> % 2 != 0</code>, let the
                       <var>current direction</var> be forwards, otherwise let
-                      the <var>current direction</var> be reverse.</li>
-                </ol>
-              </dd>
-            </dl>
-          </li>
-          <li>
-            <p>
-              If the <var>current direction</var> is forwards then return
-              the <var>forwards simple time</var>.
-            </p>
-            <p>
-              Otherwise return <code>simpleDuration</code> - <var>forwards
-                simple time</var>.
-            </p>
-          </li>
-        </ul>
+                      the <var>current direction</var> be reverse.
+                    </li>
+                  </ol>
+                </dd>
+              </dl>
+            </li>
+            <li>
+              <p>
+                If the <var>current direction</var> is forwards then return
+                the <var>scaled simple time</var>.
+              </p>
+              <p>
+                Otherwise return <code>simpleDuration</code> - <var>scaled 
+                  simple time</var>.
+              </p>
+            </li>
+          </ol>
+          <p class="note">
+            Applying the reverse behaviour after the timing function means that
+            ease-in becomes ease-out on reverse, however it avoids jumps in
+            values when reversing part-way.
+          </p>
+        </section>
       </section>
       <section>
         <h3>Seeking a timed item</h3>
