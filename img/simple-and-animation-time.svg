@@ -79,10 +79,12 @@
   <g transform="translate(120 10)">
     <!-- Text labels -->
     <g transform="translate(0 40)">
-      <text class="timeLabel">active</text>
-      <text x="100" class="timeLabel">start</text>
-      <text x="300" class="timeLabel">end</text>
-      <text x="400" class="timeLabel">inactive</text>
+      <text class="timeLabel">start time</text>
+      <text x="100" class="timeLabel" y="-0.6em">start of
+            <tspan x="100" dy="0.9em">animation</tspan></text>
+      <text x="300" class="timeLabel" y="-0.6em">end of
+            <tspan x="300" dy="0.9em">animation</tspan></text>
+      <text x="400" class="timeLabel">end time</text>
     </g>
     <!-- Arrows -->
     <g transform="translate(0 50)">
