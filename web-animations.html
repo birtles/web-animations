@@ -429,7 +429,8 @@
         </p>
         <ul>
           <li>Animation time is only defined while its animating</li>
-          <li>Simple time is defined while the animation is active</li>
+          <li>Simple time is defined while the animation is affecting the
+              target</li>
           <li>End-point exclusive timing at the repetition boundaries</li>
         </ul>
       </section>
@@ -455,64 +456,49 @@
         </ul>
       </section>
       <section>
-        <h3>Calculating the animation time</h3>
+        <h3>Calculating the item time</h3>
         <p>
           This basically involves:
         </p>
         <ul>
-          <li>
-            Getting the <var>simple time</var> from the parent group
-            <ul>
-              <li>If the parent is doing a delay with no backwards fill then we
-              should return null. (See discussion below.)</li>
-            </ul>
-          </li>
-          <li>Subtracting the <var>start time</var></li>
-          <li>Subtracting the <var>start delay</var></li>
-          <li>If it's negative, we're not animating, return
-              <code>null</code>.</li>
+          <li>Get the <var>simple time</var> from the parent group</li>
+          <li>Subtract the <var>start time</var></li>
           <li>Subtract pause offsets
             <ul>
               <li>Basically, you subtract the duration of completed pause
               intervals.</li>
               <li>If we're in the middle of a pause interval, you subtract the
-              amount of paused time. The maths for this depends if we store
+              amount of paused time. The maths for this depends on if we store
               pause endpoints in parent time (not good if you move stuff around
               in the tree), or offsets from the start time + a duration
               (probably better).</li>
             </ul>
           </li>
-          <li>If the time is greater than the animating duration, we're not
-              animation, return <code>null</code>.</li>
+          <li>Work out if we're in range (i.e. calculate end time)</li>
           <li>Return the resulting time</li>
         </ul>
-        <div class="feedbackWanted">
-          <p>
-            I'm having second thoughts about whether animation time should be
-            defined during delay / fill. The algorithms for calculating the
-            simple time would be slightly simpler if it were defined. The main
-            reason for making it undefined is so you can test from the API
-            whether the animation is running or not by just checking that time.
-            Maybe we should separate the concepts of "local time" from
-            "animation time" where animation time is local time when it is
-            animating (and undefined otherwise)? Or call it "item time"?
-          </p>
-          <p>
-            It might also make sense to say that the simple time is not defined
-            during the delay phase if we're not doing a backwards fill but
-            I think that binds the timing and animation models too closely. The
-            "time" should still be defined. It's up to the animation model as to
-            what it does with it. Hmm, I'm not sure. It's nice if a group
-            can tell its children what to do by means of the simple time they
-            get.
-          </p>
-        </div>
+      </section>
+      <section>
+        <h3>Calculating the animation time</h3>
+        <p>
+          This basically involves:
+        </p>
+        <ul>
+          <li>Get the <var>item time</var> as described above</li>
+          <li>Subtract the <var>start delay</var></li>
+          <li>If it's negative, we're not animating, return
+              <code>null</code>.</li>
+          <li>If the time is greater than the animation duration, we're not
+              animating, return <code>null</code>.</li>
+          <li>Return the resulting time</li>
+        </ul>
       </section>
       <section>
         <h3>Calculating the simple time</h3>
         <p class="note">
           We don't need to be concerned about pause times here, they will be
-          taken care of when we calculate the animation time.
+          taken care of when we calculate the item time (see <a
+            href="#calculating-the-item-time" class="sectionRef"></a>).
         </p>
         <p>
           The simple time is calculated by first converting the <var>animation
@@ -529,24 +515,34 @@
           </p>
           <ol>
             <li>
-              If the animation is inactive, return <code>null</code>.
+              If the <var>item time</var> is null (i.e. the animation is
+              inactive), return <code>null</code>.
+            </li>
+            <li>
+              If <var>item time</var> &lt; <var>start delay</var> (i.e. the
+              animation is delayed), then
+              <dl class="switch">
+                <dt>
+                  If the item has fill mode that produces a backwards fill,
+                </dt>
+                <dd>return zero.</dd>
+                <dt>
+                  Otherwise,
+                </dt>
+                <dd>return <code>null</code>.</dd>
+              </dl>
             </li>
             <li>
               If the simple duration is infinite, return zero.
-            </li>
-            <li>
-              If the animation is in the delay phase (i.e. <var>parent
-              time</var> &lt; <var>start time</var> + <var>start
-              delay)</var>, return zero.
             </li>
             <li>
               If the simple duration is zero, return the <var>simple
               duration</var>.
             </li>
             <li>
-              If <var>animation time</var> is not null (i.e. the animation is in
-              the animation phase), return <code><var>animation time</var>
-                % <var>simple duration</var></code>.
+              If <var>animation time</var> is not <code>null</code> (i.e. the
+              animation is animating), return <code><var>animation time</var>
+              % <var>simple duration</var></code>.
             </li>
             <li>
               If the <var>animation duration</var> is a positive multiple of the
@@ -575,10 +571,8 @@
               detail here, or a link to where this is defined.)</span>
             </li>
             <li>
-              <p>
-                Calculate the <var>current direction</var> using the first
-                matching condition from the following list:
-              </p>
+              Calculate the <var>current direction</var> using the first
+              matching condition from the following list:
               <dl class="switch">
                 <dt>
                   If the direction is normal,
@@ -588,14 +582,6 @@
                   If the direction is reverse,
                 </dt>
                 <dd>Let the <var>current direction</var> be reverse.</dd>
-                <dt>
-                  If the animation is in the delay phase (i.e. <var>parent
-                  time</var> &lt; <var>start time</var> + <var>start
-                  delay)</var>
-                </dt>
-                <dd>If the direction is alternate, let the <var>current
-                  direction</var> be forwards, otherwise, let the <var>current
-                  direction</var> be reverse.</dd>
                 <dt>
                   Otherwise,
                 </dt>
@@ -626,13 +612,11 @@
               </dl>
             </li>
             <li>
+              If the <var>current direction</var> is forwards then return
+              the <var>scaled simple time</var>.
               <p>
-                If the <var>current direction</var> is forwards then return
-                the <var>scaled simple time</var>.
-              </p>
-              <p>
-                Otherwise return the <var>simple duration</var> - <var>scaled 
-                  simple time</var>.
+                Otherwise, return the <var>simple duration</var> - <var>scaled 
+                simple time</var>.
               </p>
             </li>
           </ol>
@@ -667,10 +651,8 @@
               <var>t</var> be the <var>animation duration</var>.
             </li>
             <li>
-              <p>
-                Return <code>floor(<var>t</var> / <var>simple
-                duration</var>)</code>.
-              </p>
+              Return <code>floor(<var>t</var> / <var>simple
+              duration</var>)</code>.
               <p class="note">
                 If the <var>simple duration</var> is infinite, the
                 result of <code>floor(<var>t</var> / <var>simple
@@ -802,20 +784,21 @@
           </dd>
           <dt>readonly attribute unrestricted float? simpleTime</dt>
           <dd>
-            <p>
-              The time in seconds representing the offset into the simple
-              duration using the steps described in <a
-                href="#calculating-the-simple-time" class="sectionRef"></a>.
-            </p>
+            The time in seconds representing the offset into the simple
+            duration using the steps described in <a
+              href="#calculating-the-simple-time" class="sectionRef"></a>. As
+            a result of that definition, this property will be
+            non-<code>null</code> only when the animation is affecting its
+            target.
           </dd>
           <dt>readonly attribute float? animationTime</dt>
           <dd>
-            The number of seconds that have elapsed since startTime
-            + startDelay. If the animation is not yet active, returns null.
-            <span class="todo">I think we should define this such that it is
-              null during delay, and null during fill. That way you can test if
-              an animation is animating with <code>animationTime !=
-              null</code></span>
+            The time in seconds representing the offset into the animation
+            phase. It is calculated using the steps described in <a
+              href="#calculating-the-animation-time" class="sectionRef"></a>. As
+            a result of that definition, this property will be
+            non-<code>null</code> if and only if the animation is in the
+            animating phase.
           </dd>
           <dt>attribute float startDelay</dt>
           <dd>
