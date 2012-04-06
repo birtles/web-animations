@@ -513,7 +513,7 @@
             since there is no overlap between intervals.
           </p>
           <p>
-            In the example below, for the repeated animation, at animation time
+            In the examples below, for the repeated animation, at animation time
             1s, the simple time is 0. For the sequenced animation, at parent
             simple time 1s, animation A has finished animating and animation
             B has begun; there is no overlap, only animation B is affecting the
@@ -529,14 +529,21 @@
             intervals.
           </p>
           <p>
-            An exception to this behaviour is that when filling the animation
-            value. This behavior falls out of the algorithm given in <a
+            An exception to this behaviour is that when performing a fill, if
+            the fill begins at an interval endpoint, the endpoint is used. This
+            behavior falls out of the algorithm given in <a
             href="#calculating-the-unscaled-simple-time"
             class="sectionRef"></a> and is demonstrated below.
           </p>
-          <p class="todo">
-            Caption: At item time 2s, the first frame of the animation is shown,
-            but at time 4s, the last frame is shown.
+          <div class="figure">
+            <object data="img/endpoint-exclusive-timing-and-fill.svg"
+                width="600"></object>
+          </div>
+          <p class="caption">
+            Caption: After one iteration, the first frame of the animation is
+            shown, but after two iterations (and thereonwards), the last frame
+            is shown due to the special behavior defined when an animation
+            fills.
           </p>
         </section>
       </section>
