@@ -474,7 +474,8 @@
           <p>
             These time spaces can also be used to describe intervals and
             durations. The distinction between simple duration and active
-            duration is particularly common and is defined as follows:
+            duration is particularly common. The definition of these terms falls
+            out of the defition of the time spaces and is summarized as follows:
           </p>
           <dl>
             <dt>Simple duration</dt>
@@ -490,8 +491,15 @@
           <p>
             This may be visualized as follows:
           </p>
-          <p class="todo">
-            Diagram here highlighting durations
+          <div class="figure">
+            <object data="img/simple-and-animation-duration.svg"
+                width="600"></object>
+          </div>
+          <p class="caption">
+            A comparison of the simple and animation durations for an animation
+            with an iteration count of 2.5.<br>
+            Note that the simple duration for the final iteration does not
+            change, it is simply cut-off by the animation duration.
           </p>
         </section>
         <section>
@@ -510,8 +518,8 @@
           <p>
             An exception to this behaviour is that when filling the .
             This behavior falls out of the algorithm given in <a
-            href="#calculating-the-unscaled-simple-time"></a> and is
-            demonstrated below.
+            href="#calculating-the-unscaled-simple-time"
+            class="sectionRef"></a> and is demonstrated below.
           </p>
           <p class="todo">
             Caption: At item time 2s, the first frame of the animation is shown,
