@@ -505,19 +505,32 @@
         <section>
           <h4>Interval timing</h4>
           <p>
-            For intervals of time, Web Animations uses an endpoint exclusive
+            For intervals of time, Web Animations uses an endpoint-exclusive
             timing model. This means that whilst the begin time of an interval
             is included in the interval, the end time time is not. In interval
             notation this can written <code>[begin,end)</code>. This model
             provides sensible behavior when intervals are repeated and sequenced
             since there is no overlap between intervals.
           </p>
-          <p class="todo">
-            In the example below, at animation time 2s, 
+          <p>
+            In the example below, for the repeated animation, at animation time
+            1s, the simple time is 0. For the sequenced animation, at parent
+            simple time 1s, animation A has finished animating and animation
+            B has begun; there is no overlap, only animation B is affecting the
+            target.
+          </p>
+          <div class="figure">
+            <object data="img/endpoint-exclusive-timing.svg"
+                width="600"></object>
+          </div>
+          <p class="caption">
+            Illustration of end-point exclusive timing. For both repeated and
+            sequenced animations there is no overlap at the boundaries between
+            intervals.
           </p>
           <p>
-            An exception to this behaviour is that when filling the .
-            This behavior falls out of the algorithm given in <a
+            An exception to this behaviour is that when filling the animation
+            value. This behavior falls out of the algorithm given in <a
             href="#calculating-the-unscaled-simple-time"
             class="sectionRef"></a> and is demonstrated below.
           </p>
