@@ -396,6 +396,21 @@
         <p class="caption">
           Animation phases.
         </p>
+        <div class="feedbackWanted">
+          <p>
+            I'm having second thoughts about the definition of "active". I think
+            when we come to define the behaviour of sequence contains we want
+            "active" (or some similar term) to mean "from the start time to the
+            end of animation", i.e. <var>animation duration</var> + <var>start
+            delay</var>. I <em>think</em> that's how sequence containers
+            work&mdash;i.e. fill doesn't effect the timing of other elements.
+          </p>
+          <p>
+            I think we might even be able to just define "active" as "delayed"
+            + "animating" without even having to rework the algorithms further
+            down.
+          </p>
+        </div>
         <p>
           Depending on the an animation's properties, it may not enter all of
           these phases. Following are some common patterns of animations phases.
