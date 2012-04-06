@@ -214,25 +214,9 @@
         <h3>The <code>WebAnimationTemplate</code> interface</h3>
         <p>
           <dl title="[Constructor] interface WebAnimationTemplate" class="idl">
-            <dt>attribute unrestricted float? specifiedDuration</dt>
+            <dt>attribute WebTiming timing</dt>
             <dd>
-              See the description on the WebTimedItem interface.
-            </dd>
-            <dt>attribute float iterationCount</dt>
-            <dd>
-              See the description on the WebTimedItem interface.
-            </dd>
-            <dt>attribute unsigned short reversing</dt>
-            <dd>
-              See the description on the WebTimedItem interface.
-            </dd>
-            <dt>attribute float startDelay</dt>
-            <dd>
-              See the description on the WebTimedItem interface.
-            </dd>
-            <dt>attribute WebTimingFunction timingFunction</dt>
-            <dd>
-              See the description on the webTimedItem interface.
+              The timing parameters to use for generated animations.
             </dd>
             <dt>attribute WebAnimationFunctionCollection functions</dt>
             <dd>
@@ -833,13 +817,24 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebTimedItem</code> interface</h3>
+        <h3>The <code>WebTiming</code> interface</h3>
         <p>
-          Represents the timing properties and methods of an element in the
-          timeline: either a <a>WebAnimation</a> or
-          a <a>WebAnimationGroup</a>.
+          Represents a collection of timing properties. Objects of this type are
+          typically writeable when they belong to a <a>WebAnimationTemplate</a>
+          or <a>WebAnimationGroupTemplate</a> object, and readonly when attached
+          to a <a>WebTimedItem</a> object.
         </p>
-        <dl title="interface WebTimedItem" class="idl">
+        <p class="note">
+          Should this be called <code>WebTimingParameters</code>? It's probably
+          not used directly so it's ok to make it long?
+        </p>
+        <p class="todo">
+          Need to define the readonly behavior here. It's not enough to just say
+          that the object in the <a>WebTimedItem</a> interface is readonly.
+          I think we need to explicitly say that therefore all the members in
+          this object also become readonly in that case.
+        </p>
+        <dl title="interface WebTiming" class="idl">
           <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
           <dd>
             No fill.
@@ -875,17 +870,55 @@
             Even iterations are played in the reverse direction from the way
             they were specified, odd iterations are played as specified.
           </dd>
-          <dt>attribute unrestricted float? specifiedDuration</dt>
+          <dt>attribute float startDelay</dt>
+          <dd>
+            The number of seconds from <code>startTime</code> until the timed
+            item should begin executing.
+          </dd>
+          <dt>attribute unrestricted float? duration</dt>
           <dd>
             The duration specified for a single iteration. This may be
             <code>null</code> in which case the intrinsic duration will be used.
-            The duration in seconds of a single iteration. If set, it must be
-            greater than or equal to zero (including positive infinity).
+            If set, it must be greater than or equal to zero (including positive
+            infinity).
+          </dd>
+          <dt>attribute float iterationCount</dt>
+          <dd>
+            A real number greater than or equal to 0 representing the number
+            of times to repeat the animation.
+          </dd>
+          <dt>attribute unsigned short direction</dt>
+          <dd>
+            Direction behavior as specified by on of the WEBA_DIRECTION_*
+            constants defined in this interface.
+          </dd>
+          <dt>attribute WebTimingFunction timingFunction</dt>
+          <dd class="todo">
+            TBD.
+          </dd>
+          <dt>attribute unsigned short fill</dt>
+          <dd>
+            Fill mode as specified by one of the WEBA_FILL_* constants defined
+            in this interface.
+          </dd>
+        </dl>
+      </section>
+      <section>
+        <h3>The <code>WebTimedItem</code> interface</h3>
+        <p>
+          Represents the timing properties and methods of an element in the
+          timeline: either a <a>WebAnimation</a> or
+          a <a>WebAnimationGroup</a>.
+        </p>
+        <dl title="interface WebTimedItem" class="idl">
+          <dt>readonly attribute WebTiming timing</dt>
+          <dd>
+            The timing parameters for this item.
           </dd>
           <dt>readonly attribute unrestricted float simpleDuration</dt>
           <dd>
             The simple duration calculated for this item. If
-            <code>specifiedDuration</code> is set and greater the or equal to
+            <code>timing.duration</code> is set and greater than or equal to
             zero, this will match <code>specifiedDuration</code>. Otherwise,
             this will reflect the calculated intrinsic duration of the item as
             described in <a href="#calculating-the-simple-duration"
@@ -897,20 +930,10 @@
             as described in <a href="#calculating-the-animation-duration"
               class="sectionRef"></a>.
           </dd>
-          <dt>readonly attribute float iterationCount</dt>
-          <dd>
-            A real number greater than or equal to 0 representing the number
-            of times to repeat the animation.
-          </dd>
           <dt>readonly attribute unsigned long? currentIteration</dt>
           <dd>
             The number of iterations that have completed as described in <a
               href="#calculating-the-current-iteration" class="sectionRef"></a>.
-          </dd>
-          <dt>attribute unsigned short direction</dt>
-          <dd>
-            Direction behavior as specified by on of the WEBA_DIRECTION_*
-            constants defined in this interface.
           </dd>
           <dt>attribute float startTime</dt>
           <dd>
@@ -942,22 +965,6 @@
             a result of that definition, this property will be
             non-<code>null</code> if and only if the animation is in the
             animating phase.
-          </dd>
-          <dt>attribute float startDelay</dt>
-          <dd>
-            The number of seconds from <code>startTime</code> until the timed
-            item should begin executing.
-            <span class="todo">Need to define what happens when you change
-              this for an animation in flight. Make it read-only?</span>
-          </dd>
-          <dt>attribute WebTimingFunction timingFunction</dt>
-          <dd class="todo">
-            TBD.
-          </dd>
-          <dt>attribute unsigned short fill</dt>
-          <dd>
-            Fill mode as specified by one of the WEBA_FILL_* constants defined
-            in this interface.
           </dd>
           <dt>readonly attribute WebAnimationGroup parentGroup</dt>
           <dd>
