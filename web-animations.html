@@ -995,6 +995,13 @@
             group.
           </dd>
         </dl>
+        <div class="feedbackWanted">
+          How about a <code>reverse</code> method? What it does is call
+          <code>cancel</code> on the timed item. Then it generates a clone with
+          the <code>startTime</code> set to the current time. Then it sets the
+          <code>direction</code> to its opposite (i.e. normal&#x2194;reverse,
+          alternate&#x2194;alternate-reverse) and returns the new timed item?
+        </div>
         <div class="todo">
           <p>
             Similar to <code>cancel</code>, do we want a method to terminate and
