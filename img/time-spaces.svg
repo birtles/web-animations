@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
+  viewBox="0 0 600 335">
+  <defs>
+    <style type="text/css">
+    svg {
+      font-size: 1.2em;
+    }
+    .parentTimelineLabel {
+      font-size: 0.8em;
+    }
+    .line, .arrowLine, .dottedArrow {
+      stroke: black;
+      stroke-width: 1.5;
+      fill: none;
+    }
+    .arrowLine, .dottedArrow {
+      marker-end: url(#arrow);
+    }
+    .dottedArrow {
+      stroke-dasharray: 4 4;
+      stroke-width: 2;
+    }
+    .activeSpan  {
+      fill: lightgrey;
+      stroke: black;
+    }
+    .animatingSpan  {
+      fill: aqua;
+      stroke: black;
+    }
+    .timeLabel {
+      text-anchor: middle;
+      font-size: 0.8em;
+    }
+    .localTimelineLabel {
+      font-size: 0.7em;
+    }
+    .localTimelineTick {
+      font-size: 0.6em;
+      text-anchor: middle;
+    }
+    .itemTime {
+      stroke: purple;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+    }
+    .animationTime {
+      stroke: orange;
+      stroke-width: 5;
+      fill: none;
+      stroke-linecap: round;
+    }
+    .simpleTime, .simpleTimeDotted {
+      stroke: green;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .simpleTimeDotted {
+      stroke-dasharray: 3 6;
+    }
+    .excludedPoint {
+      fill: none;
+      stroke: green;
+      stroke-width: 2;
+    }
+    .includedPoint {
+      fill: green;
+      stroke: green;
+      stroke-width: 2;
+    }
+    .legendText {
+      font-size: 0.7em;
+    }
+    </style>
+    <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
+      markerHeight="5">
+      <path d="M0-5l10 5l-10 5z"/>
+    </marker>
+  </defs>
+  <!-- Parent simple timeline -->
+  <g>
+    <text x="43" y="1em" class="parentTimelineLabel">Parent
+      simple time</text>
+    <line x1="40" x2="95%" y1="22" y2="22" class="arrowLine"/>
+    <path d="M40 20v4" class="line"/>
+    <text x="40" y="3em" class="localTimelineTick">0</text>
+  </g>
+  <!-- A single animation -->
+  <g transform="translate(120 20)">
+    <!-- Text labels -->
+    <g transform="translate(0 40)">
+      <text class="timeLabel">start time</text>
+      <text x="75" class="timeLabel" y="-0.6em">start of
+        <tspan x="75" dy="0.9em">animation</tspan></text>
+      <text x="325" class="timeLabel" y="-0.6em">end of
+        <tspan x="325" dy="0.9em">animation</tspan></text>
+      <text x="400" class="timeLabel">end time</text>
+    </g>
+    <!-- Arrows -->
+    <g transform="translate(0 50)">
+      <path d="M0 0v22" class="dottedArrow"/>
+      <path d="M75 0v22" class="dottedArrow"/>
+      <path d="M325 0v22" class="dottedArrow"/>
+      <path d="M400 0v22" class="dottedArrow"/>
+    </g>
+    <!-- Animation shaded areas -->
+    <g transform="translate(0 90)">
+      <rect width="400" height="150" class="activeSpan"/>
+      <rect x="75" width="250" height="150" class="animatingSpan"/>
+    </g>
+    <!-- Local timeline -->
+    <g transform="translate(-30 240)">
+      <text y="-0.8em" transform="rotate(-90)" class="localTimelineLabel">
+        Time space time</text>
+      <path d="M0 0v-150" class="line"/>
+      <path d="M-2 0h4M-2-37.5h4M-2-75h4M-2-112.5h4M-2-150h4" class="line"/>
+      <text y="1em" transform="rotate(-90)" class="localTimelineTick">
+        0
+        <tspan x="37.5">1</tspan>
+        <tspan x="75">2</tspan>
+        <tspan x="112.5">3</tspan>
+        <tspan x="150">4</tspan>
+      </text>
+    </g>
+    <!-- Time space time -->
+    <g transform="translate(0 240)">
+      <!-- Item time -->
+      <path d="M0 0l400-150" class="itemTime"/>
+      <!-- Animation time -->
+      <path d="M75 0l250-93.75" class="animationTime"/>
+      <!-- Simple time solid parts -->
+      <path d="M0 0h75l100-37.5m0 37.5l100-37.5m0 37.5l50-18.75h75"
+        class="simpleTime" mask="url(#excludedEndPoints)"/>
+      <path d="M175-37.5v37.5m100-37.5v37.5" class="simpleTimeDotted"
+        mask="url(#excludedEndPoints)"/>
+      <!-- End-points to demonstrate end-point exlcusive timing -->
+      <circle cx="175" cy="-37.5" r="4" class="excludedPoint"/>
+      <circle cx="175" cy="0" r="3" class="includedPoint"/>
+      <circle cx="275" cy="-37.5" r="4" class="excludedPoint"/>
+      <circle cx="275" cy="0" r="3" class="includedPoint"/>
+      <mask id="excludedEndPoints">
+        <rect x="-10" y="-160" width="420" height="170" fill="white"/>
+        <circle cx="175" cy="-37.5" r="4" fill="black" stroke="none"/>
+        <circle cx="275" cy="-37.5" r="4" fill="black" stroke="none"/>
+      </mask>
+    </g>
+    <!-- Legend -->
+    <g transform="translate(100 265)">
+      <path d="M0 0h40" class="itemTime"/>
+      <text x="50px" y="0.4em" class="legendText">Item time</text>
+      <g transform="translate(0 18)">
+        <path d="M0 0h40" class="animationTime"/>
+        <text x="50px" y="0.4em" class="legendText">Animation time</text>
+      </g>
+      <g transform="translate(0 36)">
+        <path d="M0 0h40" class="simpleTime"/>
+        <text x="50px" y="0.4em" class="legendText">Simple time</text>
+      </g>
+    </g>
+  </g>
+</svg>

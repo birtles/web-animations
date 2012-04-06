@@ -145,14 +145,13 @@
         already completed and is now inactive. Animation D has yet to begin and
         is also inactive.
       </p>
-      <p class="todo">
-        End-point exclusive timing&mdash;this probably belongs in the timed item
-        section.
-      </p>
-      <p class="todo">
-        Define when the timeline starts&mdash;is it document load, or can it
-        start beforehand?
-      </p>
+      <section>
+        <h3>Start of the timeline</h3>
+        <p class="todo">
+          Define when the timeline starts&mdash;is it document load, or can it
+          start beforehand?
+        </p>
+      </section>
     </section>
 
     <section>
@@ -412,27 +411,113 @@
           (d) An animation with delay only (no forwards fill)<br>
         </p>
       </section>
-      <section>
+      <section class="informative">
         <h3>Simple time and animation time</h3>
         <p>
-          Need to describe the following:
-        </p>
-        <div class="figure">
-          <object data="img/simple-and-animation-time.svg" width="600"></object>
-        </div>
-        <p class="caption">
-          A comparison of simple and animation time for an animation with
-          a simple duration of 1s and an iteration count of 2.5.
+          Times in Web Animations are relative to some point of reference
+          within the timeline. These different points of reference produce
+          different time spaces. An analogue is computer graphics where
+          a graphical element may be present in one of a number of different
+          coordinate spaces. <span class="todo">(This analogue doesn't quite
+          work. Is it better to drop it? Does it make sense to
+          others?)</span>
         </p>
         <p>
-          Things to point out:
+          Within Web Animations, the following time spaces are used:
         </p>
-        <ul>
-          <li>Animation time is only defined while its animating</li>
-          <li>Simple time is defined while the animation is affecting the
-              target</li>
-          <li>End-point exclusive timing at the repetition boundaries</li>
-        </ul>
+        <dl>
+          <dt>Document time</dt>
+          <dd>
+            A time space whose zero point is the start time of the document
+            timeline as defined in <a href="#start-of-the-timeline"
+              class="sectionRef"></a>.
+          </dd>
+          <dt>Parent simple time</dt>
+          <dd>
+            A time space whose zero time is the beginning of the parent
+            animation group's current iteration.
+            Unless the document creates additional animation groups, this will
+            be equivalent to document time.
+          </dd>
+          <dt>Item time</dt>
+          <dd>
+            A time space whose zero time is when the item becomes active. Item
+            time is undefined when the item is not active and hence cannot be
+            negative.
+          </dd>
+          <dt>Animation time</dt>
+          <dd>
+            A time space whose zero time is when the item begins animating. It
+            is undefined when the item is not animating and hence cannot be
+            negative.
+          </dd>
+          <dt>Simple time</dt>
+          <dd>
+            A time space whose zero time is the beginning of the current
+            iteration. It is defined whenever the item is able to affect its
+            target which will depend on the item's fill behaviour. As a result,
+            the simple time may be defined even when the animation time is not.
+          </dd>
+        </dl>
+        <p>
+          Some of these time spaces are demonstrated below.
+        </p>
+        <div class="figure">
+          <object data="img/time-spaces.svg" width="600"></object>
+        </div>
+        <p class="caption">
+          A comparison of item time, animation time, and simple time for an
+          animation with a simple duration of 1s and an iteration count of 2.5.
+        </p>
+        <section>
+          <h4>Simple duration and animation duration</h4>
+          <p>
+            These time spaces can also be used to describe intervals and
+            durations. The distinction between simple duration and active
+            duration is particularly common and is defined as follows:
+          </p>
+          <dl>
+            <dt>Simple duration</dt>
+            <dd>
+              The time taken for a single iteration of the item to complete.
+            </dd>
+            <dt>Animation duration</dt>
+            <dd>
+              The time taken for the animation phase of the item to complete.
+              This may be longer or shorter than the simple duration.
+            </dd>
+          </dl>
+          <p>
+            This may be visualized as follows:
+          </p>
+          <p class="todo">
+            Diagram here highlighting durations
+          </p>
+        </section>
+        <section>
+          <h4>Interval timing</h4>
+          <p>
+            For intervals of time, Web Animations uses an endpoint exclusive
+            timing model. This means that whilst the begin time of an interval
+            is included in the interval, the end time time is not. In interval
+            notation this can written <code>[begin,end)</code>. This model
+            provides sensible behavior when intervals are repeated and sequenced
+            since there is no overlap between intervals.
+          </p>
+          <p class="todo">
+            In the example below, at animation time 2s, 
+          </p>
+          <p>
+            An exception to this behaviour is that when filling the .
+            This behavior falls out of the algorithm given in <a
+            href="#calculating-the-unscaled-simple-time"></a> and is
+            demonstrated below.
+          </p>
+          <p class="todo">
+            Caption: At item time 2s, the first frame of the animation is shown,
+            but at time 4s, the last frame is shown.
+          </p>
+        </section>
       </section>
       <section>
         <h3>Calculating the simple duration</h3>
@@ -469,8 +554,8 @@
               intervals.</li>
               <li>If we're in the middle of a pause interval, you subtract the
               amount of paused time. The maths for this depends on if we store
-              pause endpoints in parent time (not good if you move stuff around
-              in the tree), or offsets from the start time + a duration
+              pause endpoints in parent simple time (not good if you move stuff
+              around in the tree), or offsets from the start time + a duration
               (probably better).</li>
             </ul>
           </li>
@@ -689,7 +774,7 @@
           <li>end time (it might have been cancelled so you can just calculate
               this)</li>
           <li>target element</li>
-          <li>parent time container</li>
+          <li>parent animation group</li>
           <li>pointer to animation template (unless data has changed on the
           template since this was made in which case you need to store the
           modifications)</li>
@@ -780,7 +865,7 @@
           <dt>readonly attribute float endTime</dt>
           <dd>
             The time at which the animation ceases to be active expressed in
-            seconds relative to the parent time container.
+            seconds relative to the parent animation group.
           </dd>
           <dt>readonly attribute unrestricted float? simpleTime</dt>
           <dd>
@@ -863,9 +948,10 @@
           <p>
             Probably want methods for getting the startTime etc. in document
             time (i.e. in terms of the root time container). Or is it ok just to
-            have a method on the parent time container you pass your time to and
-            it does the conversion? Note that the conversion is not necessarily
-            as trivial as it seems if the parent time container is paused.
+            have a method on the parent animation group you pass your time to
+            and it does the conversion? Note that the conversion is not
+            necessarily as trivial as it seems if the parent animation group is
+            paused.
           </p>
         </div>
       </section>
