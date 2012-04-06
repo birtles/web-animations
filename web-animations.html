@@ -222,7 +222,7 @@
             <dd>
               See the description on the WebTimedItem interface.
             </dd>
-            <dt>attribute unsigned short direction/reversing</dt>
+            <dt>attribute unsigned short reversing</dt>
             <dd>
               See the description on the WebTimedItem interface.
             </dd>
@@ -842,19 +842,38 @@
         <dl title="interface WebTimedItem" class="idl">
           <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
           <dd>
-            No fill
+            No fill.
           </dd>
           <dt>const unsigned short WEBA_FILL_FORWARDS = 1</dt>
           <dd>
-            Fill forwards (=<code>fill="freeze"</code> in SVG speak)
+            Fill forwards (=<code>fill="freeze"</code> in SVG speak).
           </dd>
           <dt>const unsigned short WEBA_FILL_BACKWARDS = 2</dt>
           <dd>
-            Fill backwards
+            Fill backwards.
           </dd>
           <dt>const unsigned short WEBA_FILL_FORWARDS = 3</dt>
           <dd>
-            Fill backwards and forwards
+            Fill backwards and forwards.
+          </dd>
+          <dt>const unsigned short WEBA_DIRECTION_NORMAL = 0</dt>
+          <dd>
+            All iterations are played as specified.
+          </dd>
+          <dt>const unsigned short WEBA_DIRECTION_REVERSE = 1</dt>
+          <dd>
+            All iterations are played in the reverse direction from the way they
+            were specified.
+          </dd>
+          <dt>const unsigned short WEBA_DIRECTION_ALTERNATE = 2</dt>
+          <dd>
+            Even iterations are played as specified, odd iterations are played
+            in the reverse direction from the way they were specified.
+          </dd>
+          <dt>const unsigned short WEBA_DIRECTION_ALTERNATE_REVERSE = 3</dt>
+          <dd>
+            Even iterations are played in the reverse direction from the way
+            they were specified, odd iterations are played as specified.
           </dd>
           <dt>attribute unrestricted float? specifiedDuration</dt>
           <dd>
@@ -888,14 +907,10 @@
             The number of iterations that have completed as described in <a
               href="#calculating-the-current-iteration" class="sectionRef"></a>.
           </dd>
-          <dt>attribute unsigned short direction/reversing</dt>
+          <dt>attribute unsigned short direction</dt>
           <dd>
-            TBD. I think we want more control than just "When it finishes, go
-            backwards." We want to be able to trigger the reverse animation on
-            demand. Maybe we can have direction here as per CSS Animations and
-            then add a parameter on <code>WebAnimationTemplate</code> that
-            runs the animation in reverse? In SVG/CSS you could specify
-            different conditions that trigger the reverse effect?
+            Direction behavior as specified by on of the WEBA_DIRECTION_*
+            constants defined in this interface.
           </dd>
           <dt>attribute float startTime</dt>
           <dd>
