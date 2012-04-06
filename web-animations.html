@@ -1264,6 +1264,30 @@
       </section>
       <section>
         <h3>The <code>WebAnimationFunction</code> interface</h3>
+        <div class="todo">
+          <p>
+            This should probably become a superclass from which we create
+            <code>WebKeyframesFunction</code> and
+            <code>WebTwoValuedFunction</code>. It seems like it might even be
+            useful to allow script to provide its own function. I'm not sure how
+            that works exactly, but if we were to support that, then the
+            interface would be something like:
+          </p>
+          <ul>
+            <li><code>Sample(float simpleProgress, Element target, any
+              underlyingValue)</code> (where <code>simpleProgress</code> is the
+            ratio of <var>simple time</var> to <var>simple duration</var>)</li>
+          </ul>
+          <p>
+            Implementations of the function would be expected to produce the
+            same result given the same parameters so the implementation could
+            cache the result and not call the function when the parameters were
+            the same.
+          </p>
+          <p>
+            That would potentially let you animate anything.
+          </p>
+        </div>
         <p>
           I think most of the members of the interface, perhaps all, should be
           readonly when this object is returned from a <code>WebAnimation</code>
