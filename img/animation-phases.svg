@@ -43,46 +43,40 @@
     <line x1="4em" x2="97%" y1="0.8em" y2="0.8em" class="arrowLine"/>
   </g>
   <!-- A single animation -->
-  <g transform="translate(120 20)">
+  <g transform="translate(140 20)">
     <!-- Text labels -->
     <g transform="translate(0 40)">
       <text class="timeLabel">start time</text>
-      <text x="100" class="timeLabel" y="-0.6em">start of
-            <tspan x="100" dy="0.9em">animation</tspan></text>
-      <text x="300" class="timeLabel" y="-0.6em">end of
-            <tspan x="300" dy="0.9em">animation</tspan></text>
-      <text x="400" class="timeLabel">end time</text>
+      <text x="120" class="timeLabel" y="-0.6em">start of
+                       <tspan x="120" dy="0.9em">animation</tspan></text>
+      <text x="320" class="timeLabel">end time</text>
     </g>
     <!-- Arrows -->
     <g transform="translate(0 50)">
       <path d="M0 0v34" class="dottedArrow"/>
-      <path d="M100 0v34" class="dottedArrow"/>
-      <path d="M300 0v34" class="dottedArrow"/>
-      <path d="M400 0v34" class="dottedArrow"/>
+      <path d="M120 0v34" class="dottedArrow"/>
+      <path d="M320 0v34" class="dottedArrow"/>
     </g>
     <!-- Animation shaded areas -->
     <g transform="translate(0 100)">
-      <rect width="400" height="60" class="activeSpan"/>
-      <rect x="100" width="200" height="60" class="animatingSpan"/>
+      <rect width="320" height="60" class="activeSpan"/>
+      <rect x="120" width="200" height="60" class="animatingSpan"/>
     </g>
     <!-- Region labels -->
     <g transform="translate(0 170)">
-      <path d="M2 0s0 7 7 7h34s7 0 7 7c0 0 0-7 7-7h34s7 0 7-7" class="bracket"/>
-      <path d="M102 0s0 7 7 7h84s7 0 7 7c0 0 0-7 7-7h84s7 0 7-7"
-        class="bracket"/>
-      <path d="M302 0s0 7 7 7h34s7 0 7 7c0 0 0-7 7-7h34s7 0 7-7"
+      <path d="M2 0s0 7 7 7h44s7 0 7 7c0 0 0-7 7-7h44s7 0 7-7" class="bracket"/>
+      <path d="M122 0s0 7 7 7h84s7 0 7 7c0 0 0-7 7-7h84s7 0 7-7"
         class="bracket"/>
       <g transform="translate(0 34)">
-        <text x="50" class="regionLabel">delayed</text>
-        <text x="200" class="regionLabel">animating</text>
-        <text x="350" class="regionLabel">filling</text>
+        <text x="60" class="regionLabel">delayed</text>
+        <text x="220" class="regionLabel">animating</text>
       </g>
     </g>
     <!-- Active region label -->
     <g transform="translate(0 220)">
-      <path d="M0 0s0 7 7 7h186s7 0 7 7c0 0 0-7 7-7h186s7 0 7-7"
+      <path d="M0 0s0 7 7 7h146s7 0 7 7c0 0 0-7 7-7h146s7 0 7-7"
         class="bracket"/>
-      <text x="200" y="35" class="regionLabel">active</text>
+      <text x="160" y="35" class="regionLabel">active</text>
     </g>
   </g>
 </svg>

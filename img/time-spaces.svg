@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
-  viewBox="0 0 600 335">
+  viewBox="0 0 600 330">
   <defs>
     <style type="text/css">
     svg {
@@ -8,7 +8,7 @@
     .parentTimelineLabel {
       font-size: 0.8em;
     }
-    .line, .arrowLine, .dottedArrow {
+    .line, .arrowLine, .dottedArrow, .doubleArrowLine {
       stroke: black;
       stroke-width: 1.5;
       fill: none;
@@ -19,6 +19,10 @@
     .dottedArrow {
       stroke-dasharray: 4 4;
       stroke-width: 2;
+    }
+    .doubleArrowLine {
+      marker-start: url(#reverseArrow);
+      marker-end: url(#arrow);
     }
     .activeSpan  {
       fill: lightgrey;
@@ -42,6 +46,12 @@
     .itemTime {
       stroke: purple;
       stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+    }
+    .itemTimeMask {
+      stroke: white;
+      stroke-width: 7;
       fill: none;
       stroke-linecap: round;
     }
@@ -79,6 +89,10 @@
       markerHeight="5">
       <path d="M0-5l10 5l-10 5z"/>
     </marker>
+    <marker id="reverseArrow" viewBox="-10 -5 10 10" orient="auto"
+      markerWidth="5" markerHeight="5">
+      <path d="M0-5l-10 5l10 5z"/>
+    </marker>
   </defs>
   <!-- Parent simple timeline -->
   <g>
@@ -89,66 +103,63 @@
     <text x="40" y="3em" class="localTimelineTick">0</text>
   </g>
   <!-- A single animation -->
-  <g transform="translate(120 20)">
+  <g transform="translate(155 20)">
     <!-- Text labels -->
-    <g transform="translate(0 40)">
+    <g transform="translate(0 55)">
       <text class="timeLabel">start time</text>
       <text x="75" class="timeLabel" y="-0.6em">start of
-        <tspan x="75" dy="0.9em">animation</tspan></text>
-      <text x="325" class="timeLabel" y="-0.6em">end of
-        <tspan x="325" dy="0.9em">animation</tspan></text>
-      <text x="400" class="timeLabel">end time</text>
+                       <tspan x="75" dy="0.9em">animation</tspan></text>
+      <text x="325" class="timeLabel">end time</text>
     </g>
     <!-- Arrows -->
-    <g transform="translate(0 50)">
-      <path d="M0 0v22" class="dottedArrow"/>
-      <path d="M75 0v22" class="dottedArrow"/>
-      <path d="M325 0v22" class="dottedArrow"/>
-      <path d="M400 0v22" class="dottedArrow"/>
+    <g transform="translate(0 70)">
+      <path d="M0 0v30" class="dottedArrow"/>
+      <path d="M75 0v30" class="dottedArrow"/>
+      <path d="M325 0v30" class="dottedArrow"/>
     </g>
     <!-- Animation shaded areas -->
-    <g transform="translate(0 90)">
-      <rect width="400" height="150" class="activeSpan"/>
-      <rect x="75" width="250" height="150" class="animatingSpan"/>
+    <g transform="translate(0 120)">
+      <rect width="325" height="100" class="activeSpan"/>
+      <rect x="75" width="250" height="100" class="animatingSpan"/>
     </g>
     <!-- Local timeline -->
-    <g transform="translate(-30 240)">
+    <g transform="translate(-65 220)">
       <text y="-0.8em" transform="rotate(-90)" class="localTimelineLabel">
         Time space time</text>
-      <path d="M0 0v-150" class="line"/>
-      <path d="M-2 0h4M-2-37.5h4M-2-75h4M-2-112.5h4M-2-150h4" class="line"/>
+      <path d="M0 20v-150" class="doubleArrowLine"/>
+      <path d="M-2 0h4M-2-40h4M-2-80h4M-2-120h4" class="line"/>
       <text y="1em" transform="rotate(-90)" class="localTimelineTick">
         0
-        <tspan x="37.5">1</tspan>
-        <tspan x="75">2</tspan>
-        <tspan x="112.5">3</tspan>
-        <tspan x="150">4</tspan>
+        <tspan x="40">1</tspan>
+        <tspan x="80">2</tspan>
+        <tspan x="120">3</tspan>
       </text>
     </g>
     <!-- Time space time -->
-    <g transform="translate(0 240)">
+    <g transform="translate(0 220)">
       <!-- Item time -->
-      <path d="M0 0l400-150" class="itemTime"/>
+      <path d="M270-108l80-32" class="itemTimeMask"/>
+      <path d="M-25 10l375-150" class="itemTime"/>
       <!-- Animation time -->
-      <path d="M75 0l250-93.75" class="animationTime"/>
+      <path d="M75 0l250-100" class="animationTime"/>
       <!-- Simple time solid parts -->
-      <path d="M0 0h75l100-37.5m0 37.5l100-37.5m0 37.5l50-18.75h75"
+      <path d="M-25 0h100l100-40m0 40l100-40m0 40l50-20h25"
         class="simpleTime" mask="url(#excludedEndPoints)"/>
-      <path d="M175-37.5v37.5m100-37.5v37.5" class="simpleTimeDotted"
+      <path d="M175-40v40m100-40v40" class="simpleTimeDotted"
         mask="url(#excludedEndPoints)"/>
       <!-- End-points to demonstrate end-point exlcusive timing -->
-      <circle cx="175" cy="-37.5" r="4" class="excludedPoint"/>
+      <circle cx="175" cy="-40" r="4" class="excludedPoint"/>
       <circle cx="175" cy="0" r="3" class="includedPoint"/>
-      <circle cx="275" cy="-37.5" r="4" class="excludedPoint"/>
+      <circle cx="275" cy="-40" r="4" class="excludedPoint"/>
       <circle cx="275" cy="0" r="3" class="includedPoint"/>
       <mask id="excludedEndPoints">
-        <rect x="-10" y="-160" width="420" height="170" fill="white"/>
-        <circle cx="175" cy="-37.5" r="4" fill="black" stroke="none"/>
-        <circle cx="275" cy="-37.5" r="4" fill="black" stroke="none"/>
+        <rect x="-30" y="-110" width="390" height="120" fill="white"/>
+        <circle cx="175" cy="-40" r="4" fill="black" stroke="none"/>
+        <circle cx="275" cy="-40" r="4" fill="black" stroke="none"/>
       </mask>
     </g>
     <!-- Legend -->
-    <g transform="translate(100 265)">
+    <g transform="translate(100 255)">
       <path d="M0 0h40" class="itemTime"/>
       <text x="50px" y="0.4em" class="legendText">Item time</text>
       <g transform="translate(0 18)">
