@@ -161,33 +161,35 @@
       </p>
       <section>
         <h3>The <code>WebAnimationInstance</code> interface</h3>
-        <p>
-          All the stuff in the WebTimedItem interface here should be
-          a snapshot of what was in the <code>WebAnimation</code> from
-          which this object was minted. That's not to say it's readonly though.
-          <dl title="interface WebAnimationInstance : WebTimedItem" class="idl">
-            <dt>readonly attribute WebAnimationFunctionCollection functions</dt>
-            <dd>
-              A readonly snapshot of the animation functions copied from
-              <code>template</code>, one per target property / attribute. As
-              with the <code>WebAnimation</code> interface, in
-              ECMAScript you can just do <code>functions["height"]</code>.
-            </dd>
-            <dt>readonly attribute WebAnimation template</dt>
-            <dd>
-              The <code>WebAnimation</code> object from which this object was
-              minted.
-            </dd>
-            <dt>readonly attribute Element targetElement</dt>
-            <dd>
-              The element being animated by this object. Can this be null?
-              Presumably yes? i.e. this isn't an owning reference?
-            </dd>
-          </dl>
-        </p>
-        <p>
-          Describe liveness (what can you change when)
-        </p>
+        <dl title="interface WebAnimationInstance : WebTimedItem" class="idl">
+          <dt>attribute WebAnimationFunctionCollection functions</dt>
+          <dd>
+            <p>
+              A read-only set of animation functions to animate, one per target
+              property / attribute. As with the <code>WebAnimation</code>
+              interface, in ECMAScript you can just do
+              <code>functions["height"]</code>.
+            </p>
+            <p>
+              Initially this will be the same object as
+              <code>animation.functions</code> and will reflect changes made to
+              that object. The contents of <code>functions</code> cannot be
+              changed from this interface however, the object referred to by the
+              property can be changed. That is, the
+              <code>WebAnimationFunctionCollection</code> object is readonly but
+              the attribute is not.
+            </p>
+          </dd>
+          <dt>readonly attribute WebAnimation animation</dt>
+          <dd>
+            The <code>WebAnimation</code> object from which this object was
+            minted (see <a href="#creating-animations" class="sectionRef"></a>).
+          </dd>
+          <dt>readonly attribute Element targetElement</dt>
+          <dd>
+            The element being animated by this object.
+          </dd>
+        </dl>
       </section>
     </section>
 
@@ -255,7 +257,7 @@
               </p>
             </dd>
             <dt>sequence&lt;WebAnimationInstance&gt; animateWithParent
-              (any target, WebAnimationGroup? parentGroup,
+              (any target, WebAnimationGroup? parentTimeline,
               optional float startTime)</dt>
             <dd>
               <p>
@@ -263,8 +265,8 @@
                 <code>WebAnimationInstance</code> object for each element in
                 <code>target</code> but then appends the resulting
                 <code>WebAnimationInstance</code> objects as children of the
-                given <code>parentGroup</code>, if provided. If
-                <code>parentGroup</code> is <code>null</code>, the
+                given <code>parentTimeline</code>, if provided. If
+                <code>parentTimeline</code> is <code>null</code>, the
                 <code>WebAnimationInstance</code> objects will not be added to
                 any group.
               </p>
@@ -275,10 +277,10 @@
               <p>
                 <code>startTime</code> represents a time in the context of the
                 <code>WebTimelineInstance</code> to which it will be appended.
-                In this case that <code>parentGroup</code> is not null, this
-                will be <code>parentGroup</code>.
+                In this case that <code>parentTimeline</code> is not null, this
+                will be <code>parentTimeline</code>.
                 If this parameter is not specified it will default to the
-                current time of <code>parentGroup</code> if it is not null,
+                current time of <code>parentTimeline</code> if it is not null,
                 otherwise it will default to 0.
               </p>
             </dd>
@@ -289,8 +291,8 @@
               Regarding the animation target(s) we want to support:
             </p>
             <pre>
-              template.animate(document.getElementById("a"));
-              template.animate(document.querySelectorAll("div.warning"));</pre>
+              animation.animate(document.getElementById("a"));
+              animation.animate(document.querySelectorAll("div.warning"));</pre>
             <p>
               That is we want to support at least:
             </p>
@@ -761,8 +763,8 @@
               this)</li>
           <li>target element</li>
           <li>parent animation group</li>
-          <li>pointer to animation template (unless data has changed on the
-          template since this was made in which case you need to store the
+          <li>pointer to animation (unless data has changed on the animation
+          since this was made in which case you need to store the
           modifications)</li>
         </ul>
         <p>
@@ -1029,7 +1031,7 @@
       </p>
       <ul>
         <li>It cannot be appended as a child of another group. As a result the
-        <code>parentGroup</code> property returns <code>null</code>.</li>
+        <code>parentTimeline</code> property returns <code>null</code>.</li>
         <li>A lot of other properties are read-only like
         <code>iterationCount</code> etc.</li>
         <li>It's startTime represents real-world time??? Can we align with the
@@ -1318,6 +1320,13 @@
               should be here). Not sure yet how this will work with adaptive
               duration if other animation functions use also this.
             </dd>
+            <dt>WebAnimationFunction clone ()</dt>
+            <dd>
+              Returns a copy of this object.
+              <span class="todo">As with
+              <code>WebAnimationFunctionCollection</code> this only exists so
+              functions can be changed in flight</span>
+            </dd>
           </dl>
         </p>
       </section>
@@ -1327,7 +1336,8 @@
           Yeah, the name is a mouthful, but like <code>HTMLCollection</code> you
           rarely use this directly. I'm not sure if &lsquo;collection&rsquo; is
           the right terminology. It's basically an unordered list.
-          <dl title="interface WebAnimationFunctionCollection" class="idl">
+          <dl title="[Constructor] interface WebAnimationFunctionCollection"
+            class="idl">
             <dt>readonly attribute unsigned long length</dt>
             <dd>
               The number of functions in the collection.
@@ -1354,6 +1364,15 @@
               <code>function</code> already exists in this collection no change
               will be made?? Does that break assumptions about order though? We
               could just say it will be moved to the end of the list
+            </dd>
+            <dt>WebAnimationFunctionCollection clone ()</td>
+            <dd>
+              Creates a copy of this object and the
+              <code>WebAnimationFunction</code> objects it contains.
+              <span class="todo">This only exists so functions can be changed in
+              flight by cloning the function collection attached to an animation
+              and then attaching the clone to the instance. How important is
+              that though?</span>
             </dd>
           </dl>
         </p>
