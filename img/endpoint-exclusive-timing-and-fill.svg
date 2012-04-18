@@ -81,7 +81,6 @@
     <g mask="url(#fadeout)">
       <!-- Animation shaded areas -->
       <g transform="translate(0 30)">
-        <rect width="500" height="100" class="activeSpan"/>
         <rect width="300" height="100" class="animatingSpan"/>
         <path d="M150 0v100m150-100v100" class="intervalBoundary"/>
       </g>

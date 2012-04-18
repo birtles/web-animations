@@ -554,7 +554,6 @@
               (probably better).</li>
             </ul>
           </li>
-          <li>Work out if we're in range (i.e. calculate end time)</li>
           <li>Return the resulting time</li>
         </ul>
       </section>
@@ -581,10 +580,10 @@
             href="#calculating-the-item-time" class="sectionRef"></a>).
         </p>
         <p>
-          The simple time is calculated by first converting the <var>animation
-          time</var> down into intervals. This is called the <var>unscaled
-          simple time</var>. Following this, timing manipulations specified on
-          the timed item are applied to the <var>unscaled simple time</var> to
+          The simple time is calculated by first dividing the <var>animation
+          time</var> into intervals. This is called the <var>unscaled simple
+          time</var>. Following this, timing manipulations specified on the
+          timed item are applied to the <var>unscaled simple time</var> to
           produce the <var>simple time</var>.
         </p>
         <section>
@@ -595,22 +594,12 @@
           </p>
           <ol>
             <li>
-              If the <var>item time</var> is null (i.e. the animation is
-              inactive), return <code>null</code>.
+              If the <var>item time</var> is null (i.e. the animation's start
+              time is not defined), return <code>null</code>.
             </li>
             <li>
               If <var>item time</var> &lt; <var>start delay</var> (i.e. the
-              animation is delayed), then
-              <dl class="switch">
-                <dt>
-                  If the item has fill mode that produces a backwards fill,
-                </dt>
-                <dd>return zero.</dd>
-                <dt>
-                  Otherwise,
-                </dt>
-                <dd>return <code>null</code>.</dd>
-              </dl>
+              animation is delayed), return zero.
             </li>
             <li>
               If the simple duration is infinite, return zero.
