@@ -157,26 +157,26 @@
       <h2>Animations in the timeline</h2>
       <p>
         Animations in the timeline are represented by
-        <code>WebAnimation</code> objects.
+        <code>WebAnimationInstance</code> objects.
       </p>
       <section>
-        <h3>The <code>WebAnimation</code> interface</h3>
+        <h3>The <code>WebAnimationInstance</code> interface</h3>
         <p>
           All the stuff in the WebTimedItem interface here should be
-          a snapshot of what was in the <code>WebAnimationTemplate</code> from
+          a snapshot of what was in the <code>WebAnimation</code> from
           which this object was minted. That's not to say it's readonly though.
-          <dl title="interface WebAnimation : WebTimedItem" class="idl">
+          <dl title="interface WebAnimationInstance : WebTimedItem" class="idl">
             <dt>readonly attribute WebAnimationFunctionCollection functions</dt>
             <dd>
               A readonly snapshot of the animation functions copied from
               <code>template</code>, one per target property / attribute. As
-              with the <code>WebAnimationTemplate</code> interface, in
+              with the <code>WebAnimation</code> interface, in
               ECMAScript you can just do <code>functions["height"]</code>.
             </dd>
-            <dt>readonly attribute WebAnimationTemplate template</dt>
+            <dt>readonly attribute WebAnimation template</dt>
             <dd>
-              The <code>WebAnimationTemplate</code> object from which this
-              object was minted.
+              The <code>WebAnimation</code> object from which this object was
+              minted.
             </dd>
             <dt>readonly attribute Element targetElement</dt>
             <dd>
@@ -194,25 +194,25 @@
     <section>
       <h2>Creating animations</h2>
       <p>
-        <code>WebAnimation</code> objects are not created directly, but via
-        a separate <code>WebAnimationTemplate</code> object. The
-        <code>WebAnimationTemplate</code> object acts a cookie-cutter allowing
-        the same set of animation parameters to be used multiple times with
-        multiple target elements.
+        <code>WebAnimationInstance</code> objects are not created directly, but
+        via a separate <code>WebAnimation</code> object. The
+        <code>WebAnimation</code> object acts a template allowing the same set
+        of animation parameters to be used multiple times with multiple target
+        elements.
       </p>
       <p>
-        The <code>WebAnimation</code> objects created by the
-        <code>animate</code> method of a <code>WebAnimationTemplate</code>
-        do not share data with the <code>WebAnimationTemplate</code> object from
-        which they were minted or with other <code>WebAnimation</code> objects
-        created from the same <code>WebAnimationTemplate</code>. Their
+        The <code>WebAnimationInstance</code> objects created by the
+        <code>animate</code> method of a <code>WebAnimation</code>
+        do not share data with the <code>WebAnimation</code> object from
+        which they were minted or with other <code>WebAnimationInstance</code>
+        objects created from the same <code>WebAnimation</code>. Their
         properties are independent and unique copies such that comparing their
         object identities will return false.
       </p>
       <section>
-        <h3>The <code>WebAnimationTemplate</code> interface</h3>
+        <h3>The <code>WebAnimation</code> interface</h3>
         <p>
-          <dl title="[Constructor] interface WebAnimationTemplate" class="idl">
+          <dl title="[Constructor] interface WebAnimation" class="idl">
             <dt>attribute WebTiming timing</dt>
             <dd>
               The timing parameters to use for generated animations.
@@ -225,12 +225,12 @@
               get the appropriate function (rather than
               <code>functions.nameItem("height")</code>).
             </dd>
-            <dt>sequence&lt;webanimation&gt; animate (any target,
+            <dt>sequence&lt;WebAnimationInstance&gt; animate (any target,
               optional float startTime)</dt>
             <dd>
               <p>
-                Creates a series of <code>WebAnimation</code> objects, one for
-                each element in <code>target</code>. For each
+                Creates a series of <code>WebAnimationInstance</code> objects,
+                one for each element in <code>target</code>. For each
                 <code>element</code> in <code>target</code> the associated
                 animation is appended to the animation group corresponding to
                 <code>element.ownerDocument.animationRoot</code>.
@@ -249,22 +249,24 @@
                 of the animation group to which it is appended.
               </p>
               <p>
-                The <code>WebAnimation</code> objects created by this method
-                behave independently of this object as described in <a
-                  href="#creating-animations" class="sectionRef"></a>.
+                The <code>WebAnimationInstance</code> objects created by this
+                method behave independently of this object as described in <a
+                href="#creating-animations" class="sectionRef"></a>.
               </p>
             </dd>
-            <dt>sequence&lt;webanimation&gt; animateWithParent (any target,
-              WebAnimationGroup? parentGroup, optional float startTime)</dt>
+            <dt>sequence&lt;WebAnimationInstance&gt; animateWithParent
+              (any target, WebAnimationGroup? parentGroup,
+              optional float startTime)</dt>
             <dd>
               <p>
                 Similar to <code>animate</code>, this method creates one
-                <code>WebAnimation</code> objects for each element in
+                <code>WebAnimationInstance</code> object for each element in
                 <code>target</code> but then appends the resulting
-                <code>WebAnimation</code> objects as children of the given
-                <code>parentGroup</code>, if provided. If
-                <code>parentGroup</code> is null, the <code>WebAnimation</code>
-                objects will not be added to any group.
+                <code>WebAnimationInstance</code> objects as children of the
+                given <code>parentGroup</code>, if provided. If
+                <code>parentGroup</code> is <code>null</code>, the
+                <code>WebAnimationInstance</code> objects will not be added to
+                any group.
               </p>
               <p>
                 The handling of <code>target</code> is the same as for
@@ -272,9 +274,9 @@
               </p>
               <p>
                 <code>startTime</code> represents a time in the context of the
-                <code>WebAnimationGroup</code> to which it will be appended. In
-                this case that <code>parentGroup</code> is not null, this will
-                be <code>parentGroup</code>.
+                <code>WebTimelineInstance</code> to which it will be appended.
+                In this case that <code>parentGroup</code> is not null, this
+                will be <code>parentGroup</code>.
                 If this parameter is not specified it will default to the
                 current time of <code>parentGroup</code> if it is not null,
                 otherwise it will default to 0.
@@ -321,7 +323,8 @@
               insert the animation yourself at a particular position. It's also
               likely there will be situations where you want to make the
               animation and attach it later such as a helper function that
-              returns an animation object for the caller to insert.)</li>
+              returns an animation instance object for the caller to
+              insert.)</li>
             </ul>
             <p>
               That gives you up to 18 permutations of ways of calling
@@ -346,23 +349,23 @@
       <section class="informative">
         <h3>Animation phases</h3>
         <p>
-          An individual animation can be in one of three possible states, called
-          phases:
+          An individual animation instance can be in one of three possible
+          states, called phases:
         </p>
         <dl>
           <dt>Inactive</dt>
-          <dd>The animation has yet to start or has already finished. Whether it
-          effects its target depends on its fill mode.</dd>
+          <dd>The animation instance has yet to start or has already finished.
+          Whether it effects its target depends on its fill mode.</dd>
           <dt>Delayed (active)</dt>
-          <dd>The animation is waiting to start (assuming time is progressing
-          forwards). Depending on the animation's fill mode, it may apply
-          a backwards fill to its target at this time.</dd>
+          <dd>The animation instance is waiting to start (assuming time is
+          progressing forwards). Depending on the animation instance's fill
+          mode, it may apply a backwards fill to its target at this time.</dd>
           <dt>Animating (active)</dt>
-          <dd>The animation is executing, and will apply its effect to its
-          target.</dd>
+          <dd>The animation instance is executing, and will apply its effect to
+          its target.</dd>
         </dl>
         <p>
-          An animation is considered <em>active</em> if it is in the
+          An animation instance is considered <em>active</em> if it is in the
           <em>delayed</em> or <em>animating</em> phases.
         </p>
         <p>
@@ -375,20 +378,19 @@
           Animation phases.
         </p>
         <p>
-          Depending on the an animation's properties, it may not enter all of
-          these phases.
+          Depending on the an animation instance's properties, it may not enter
+          all of these phases.
         </p>
       </section>
       <section class="informative">
         <h3>Simple time and animation time</h3>
         <p>
-          Times in Web Animations are relative to some point of reference
-          within the timeline. These different points of reference produce
-          different time spaces. An analogue is computer graphics where
-          a graphical element may be present in one of a number of different
-          coordinate spaces. <span class="todo">(This analogue doesn't quite
-          work. Is it better to drop it? Does it make sense to
-          others?)</span>
+          Times in Web Animations are relative to some point of reference. These
+          different points of reference produce different time spaces. An
+          analogue is computer graphics where a graphical element may be present
+          in one of a number of different coordinate spaces. <span
+          class="todo">(This analogue doesn't quite work. Is it better to drop
+          it? Does it make sense to others?)</span>
         </p>
         <p>
           Within Web Animations, the following time spaces are used:
@@ -738,9 +740,9 @@
           and then for an animation group.
         </p>
         <p>
-          Talk about how animations are not removed on a backwards seek so you
-          need to remove them yourself or detect them and not re-create them.
-          Perhaps we will have a seek event for this? Or a way of marking
+          Talk about how animation instances are not removed on a backwards seek
+          so you need to remove them yourself or detect them and not re-create
+          them.  Perhaps we will have a seek event for this? Or a way of marking
           animations as remove-on-seek (which would remove the animation if you
           do a backwards seek past its startTime).
         </p>
@@ -749,8 +751,8 @@
           more-and-more memory.
         </p>
         <p>
-          Once an animation has become inactive, ideally all you need to store
-          is:
+          Once an animation instance has become inactive, ideally all you need
+          to store is:
         </p>
         <ul>
           <li>start time</li>
@@ -777,8 +779,8 @@
         <h3>The <code>WebTiming</code> interface</h3>
         <p>
           Represents a collection of timing properties. Objects of this type are
-          typically writeable when they belong to a <a>WebAnimationTemplate</a>
-          or <a>WebAnimationGroupTemplate</a> object, and readonly when attached
+          typically writeable when they belong to a <a>WebAnimation</a>
+          or <a>WebTimeline</a> object, and readonly when attached
           to a <a>WebTimedItem</a> object.
         </p>
         <p class="note">
@@ -863,9 +865,8 @@
       <section>
         <h3>The <code>WebTimedItem</code> interface</h3>
         <p>
-          Represents the timing properties and methods of an element in the
-          timeline: either a <a>WebAnimation</a> or
-          a <a>WebAnimationGroup</a>.
+          Represents the timing properties and methods of an animation actor:
+          either a <a>WebAnimationInstance</a> or a <a>WebTimelineInstance</a>.
         </p>
         <dl title="interface WebTimedItem" class="idl">
           <dt>readonly attribute WebTiming timing</dt>
@@ -923,7 +924,7 @@
             non-<code>null</code> if and only if the animation is in the
             animating phase.
           </dd>
-          <dt>readonly attribute WebAnimationGroup parentGroup</dt>
+          <dt>readonly attribute WebTimeline parentTimeline</dt>
           <dd>
             The parent animation group
           </dd>
@@ -1023,7 +1024,7 @@
         Integration with <code>&lt;video&gt;</code> etc.
       </p>
       <p>
-        Describe how the timeline itself is itself just a group but has the
+        Describe how the document timeline is just a timeline instance with the
         following special properties:
       </p>
       <ul>
@@ -1035,10 +1036,10 @@
         timestamps used in DOM (e.g. for events) here?</li>
       </ul>
       <section>
-        <h3>The <code>WebAnimationGroup</code> interface</h3>
+        <h3>The <code>WebTimelineInstance</code> interface</h3>
         <p>
-          Represents a list of timed items which may be animations or
-          nested animation groups. Order is significant only when
+          Represents a list of timed items which may be animation instances or
+          nested timeline instances. Order is significant only when
           <code>type</code> is <code>WEBA_SYNC_SEQ</code>.
         </p>
         <div class="feedbackWanted">
@@ -1077,7 +1078,40 @@
             an exception if it belongs to another group?
           </p>
         </div>
-        <dl title="[Constructor] interface WebAnimationGroup : WebTimedItem"
+        <div class="feedbackWanted">
+          <p>
+            The naming of all these objects deserves further consideration. We
+            currently have:
+          </p>
+          <ul>
+            <li><code>WebAnimationInstance</code></li>
+            <li><code>WebAnimation</code></li>
+            <li><code>WebTimelineInstance</code></li>
+            <li><code>WebTimeline</code></li>
+          </ul>
+          <p>
+            Some alternatives:
+          </p>
+          <ul>
+            <li><code>WebAnimationInstance</code></li>
+            <li><code>WebAnimation</code></li>
+            <li><code>WebAnimationGroupInstance</code></li>
+            <li><code>WebAnimationGroup</code></li>
+          </ul>
+          <ul>
+            <li><code>WebAnimation</code></li>
+            <li><code>WebAnimationDef</code></li>
+            <li><code>WebTimeline</code></li>
+            <li><code>WebTimelineDef</code></li>
+          </ul>
+          <ul>
+            <li><code>WebAnimation</code></li>
+            <li><code>WebAnimator</code></li>
+            <li><code>WebAnimationGroup</code></li>
+            <li><code>WebAnimatorGroup</code></li>
+          </ul>
+        </div>
+        <dl title="[Constructor] interface WebTimelineInstance : WebTimedItem"
           class="idl">
           <dt>const unsigned short WEBA_SYNC_PAR = 0</dt>
           <dd>
@@ -1098,7 +1132,7 @@
           <dt>attribute unsigned short type</dt>
           <dd>
             <p>
-              The type of synchronization provided by this animation group
+              The type of synchronization provided by this timeline instance
               as specified by one of the <code>WEBA_SYNC_*</code> constants
               defined in this interface.
             </p>
@@ -1120,10 +1154,11 @@
                 Seek the container time to zero.
               </li>
               <li>
-                Calculate the effective start time of each child in the group
-                using the new synchronization type <span class="todo">(Need
-                a cross-reference to somewhere where we describe this
-                behaviour and define things like "effective start time".)</span>
+                Calculate the effective start time of each child in the timeline
+                instance using the new synchronization type <span
+                class="todo">(Need a cross-reference to somewhere where we
+                describe this behaviour and define things like "effective
+                start time".)</span>
               </li>
               <li>
                 Seek the container time to the previously recorded time.
@@ -1247,9 +1282,9 @@
         </div>
         <p>
           I think most of the members of the interface, perhaps all, should be
-          readonly when this object is returned from a <code>WebAnimation</code>
-          object. Objects returned from a <code>WebAnimationTemplate</code>,
-          however, are live.
+          readonly when this object is returned from
+          a <code>WebAnimationInstance</code> object. Objects returned from
+          a <code>WebAnimation</code>, however, are live.
         </p>
         <p>
           <dl title="[Constructor] interface WebAnimationFunction" class="idl">
@@ -1511,9 +1546,9 @@
         </p>
       </section>
       <section>
-        <h3>The <code>CSSAnimationTemplate</code> interface</h3>
+        <h3>The <code>CSSAnimation</code> interface</h3>
         <p>
-          <dl title="interface CSSAnimationTemplate : WebAnimationTemplate"
+          <dl title="interface CSSAnimation: WebAnimation"
             class="idl">
           </dl>
         </p>
@@ -1549,7 +1584,7 @@
       <section>
         <h3>The <code>SVGAnimationElement</code> interface</h3>
         <p>
-          <dl title="interface SVGAnimationElement : WebAnimationTemplate"
+          <dl title="interface SVGAnimationElement : WebAnimation"
             class="idl">
           </dl>
         </p>
