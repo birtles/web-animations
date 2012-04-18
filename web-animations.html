@@ -778,91 +778,144 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebTiming</code> interface</h3>
+        <h3>Specifying timing properties</h3>
         <p>
-          Represents a collection of timing properties. Objects of this type are
-          typically writeable when they belong to a <a>WebAnimation</a>
-          or <a>WebTimeline</a> object, and readonly when attached
-          to a <a>WebTimedItem</a> object.
+          Timing properties are collected under the <code>WebTiming</code>
+          interface.
+          For properties that are not explicitly set on a <code>WebTiming</code>
+          object, a base object is consulted. The identity of this base object
+          is as follows:
         </p>
-        <p class="note">
-          Should this be called <code>WebTimingParameters</code>? It's probably
-          not used directly so it's ok to make it long?
-        </p>
-        <p class="todo">
-          Need to define the readonly behavior here. It's not enough to just say
-          that the object in the <a>WebTimedItem</a> interface is readonly.
-          I think we need to explicitly say that therefore all the members in
-          this object also become readonly in that case.
-        </p>
-        <dl title="interface WebTiming" class="idl">
-          <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
+        <dl>
+          <dt>
+            For <code>WebTiming</code> objects attached to
+            <code>WebAnimationInstance</code> objects,
+          </dt>
           <dd>
-            No fill.
+            Use <code>animation.timing</code>.
           </dd>
-          <dt>const unsigned short WEBA_FILL_FORWARDS = 1</dt>
+          <dt>
+            Otherwise,
+          </dt>
           <dd>
-            Fill forwards (=<code>fill="freeze"</code> in SVG speak).
-          </dd>
-          <dt>const unsigned short WEBA_FILL_BACKWARDS = 2</dt>
-          <dd>
-            Fill backwards.
-          </dd>
-          <dt>const unsigned short WEBA_FILL_BOTH = 3</dt>
-          <dd>
-            Fill backwards and forwards.
-          </dd>
-          <dt>const unsigned short WEBA_DIRECTION_NORMAL = 0</dt>
-          <dd>
-            All iterations are played as specified.
-          </dd>
-          <dt>const unsigned short WEBA_DIRECTION_REVERSE = 1</dt>
-          <dd>
-            All iterations are played in the reverse direction from the way they
-            were specified.
-          </dd>
-          <dt>const unsigned short WEBA_DIRECTION_ALTERNATE = 2</dt>
-          <dd>
-            Even iterations are played as specified, odd iterations are played
-            in the reverse direction from the way they were specified.
-          </dd>
-          <dt>const unsigned short WEBA_DIRECTION_ALTERNATE_REVERSE = 3</dt>
-          <dd>
-            Even iterations are played in the reverse direction from the way
-            they were specified, odd iterations are played as specified.
-          </dd>
-          <dt>attribute float startDelay</dt>
-          <dd>
-            The number of seconds from <code>startTime</code> until the timed
-            item should begin executing.
-          </dd>
-          <dt>attribute unrestricted float? duration</dt>
-          <dd>
-            The duration specified for a single iteration. This may be
-            <code>null</code> in which case the intrinsic duration will be used.
-            If set, it must be greater than or equal to zero (including positive
-            infinity).
-          </dd>
-          <dt>attribute float iterationCount</dt>
-          <dd>
-            A real number greater than or equal to 0 representing the number
-            of times to repeat the animation.
-          </dd>
-          <dt>attribute unsigned short direction</dt>
-          <dd>
-            Direction behavior as specified by on of the WEBA_DIRECTION_*
-            constants defined in this interface.
-          </dd>
-          <dt>attribute WebTimingFunction timingFunction</dt>
-          <dd class="todo">
-            TBD.
-          </dd>
-          <dt>attribute unsigned short fill</dt>
-          <dd>
-            Fill mode as specified by one of the WEBA_FILL_* constants defined
-            in this interface.
+            Use the <var>global default <code>WebTiming</code> object</var>.
           </dd>
         </dl>
+        <p>
+          The <var>global default <code>WebTiming</code> object</var> is
+          a <code>WebTiming</code> object where each property value is set to
+          its <var>default value</var>.
+        </p>
+        <p>
+          When querying the properties of a <code>WebTiming</code> the
+          <var>effective value</var> of the property is resolved by looking up
+          the base object. This is represented graphically below:
+        </p>
+        <div class="figure">
+          <object data="img/webtiming-interaction.svg" width="600"></object>
+        </div>
+        <p class="caption">
+          The values returned when querying <var>instance</var> are derived by
+          successively querying base objects along the chain.
+        </p>
+        <section>
+          <h3>The <code>WebTiming</code> interface</h3>
+          <dl title="interface WebTiming" class="idl">
+            <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
+            <dd>
+              No fill.
+            </dd>
+            <dt>const unsigned short WEBA_FILL_FORWARDS = 1</dt>
+            <dd>
+              Fill forwards (=<code>fill="freeze"</code> in SVG speak).
+            </dd>
+            <dt>const unsigned short WEBA_FILL_BACKWARDS = 2</dt>
+            <dd>
+              Fill backwards.
+            </dd>
+            <dt>const unsigned short WEBA_FILL_BOTH = 3</dt>
+            <dd>
+              Fill backwards and forwards.
+            </dd>
+            <dt>const unsigned short WEBA_DIRECTION_NORMAL = 0</dt>
+            <dd>
+              All iterations are played as specified.
+            </dd>
+            <dt>const unsigned short WEBA_DIRECTION_REVERSE = 1</dt>
+            <dd>
+              All iterations are played in the reverse direction from the way
+              they were specified.
+            </dd>
+            <dt>const unsigned short WEBA_DIRECTION_ALTERNATE = 2</dt>
+            <dd>
+              Even iterations are played as specified, odd iterations are played
+              in the reverse direction from the way they were specified.
+            </dd>
+            <dt>const unsigned short WEBA_DIRECTION_ALTERNATE_REVERSE = 3</dt>
+            <dd>
+              Even iterations are played in the reverse direction from the way
+              they were specified, odd iterations are played as specified.
+            </dd>
+            <dt>attribute float startDelay</dt>
+            <dd>
+              <p>
+                The number of seconds from <code>startTime</code> until the
+                timed item should begin executing.
+              </p>
+              <p>
+                The <var>default value</var> is 0.
+              </p>
+            </dd>
+            <dt>attribute unrestricted float? duration</dt>
+            <dd>
+              <p>
+                The duration specified for a single iteration. This may be
+                <code>null</code> in which case the intrinsic duration will be
+                used. If set, it must be greater than or equal to zero
+                (including positive infinity).
+              </p>
+              <p>
+                The <var>default value</var> is <code>null</code>.
+              </p>
+            </dd>
+            <dt>attribute float iterationCount</dt>
+            <dd>
+              <p>
+                A real number greater than or equal to 0 representing the number
+                of times to repeat the animation.
+              </p>
+              <p>
+                The <var>default value</var> is 1.
+              </p>
+            </dd>
+            <dt>attribute unsigned short direction</dt>
+            <dd>
+              <p>
+                Direction behavior as specified by on of the
+                <code>WEBA_DIRECTION_*</code> constants defined in this
+                interface.
+              </p>
+              <p>
+                The <var>default value</var> is
+                <code>WEBA_DIRECTION_NORMAL</code>.
+              </p>
+            </dd>
+            <dt>attribute WebTimingFunction timingFunction</dt>
+            <dd class="todo">
+              TBD.
+            </dd>
+            <dt>attribute unsigned short fill</dt>
+            <dd>
+              <p>
+                Fill mode as specified by one of the <code>WEBA_FILL_*</code>
+                constants defined in this interface.
+              </p>
+              <p>
+                The <var>default value</var> is <code>WEBA_FILL_NONE</code>.
+              </p>
+            </dd>
+          </dl>
+        </section>
       </section>
       <section>
         <h3>The <code>WebTimedItem</code> interface</h3>
