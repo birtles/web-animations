@@ -166,19 +166,49 @@
           <dd>
             <p>
               A read-only set of animation functions to animate, one per target
-              property / attribute. As with the <code>WebAnimation</code>
-              interface, in ECMAScript you can just do
-              <code>functions["height"]</code>.
+              property / attribute. As with <code>HTMLCollection</code>, in
+              ECMAScript you should be able to just use
+              <code>functions["height"]</code> to get the appropriate function
+              (rather than <code>functions.namedItem("height")</code>).
             </p>
-            <p>
-              Initially this will be the same object as
-              <code>animation.functions</code> and will reflect changes made to
-              that object. The contents of <code>functions</code> cannot be
-              changed from this interface however, the object referred to by the
-              property can be changed. That is, the
-              <code>WebAnimationFunctionCollection</code> object is readonly but
-              the attribute is not.
-            </p>
+            <div class="feedbackWanted">
+              <p>
+                I'm not sure how to do this. A few options:
+              </p>
+              <ol>
+                <li>
+                  Make this a read-only copy of
+                  <code>animation.functions</code>. i.e. the object identities
+                  are different but this object still tracks changes to that
+                  one. This means if you want to update to the "master" object
+                  you have to go to the template to do it. Then maybe you have
+                  a <code>setFunctions</code> object here to take any function
+                  collection and make a read-only copy here (that way you can
+                  plug in your own one and still revert to the original).
+                </li>
+                <li>
+                  Have a separate <code>localFunctions</code> property. Then
+                  have <code>functions</code> be the union of
+                  <code>localFunctions</code> and
+                  <code>animation.functions</code>. When two functions are
+                  indexed on the same property, <code>localFunctions</code>
+                  wins. This approach doesn't let you drop the function property
+                  for a property though unless you add some kind of
+                  null-function in.
+                </li>
+                <li>
+                  Have a <code>overrideFunctions</code> property that, if set,
+                  simple overrides <code>animation.functions</code> wholesale.
+                </li>
+                <li>
+                  Just make <code>functions</code> refer to
+                  <code>animation.functions</code>. i.e. changes made to
+                  <code>functions</code> here affect all animation instances
+                  from the same template. I don't like this at all, especially
+                  since it's inconsistent with what we do for timing properties.
+                </li>
+              </ol>
+            </div>
           </dd>
           <dt>readonly attribute WebAnimation animation</dt>
           <dd>
@@ -225,7 +255,7 @@
               / attribute. As with <code>HTMLCollection</code>, in ECMAScript
               you should be able to just use <code>functions["height"]</code> to
               get the appropriate function (rather than
-              <code>functions.nameItem("height")</code>).
+              <code>functions.namedItem("height")</code>).
             </dd>
             <dt>sequence&lt;WebAnimationInstance&gt; animate (any target,
               optional float startTime)</dt>

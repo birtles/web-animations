@@ -66,6 +66,6 @@ li {
 dl.switch > dt:before {
   content: "↪";
 }
-dd ol {
+dl.switch ol {
   padding-left: 0px;
 }
