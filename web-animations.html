@@ -1720,9 +1720,47 @@
 
     <section>
       <h2>Combining animations</h2>
-      <p>
-        Animation addition
-      </p>
+      <section>
+        <h3>The Animation Stack</h3>
+        <p>
+          When multiple active animations target the same element, the
+          animations are ordered into a stack which resolves how those 
+          animations combine. This stack is sorted by animation start time.
+          Where multiple animations have the same start time, those animations
+          are sorted in document order (for animations from the DOM) and script
+          order (for animations from the API). Script animations are always
+          sorted after DOM animations.
+        </p>
+        <p>
+          The animation stack may be thought of as a single stack with all
+          animations sorted into it, or a stack per animating element, as
+          animations on one element cannot effect the course of animations on 
+          another element.
+        </p>
+        <p class="note">
+          The start time of an animation refers to the recorded or 
+          calculated start time (i.e. the point where an animation changes 
+          phase from <code>Inactive</code> to <code>Delayed</code>), not the
+          point at which the animation actually starts (i.e. the point where
+          an animation changes phase from <code>Delayed</code> to 
+          <code>Animating</code>). 
+        </p>
+        <p class="note">
+          The stacking order of animations is independent of the
+          current play direction of individual animations and animation
+          groups.
+        </p>
+      </section>
+      <section>
+        <h3>Animation combinators</h3>
+        <p class="todo">
+          There are 3 - <code>Replace</code>, <code>Accumulate</code>, and 
+          <code>Blend</code>. <code>Blend</code> requires an additional 
+          parameter specifying how the blend values vary over time.
+          We need a way to specify these somehow - probably as part of the
+          <code>AnimationFunction</code> interface.
+        </p>
+      </section>
     </section>
 
     <section>
