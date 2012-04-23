@@ -52,7 +52,25 @@ div.feedbackWanted, p.feedbackWanted {
 /*
  * todo
  */
-.todo {
+div.todo:before, p.todo:before {
+  display: block;
+  content: "TODO";
+  background: white;
+  border: 1px solid #F90;
+  font-weight: bold;
+  margin: -1.5em 0 0.5em;
+  padding: 3px 1em;
+  width: 80px;
+}
+div.todo, p.todo {
+  background: #FFD;
+  margin: 1em 0 0;
+  padding: 1em;
+}
+div.todo {
+  padding-bottom: 0.2em;
+}
+span.todo {
   background: #FFB;
 }
 

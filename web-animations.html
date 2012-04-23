@@ -198,7 +198,7 @@
                 </li>
                 <li>
                   Have a <code>overrideFunctions</code> property that, if set,
-                  simple overrides <code>animation.functions</code> wholesale.
+                  simply overrides <code>animation.functions</code> wholesale.
                 </li>
                 <li>
                   Just make <code>functions</code> refer to
@@ -233,13 +233,10 @@
         elements.
       </p>
       <p>
-        The <code>WebAnimationInstance</code> objects created by the
-        <code>animate</code> method of a <code>WebAnimation</code>
-        do not share data with the <code>WebAnimation</code> object from
-        which they were minted or with other <code>WebAnimationInstance</code>
-        objects created from the same <code>WebAnimation</code>. Their
-        properties are independent and unique copies such that comparing their
-        object identities will return false.
+        Changes made to the <code>WebAnimation</code> object are reflected in
+        <code>WebAnimationInstance</code> objects previously generated from the
+        <code>WebAnimation</code> unless the properties that were changed have
+        been explicitly overriden on the <code>WebAnimation</code> object.
       </p>
       <section>
         <h3>The <code>WebAnimation</code> interface</h3>
@@ -551,10 +548,74 @@
       <section>
         <h3>Calculating the simple duration</h3>
         <p>
-          Need to talk about intrinsic duration
+          The <var>simple duration</var> is calculated according to the
+          following steps:
         </p>
         <p>
-          If we support <code>pace="10px/s"</code> this is where it would go.
+          The method for calculating an item's simple duration depends on the
+          kind of item in question. Following are the steps for calculating the
+          simple duration of an animation instance. The steps for calculating
+          the simple duration of a timeinline instance are described in <a
+        </p>
+        <dl class="switch">
+          <dt>
+            If the <var>duration</var> timing property is set to a numerical
+            value greater than or equal to zero (including positive infinity),
+          </dt>
+          <dd>
+            return <var>duration</var>.
+          </dd>
+          <dt>
+            If the <var>duration</var> timing property has the special value of
+            "untilParentEnd",
+          </dt>
+          <dd>
+            return <var>the simple duration of the parent timeline</var>
+            - <var>the item's start time</var> - <var>the item's start
+            delay</var>.
+          </dd>
+          <dt>
+            If the <var>duration</var> timing property is set (but not one of
+            the above values),
+          </dt>
+          <dd>
+            return <code>Infinity</code>.
+          </dd>
+          <dt>
+            Otherwise,
+          </dt>
+          <dd>
+            return the item's <var>intrinsic duration</var>.
+          </dd>
+        </dl>
+        <p>
+          The value of an item's <var>intrinsic duration</var> depends on
+          the type of the item. For animation instances the <var>intrinsic
+          duration</var> is <code>Infinity</code>.
+        </p>
+        <div class="todo">
+          <p>
+            If we support <code>pace="10px/s"</code> then, when specified, it
+            will allow animation instances to have an intrinsic duration.
+          </p>
+          <p>
+            In specifying that, we need to define what happens when the simple
+            duration and intrinsic duration don't match. Basically, if the
+            simple duration is shorter, you chop off the remaining time. If the
+            simple duration is longer, you do your fill behavior for that time.
+            It probably makes most sense to specify that behavior where we
+            define the mapping from simple time to the paced time. (Basically,
+            if the paced time ends up being greater than the specified duration
+            then you clamp to the specified duration and invoke fill behavior.)
+          </p>
+        </div>
+        <p>
+          The intrinsic duration for timeline instances and media items is
+          described under <a
+          href="#calculating-the-intrinsic-duration-of-a-timeline-instance"
+          class="sectionRef"></a> and <a
+          href="#the-intrinsic-duration-of-a-media-item"
+          class="sectionRef"></a> respectively.
         </p>
       </section>
       <section>
@@ -565,8 +626,7 @@
         <ul>
           <li>Multiplying the simple duration by the iteration count</li>
           <li>Apply min and max (if they are supported)</li>
-          <li>Applying any speed functions&mdash;or do they apply directly to
-              the simple duration?</li>
+          <li>Applying any speed functions</li>
         </ul>
       </section>
       <section>
@@ -577,17 +637,9 @@
         <ul>
           <li>Get the <var>simple time</var> from the parent group</li>
           <li>Subtract the <var>start time</var></li>
-          <li>Subtract pause offsets
-            <ul>
-              <li>Basically, you subtract the duration of completed pause
-              intervals.</li>
-              <li>If we're in the middle of a pause interval, you subtract the
-              amount of paused time. The maths for this depends on if we store
-              pause endpoints in parent simple time (not good if you move stuff
-              around in the tree), or offsets from the start time + a duration
-              (probably better).</li>
-            </ul>
-          </li>
+          <li>Subtract start offset&mdash;if we're currently paused, you update
+          the start offset first (and update the pause start time with the
+          parent simple time)</li>
           <li>Return the resulting time</li>
         </ul>
       </section>
@@ -908,11 +960,12 @@
                 The <var>default value</var> is <code>null</code>.
               </p>
             </dd>
-            <dt>attribute float iterationCount</dt>
+            <dt>attribute unrestricted float iterationCount</dt>
             <dd>
               <p>
-                A real number greater than or equal to 0 representing the number
-                of times to repeat the animation.
+                A real number greater than or equal to zero (including positive
+                infinite) representing the number of times to repeat the
+                animation.
               </p>
               <p>
                 The <var>default value</var> is 1.
@@ -1073,12 +1126,9 @@
       <p>
         Need to add:
         <ul>
-          <li>Adaptive duration</li>
-          <li>Repeat by duration (i.e. iterationDuration)</li>
           <li>Pre-defined timing functions, spline-based timing functions etc.
           (want to allow a series of splines, not just four points)</li>
           <li>Custom easing functions</li>
-          <li>Pace control (e.g. <code>pace="10px/s"</code>?)</li>
           <li>Reversing</li>
           <li>Speed control (only belongs on containers?)</li>
         </ul>
@@ -1120,6 +1170,26 @@
         <li>It's startTime represents real-world time??? Can we align with the
         timestamps used in DOM (e.g. for events) here?</li>
       </ul>
+      <section>
+        <h3>Calculating the intrinsic duration of a timeline instance</h3>
+        <dl class="switch">
+          <dt>If the type is parallel,</dt>
+          <dd>
+            calc the endTime for each child and take the
+            max. If any child has dur of type "parentEnd" skip it.
+          </dd>
+          <dt>If the type is sequence</dt>
+          <dd>
+            If it's seq, sum all the active durations + start delays
+            (including negatives). If any child has a dur of parentEnd,
+            treat it as zero and ignore the start delay???
+          </dd>
+          <dt>If the type is media group</dt>
+          <dd>
+            Same as parallel?
+          </dd>
+        </dl>
+      </section>
       <section>
         <h3>The <code>WebTimelineInstance</code> interface</h3>
         <p>
@@ -1495,30 +1565,28 @@
       </section>
       <section>
         <h3>The <code>WebAnimationFrameList</code> interface</h3>
-        <p>
-          <dl title="interface WebAnimationFrameList" class="idl">
-            <dt>readonly attribute unsigned long length</dt>
-            <dd>
-              The number of frames in the list.
-            </dd>
-            <dt>WebAnimationFrameList? item(unsigned long index)</dt>
-            <dd>
-              Returns the frame at <code>index</code> if it exists or null.
-            </dd>
-            <dt>WebAnimationFrameList? add(WebAnimationFrame frame)</dt>
-            <dd>
-              Adds <code>frame</code> to the list such that the list is sorted
-              by the offset of the frames. If there's already a frame with the
-              same offset? This one comes after?
-            </dd>
-            <dt>WebAnimationFrameList? remove(unsigned long index)</dt>
-            <dd>
-              Adds <code>frame</code> to the list such that the list is sorted
-              by the offset of the frames. If there's already a frame with the
-              same offset? This one comes after?
-            </dd>
-          </dl>
-        </p>
+        <dl title="interface WebAnimationFrameList" class="idl">
+          <dt>readonly attribute unsigned long length</dt>
+          <dd>
+            The number of frames in the list.
+          </dd>
+          <dt>WebAnimationFrameList? item(unsigned long index)</dt>
+          <dd>
+            Returns the frame at <code>index</code> if it exists or null.
+          </dd>
+          <dt>WebAnimationFrameList? add(WebAnimationFrame frame)</dt>
+          <dd>
+            Adds <code>frame</code> to the list such that the list is sorted
+            by the offset of the frames. If there's already a frame with the
+            same offset? This one comes after?
+          </dd>
+          <dt>WebAnimationFrameList? remove(unsigned long index)</dt>
+          <dd>
+            Adds <code>frame</code> to the list such that the list is sorted
+            by the offset of the frames. If there's already a frame with the
+            same offset? This one comes after?
+          </dd>
+        </dl>
         <p>
           Not sure about the <code>remove</code> method. Do we want:
           <ul>
@@ -1556,6 +1624,27 @@
       <p>
         Animation addition
       </p>
+    </section>
+
+    <section>
+      <h2>Synchronizing with media</h2>
+      <section>
+        <h3>The intrinsic duration of a media item</h3>
+        <p class="todo">
+          Basically just take the <code>HTMLMediaElement.duration</code>
+          property. Possibly convert <code>NaN</code> values to positive
+          infinity.
+        </p>
+      </section>
+      <section>
+        <h3>The <code>WebMediaItem</code> interface</h3>
+        <dl title="interface WebMediaItem" class="idl">
+          <dt>attribute HTMLMediaElement element</dt>
+          <dd>
+            A pointer to the element?
+          </dd>
+        </dl>
+      </section>
     </section>
 
     <section>
