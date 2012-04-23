@@ -614,13 +614,29 @@
       <section>
         <h3>Calculating the animation duration</h3>
         <p>
-          This basically involves:
+          The <var>animation duration</var> is calculated according to the
+          following steps:
         </p>
-        <ul>
-          <li>Multiplying the simple duration by the iteration count</li>
-          <li>Apply min and max (if they are supported)</li>
-          <li>Applying any speed functions</li>
-        </ul>
+        <ol>
+          <li>
+            Let the <var>repeated duration</var> be <code><var>simple
+            duration</var> * <var>iteration count</var></code>.
+          </li>
+          <li>
+            If <var>speed</var> is zero, return <code>Infinity</code>.
+          </li>
+          <li>
+            Otherwise, return <code><var>repeated duration</var>
+            / abs(<var>speed</var>)</code>.
+          </li>
+        </ol>
+        <p class="todo">
+          Allow <var>iteration count</var> to take a special "untilParentEnd"
+          value.
+        </p>
+        <p class="todo">
+          Do we need to support min/max?
+        </p>
       </section>
       <section>
         <h3>Calculating the item time</h3>
@@ -758,6 +774,10 @@
                   </ol>
                 </dd>
               </dl>
+            </li>
+            <li>
+              If the <var>speed</var> timing property is negative, reverse the
+              <var>current direction</var>.
             </li>
             <li>
               If the <var>current direction</var> is forwards then return
@@ -957,8 +977,24 @@
             <dd>
               <p>
                 A real number greater than or equal to zero (including positive
-                infinite) representing the number of times to repeat the
+                infinity) representing the number of times to repeat the
                 animation.
+              </p>
+              <p>
+                The <var>default value</var> is 1.
+              </p>
+            </dd>
+            <dt>attribute float speed</dt>
+            <dd>
+              <p>
+                A real number that acts as a multiplier on the item's rate of
+                play. For example, a value of 2.0 will cause the item to run at
+                twice its usual speed. A value of -1.0 will cause the item to
+                play backwards.
+              </p>
+              <p>
+                Setting this attribute will affect the item's active duration as
+                described in <a href="#calculating-the-active-duration"></a>.
               </p>
               <p>
                 The <var>default value</var> is 1.
