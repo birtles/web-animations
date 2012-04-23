@@ -641,15 +641,26 @@
       <section>
         <h3>Calculating the item time</h3>
         <p>
-          This basically involves:
+          The <var>item time</var> is calculated according to the following
+          equation:
         </p>
+        <blockquote>
+          <code><var>item time</var> = <var>parent time</var>
+            - <var>start time</var> - <var>start offset</var></code>
+        </blockquote>
+        <p>where:</p>
         <ul>
-          <li>Get the <var>simple time</var> from the parent group</li>
-          <li>Subtract the <var>start time</var></li>
-          <li>Subtract start offset&mdash;if we're currently paused, you update
-          the start offset first (and update the pause start time with the
-          parent simple time)</li>
-          <li>Return the resulting time</li>
+          <li>
+            <var>parent time</var> is the simple time of the parent timeline.
+          </li>
+          <li>
+            <var>start time</var> is the item's start time.
+          </li>
+          <li>
+            <var>start offset</var> is the accumulated drift from the start
+            time as described in <a href="#pausing-a-timed-item"
+            class="sectionRef"></a>.
+          </li>
         </ul>
       </section>
       <section>
@@ -669,11 +680,6 @@
       </section>
       <section>
         <h3>Calculating the simple time</h3>
-        <p class="note">
-          We don't need to be concerned about pause times here, they will be
-          taken care of when we calculate the item time (see <a
-            href="#calculating-the-item-time" class="sectionRef"></a>).
-        </p>
         <p>
           The simple time is calculated by first dividing the <var>animation
           time</var> into intervals. This is called the <var>unscaled simple
@@ -789,9 +795,9 @@
             </li>
           </ol>
           <p class="note">
-            Applying the reverse behaviour after the timing function means that
-            ease-in becomes ease-out on reverse, however it avoids jumps in
-            values when reversing part-way.
+            Applying the reverse behaviour after applying the timing function
+            means that ease-in becomes ease-out on reverse, however it avoids
+            jumps in values when reversing part-way.
           </p>
         </section>
         <section>
@@ -830,46 +836,103 @@
           </ol>
         </section>
       </section>
+      <section class="informative">
+        <h3>Pausing a timed item</h3>
+        <p>
+          Timed items may be paused and resumed independently of the parent
+          timeline they belong to.
+          The effect is that the timeline of the item drifts from that of its
+          parent.
+          This drift is called the <var>start offset</var> since it acts as an
+          additional delay added to the <var>start time</var> of the item.
+        </p>
+        <p>
+          Timed elements that do not have a parent timeline may still be
+          paused and resumed.
+          However, except for the case of the document timeline, there will be
+          no observable effect until the element is attached to a parent
+          timeline.
+        </p>
+        <p>
+          The <var>start offset</var> produced by pausing can be calculated as
+          follows:
+        </p>
+        <ol>
+          <li>
+            Let <var>start offset</var> be initially zero.
+          </li>
+          <li>
+            When the pause state is newly true, record the <var>parent simple
+            time</var> as <var>pause start time</var>.
+          </li>
+          <li>
+            On the next sample, increment <var>start offset</var> by
+            <code><var>parent simple time</var> - <var>pause start
+            time</var></code>.
+          </li>
+          <li>
+            Update <var>pause start time</var> to <var>parent simple time</var>.
+          </li>
+          <li>
+            Repeat steps 3 and 4 for each sample while paused and when the pause
+            state is newly false.
+          </li>
+        </ol>
+        <p>
+          An important characteristic of the above procedure is that the
+          <var>start offset</var> continues to accumulate while the
+          item is paused. As a result, the <var>start offset</var> must be
+          calculated prior to calculating the <var>item time</var>.
+        </p>
+      </section>
       <section>
         <h3>Seeking a timed item</h3>
         <p>
-          It might make sense to describe the behaviour for an animation first,
-          and then for an animation group.
+          Seeking, like pausing, has the effect of causing a timed item's
+          timeline to drift from that of its parent timeline.
         </p>
         <p>
-          Talk about how animation instances are not removed on a backwards seek
-          so you need to remove them yourself or detect them and not re-create
-          them.  Perhaps we will have a seek event for this? Or a way of marking
-          animations as remove-on-seek (which would remove the animation if you
-          do a backwards seek past its startTime).
+          When a seek operation is performed, the <var>start offset</var> is set
+          according to the following formula:
         </p>
-        <p>
-          Talk about the 5-minute rule plus issues relating to not chewing up
-          more-and-more memory.
-        </p>
-        <p>
-          Once an animation instance has become inactive, ideally all you need
-          to store is:
-        </p>
+        <blockquote>
+          <code><var>start offset</var> = <var>parent simple time</var>
+            - <var>start time</var> - <var>seek time</var></code>
+        </blockquote>
+        <p>where:</p>
         <ul>
-          <li>start time</li>
-          <li>pause intervals</li>
-          <li>end time (it might have been cancelled so you can just calculate
-              this)</li>
-          <li>target element</li>
-          <li>parent animation group</li>
-          <li>pointer to animation (unless data has changed on the animation
-          since this was made in which case you need to store the
-          modifications)</li>
+          <li><var>parent simple time</var> - is the simple time of the parent
+          timeline if there is one, otherwise it is zero.</li>
+          <li><var>start time</var> - is the start time of the item being
+          seeked.</li>
+          <li><var>seek time</var> - is the time to seek to expressed in the
+          item time space.</li>
         </ul>
         <p>
-          However, we have this idea that animations copy their shared data from
-          their template when they are created (or is it when they become
-          active?) So, if the template was changed, we should preserve the
-          changed information too.
+          The animation events dispatched when a week is performed are described
+          in <a href="#animation-events" class="sectionRef"></a>.
         </p>
-        <p>
-          Need to talk about what happens with regards to events too.
+        <p class="informative">
+          Note that seeking a timed item does not reset the state of the timed
+          item or its children.
+          For example, if an application is configured to produce new animations
+          in response to animation end events, seeking the document timeline
+          backwards will not remove the created animations. As a result, a naive
+          application may create overlapping animations on subsequent replays.
+          It is the application's responsibility to restore the original state
+          of the document in such situations.
+        </p>
+        <p class="feedbackWanted">
+          Is it worth adding "seek" events for this? Or the ability to mark
+          animations as "remove-on-seek" (or something of that ilk).
+        </p>
+        <p class="feedbackWanted">
+          I wonder if it makes sense to clear accumulated start offsets in some
+          states. If you rewind a document to the start, then it's perhaps
+          counter-intuitive if, on replay, the accumulated start offset due to
+          pauses still takes effect. Or maybe it's ok? Bear in mind, that if we
+          do add some feature here, it should ideally work the same when the
+          document is played in reverse.
         </p>
       </section>
       <section>
@@ -1093,7 +1156,14 @@
           </dd>
           <dt>readonly attribute WebTimeline parentTimeline</dt>
           <dd>
-            The parent animation group
+            The parent animation timeline.
+          </dd>
+          <dt>readonly attribute float startOffset</dt>
+          <dd>
+            The number of seconds that the actual item time of this item
+            lags behind the time given by <code><var>parent simple time</var>
+            - <var>start time</var></code> as a result of pausing and seeking
+            this item.
           </dd>
           <dt>void setPauseState (bool pauseState)</dt>
           <dd>
@@ -1105,7 +1175,7 @@
           </dd>
           <dt>bool getPauseState ()</dt>
           <dd>
-            Retrusn the pause state of this timed item. Note that even if this
+            Returns the pause state of this timed item. Note that even if this
             returns false, the timed item might still be effectively paused by
             an ancestor animation group.
           </dd>
@@ -1115,7 +1185,7 @@
             object <em>or one of its ancestor animation groups</em> is
             <code>true</code>.
           </dd>
-          <dt>void seek (unsigned long activeTime)</dt>
+          <dt>void seek (unsigned long animationTime)</dt>
           <dd>
             <span class="todo">TBD</span>
           </dd>
@@ -1699,6 +1769,9 @@
         the SVG bindings so you can clear certain events on a backwards seek as
         required by SMIL.
       </p>
+      <p>
+        Talk about what events are dispatched on a seek.
+      </p>
       <section>
         <h3>Synchronizing event handlers</h3>
         <p>
@@ -1749,6 +1822,43 @@
       <p>
         Need to provide facility for smooth interpolation of arbitrary paths.
       </p>
+    </section>
+
+    <section>
+      <h2>Implementation requirements</h2>
+      <section>
+        <h3>Discarding past animations</h3>
+        <p>
+          If implementations are required to preserve all state associated with
+          animations then the resources required by an animation could continue
+          to increase without limit over time. For long-running animations, and
+          particularly those where animations are added dynamically, this could
+          lead to degraded performance and eventual failure.
+        </p>
+        <div class="issue">
+          <p>
+            I'm not sure how to define this. We could say all animations with
+            <code><var>end time converted to document time</var> &lt;
+            <var>current document time</var> - 5min</code> can be discarded.
+          </p>
+          <p>
+            That's fine, but what about crazy documents that put 1 million
+            animations in a 5min span? Just leave that up to the browser.
+            Also, what about mobile clients, is 5 min too long? Is this too
+            prescriptive?
+          </p>
+          <p>
+            Maybe, just make some suggestions (e.g. 1 min for mobile clients,
+            5 min for desktop?) and then define an exception to throw if there
+            is a seek to some time outside that window.
+          </p>
+          <p>
+            Also, note that defining this in terms of past intervals is
+            direction-specific but that's probably ok since most long-running
+            animations will run forwards.
+          </p>
+        </div>
+      </section>
     </section>
 
     <section>
