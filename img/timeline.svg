@@ -13,14 +13,12 @@
       fill: none;
     }
     .active {
-      fill: orange;
+      fill: peachpuff;
       stroke: black;
-      stroke-width: 2;
     }
     .inactive {
       fill: lightgrey;
       stroke: black;
-      stroke-width: 2;
     }
     .animationLabel {
       text-anchor: start;
