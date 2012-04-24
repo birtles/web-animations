@@ -1483,7 +1483,10 @@
             the same.
           </p>
           <p>
-            That would potentially let you animate anything.
+            That would potentially let you animate anything. Anything! (And,
+            that could be bad. The callback could rewrite the entire document
+            every sample. After returning from the callback you'd have to do
+            a lot of checks regarding the state of the world before continuing.)
           </p>
         </div>
         <p>
