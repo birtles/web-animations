@@ -615,17 +615,27 @@
       <section>
         <h3>Calculating the animation time</h3>
         <p>
-          This basically involves:
+          The <var>animation time</var> is calculated according to the following
+          steps:
         </p>
-        <ul>
-          <li>Get the <var>item time</var> as described above</li>
-          <li>Subtract the <var>start delay</var></li>
-          <li>If it's negative, we're not animating, return
-              <code>null</code>.</li>
-          <li>If the time is greater than the animation duration, we're not
-              animating, return <code>null</code>.</li>
-          <li>Return the resulting time</li>
-        </ul>
+        <ol>
+          <li>
+            If <code><var>item time</var> + <var>start delay</var></code> is
+            negative, return <code>null</code>.
+          </li>
+          <li>
+            Let the <var>unrestricted animation time</var> be <code><var>item
+            time</var> - <var>start delay</var></code>.
+          </li>
+          <li>
+            If the <var>unrestricted animation time</var> is not in the range
+            <code>[0, <var>animation duration</var>)</code>, return
+            <code>null</code>.
+          </li>
+          <li>
+            Otherwise, return the <var>unrestricted animation time</var>.
+          </li>
+        </ol>
       </section>
       <section>
         <h3>Calculating the simple time</h3>
@@ -659,16 +669,36 @@
               duration</var>.
             </li>
             <li>
+              If <var>item time</var> &lt; <var>start delay</var> (i.e. the
+              animation is delayed), return zero.
+            </li>
+            <li>
               If <var>animation time</var> is not <code>null</code> (i.e. the
               animation is animating), return <code><var>animation time</var>
               % <var>simple duration</var></code>.
             </li>
             <li>
-              If the <var>animation duration</var> is a positive multiple of the
-              <var>simple duration</var>, return the <var>simple duration</var>.
+              Let <var>effective animation time</var> be the value corresponding
+              to the first matching condition of the following:
+              <dl class="switch">
+                <dt>If <var>start delay</var> is negative,</dt>
+                <dd>
+                  <code>min(-<var>start delay</var>, <var>animation
+                    duration</var>)</code>
+                </dd>
+                <dt>Otherwise,</dt>
+                <dd>
+                  <var>animation duration</var>
+                </dd>
+              </dl>
             </li>
             <li>
-              Otherwise, return <code><var>animation duration</var>
+              If the <var>effective animation time</var> is a positive multiple
+              of the <var>simple duration</var>, return the <var>simple
+              duration</var>.
+            </li>
+            <li>
+              Otherwise, return <code><var>effective animation time</var>
               % <var>simple duration</var></code>.
             </li>
           </ol>
