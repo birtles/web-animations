@@ -1042,41 +1042,8 @@
         <p>
           Timing properties are collected under the <code>WebTiming</code>
           interface.
-          For properties that are not explicitly set on a <code>WebTiming</code>
-          object, a base object is consulted. The identity of this base object
-          is as follows:
-        </p>
-        <dl>
-          <dt>
-            For <code>WebTiming</code> objects attached to
-            <code>WebAnimationInstance</code> objects,
-          </dt>
-          <dd>
-            Use <code>animation.timing</code>.
-          </dd>
-          <dt>
-            Otherwise,
-          </dt>
-          <dd>
-            Use the <var>global default <code>WebTiming</code> object</var>.
-          </dd>
-        </dl>
-        <p>
-          The <var>global default <code>WebTiming</code> object</var> is
-          a <code>WebTiming</code> object where each property value is set to
-          its <var>default value</var>.
-        </p>
-        <p>
-          When querying the properties of a <code>WebTiming</code> the
-          <var>effective value</var> of the property is resolved by looking up
-          the base object. This is represented graphically below:
-        </p>
-        <div class="figure">
-          <object data="img/webtiming-interaction.svg" width="600"></object>
-        </div>
-        <p class="caption">
-          The values returned when querying <var>instance</var> are derived by
-          successively querying base objects along the chain.
+          All properties have a default value associated with them with is the
+          value used when a new <code>WebTiming</code> object is constructed.
         </p>
         <section>
           <h3>The <code>WebTiming</code> interface</h3>
