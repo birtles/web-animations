@@ -1011,7 +1011,7 @@
           item time space.</li>
         </ul>
         <p>
-          The animation events dispatched when a week is performed are described
+          The animation events dispatched when a seek is performed are described
           in <a href="#animation-events" class="sectionRef"></a>.
         </p>
         <p class="informative">
@@ -1237,10 +1237,6 @@
           <dt>void setPauseState (bool pauseState)</dt>
           <dd>
             Sets the pause state of this timed item.
-            <span class="todo">Need to define how this works somewhere. e.g.
-              for sequence containers, you just keep playing and then get
-              stuck when you hit a paused one I guess. Also, need to define
-              the interaction with <code>seek</code>.</span>
           </dd>
           <dt>bool getPauseState ()</dt>
           <dd>
@@ -1256,7 +1252,9 @@
           </dd>
           <dt>void seek (unsigned long animationTime)</dt>
           <dd>
-            <span class="todo">TBD</span>
+            Performs a seek operation on this timed item according to the steps
+            described in <a href="#seeking-a-timed-item"
+            class="sectionRef"></a>.
           </dd>
           <dt>void cancel ()</dt>
           <dd>
