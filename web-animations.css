@@ -82,7 +82,7 @@ li {
   margin-bottom: 0.5em;
 }
 dl.switch > dt:before {
-  content: "↪";
+  content: "\0021aa";
 }
 dl.switch ol {
   padding-left: 0px;
