@@ -5,6 +5,9 @@
     <meta http-equiv='Content-Type' content='text/html;charset=utf-8'/>
     <script src='http://dev.w3.org/2009/dap/ReSpec.js/js/respec.js'
       class='remove'></script>
+    <script
+      src='http://dev.w3.org/2009/dap/ReSpec.js/js/lang/sh_javascript.min.js'
+      class='remove'></script>
     <script class='remove'>
       var respecConfig = {
           // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use
@@ -105,6 +108,9 @@
 
       * Need ability to cross-reference members of interfaces (e.g. constants
         etc.)
+      * Get rid of the description section next to parameters? It seems more
+        natural to describe the parameters in the description of the method?
+      * Allow making cross-references to specific methods and members.
     -->
   </head>
   <body>
@@ -163,14 +169,33 @@
           <dd>
             The animation function to apply.
           </dd>
-          <dt>readonly attribute WebAnimation animation</dt>
+          <dt>readonly attribute WebAnimation? animation</dt>
           <dd>
-            The <code>WebAnimation</code> object from which this object was
-            minted (see <a href="#creating-animations" class="sectionRef"></a>).
+            For live animation instances (see <a href="#creating-animations"
+            class="sectionRef"></a>), the <code>WebAnimation</code> object from
+            which this object was minted. For independent animation instances,
+            this property is <code>null</code>.
           </dd>
           <dt>readonly attribute Element targetElement</dt>
           <dd>
             The element being animated by this object.
+          </dd>
+          <dt>bool makeNotLive()</dt>
+          <dd>
+            <p>
+              Makes this object independent of the template from which it was
+              created.
+              See <a href="#creating-animations" class="sectionRef"></a>.
+            </p>
+            <p>
+              After this method returns, the <code>animation</code>
+              property will be <code>null</code>.
+            </p>
+            <p>
+              Returns <code>true</code> if this object was previously a live
+              animation instance, <code>false</code> if this object was already
+              an independent animation instance.
+            </p>
           </dd>
         </dl>
       </section>
@@ -186,11 +211,75 @@
         elements.
       </p>
       <p>
-        Changes made to the <code>WebAnimation</code> object are reflected in
-        <code>WebAnimationInstance</code> objects previously generated from the
-        <code>WebAnimation</code> unless the properties that were changed have
-        been explicitly overriden on the <code>WebAnimation</code> object.
+        A <code>WebAnimationInstance</code> can be in one of two states with
+        regards to the relationship between it and the <code>WebAnimation</code>
+        that produced it.
       </p>
+      <dl>
+        <dt>Live animation instance</dt>
+        <dd>
+          Changes made to the <code>WebAnimation</code> object are reflected in
+          the <code>WebAnimationInstance</code> object.
+        </dd>
+        <dt>Independent animation instance</dt>
+        <dd>
+          Changes made to the <code>WebAnimation</code> object have no effect on
+          the <code>WebAnimationInstance</code> object.
+        </dd>
+      </dl>
+      <p>
+        Live animation instances can be converted to independent animation
+        instances by one of two means:
+      </p>
+      <ol>
+        <li>
+          Calling the <code>makeNotLive</code> method of the
+          <code>WebAnimationInstance</code> object.
+        </li>
+        <li>
+          Modifying any of the members of the <code>function</code> or
+          <code>timing</code> properties of the
+          <code>WebAnimationInstance</code> object. This includes redundant
+          modifications, that is, setting a property to its current value.
+          <!--
+           The redundant modification condition is an attempt to eliminate an
+           area where interop might fail subtley.
+
+           If, internally, implementation A filters out redundant changes whilst
+           implementation B blindly accepts all changes we still want the same
+           behaviour with regards to becoming independent. It's easier, more
+           convenient and, I think, more intuitive for authors to define it this
+           way.
+
+           The alternative, requiring redundant changes to be ignored, is more
+           complex as we need to specify what consitutes a redundant change and
+           that's not always easy as the data types become complex. For example,
+           what constitutues a redundant change to an SVGLength is not always
+           obvious.
+           -->
+        </li>
+      </ol>
+      <p>
+        Once independent, animation instances cannot be made live again.
+      </p>
+      <pre class="example sh_javascript">
+        // Create a new animation
+        var anim = new WebAnimation();
+        anim.timing.duration = 1;
+
+        // Create a live instance
+        var instance = a.animateLive(document.getElementById('a'));
+        alert(instance.timing.duration); // Displays "1"
+
+        // Modify the animation
+        anim.timing.duration = 2;
+        alert(instance.timing.duration); // Displays "2"
+
+        // Modify both the animation and instance
+        instance.timing.duration = 3;    // instance is now independent
+        anim.timing.duration = 4;
+        alert(instance.timing.duration); // Displays "3"
+      </pre>
       <section>
         <h3>The <code>WebAnimation</code> interface</h3>
         <p>
@@ -203,62 +292,85 @@
             <dd>
               The animation function to apply.
             </dd>
-            <dt>sequence&lt;WebAnimationInstance&gt; animate (any target,
-              optional float startTime)</dt>
+            <dt>sequence&lt;WebAnimationInstance&gt; animate ()</dt>
             <dd>
               <p>
-                Creates a series of <code>WebAnimationInstance</code> objects,
-                one for each element in <code>target</code>. For each
-                <code>element</code> in <code>target</code> the associated
-                animation is appended to the animation group corresponding to
+                Creates a series of independent
+                <code>WebAnimationInstance</code> objects, one for each element
+                in <code>target</code>. For each <code>element</code> in
+                <code>target</code> the associated animation is appended to the
+                animation group corresponding to
                 <code>element.ownerDocument.animationRoot</code>.
               </p>
-              <p>
-                <code>target</code> may be one of the following types:
-                <code>Element</code>, <code>NodeList</code>,
-                <code>Element[]</code>. If <code>target</code> is of type
-                <code>NodeList</code> all nodes in the list that are not of type
-                <code>ELEMENT_NODE</code> are ignored.
-              </p>
-              <p>
-                <code>startTime</code> represents a time in the context of the
-                <code>WebAnimationGroup</code> to which it is appended. If this
-                parameter is not specified it will default to the current time
-                of the animation group to which it is appended.
-              </p>
-              <p>
-                The <code>WebAnimationInstance</code> objects created by this
-                method behave independently of this object as described in <a
-                href="#creating-animations" class="sectionRef"></a>.
-              </p>
+              <dl class="parameters">
+                <dt>any target</dt>
+                <dd>
+                  The element(s) to be animated.
+                  May be one of the following types:
+                  <code>Element</code>, <code>NodeList</code>,
+                  <code>Element[]</code>.
+                  If <code>target</code> is of type
+                  <code>NodeList</code> all nodes in the list that are not of
+                  type <code>ELEMENT_NODE</code> are ignored.
+                </dd>
+                <dt>optional float startTime</dt>
+                <dd>
+                  The start time for the animation instance in the time space of
+                  the <code>WebTimelineInstance</code> to which it is appended.
+                  If this parameter is not specified it will default to the
+                  current time of the <code>WebTimelineInstance</code> to which
+                  it is appended.
+                </dd>
+              </dl>
             </dd>
-            <dt>sequence&lt;WebAnimationInstance&gt; animateWithParent
-              (any target, WebAnimationGroup? parentTimeline,
-              optional float startTime)</dt>
+            <dt>sequence&lt;WebAnimationInstance&gt; animateWithParent ()</dt>
             <dd>
               <p>
                 Similar to <code>animate</code>, this method creates one
-                <code>WebAnimationInstance</code> object for each element in
-                <code>target</code> but then appends the resulting
+                independent <code>WebAnimationInstance</code> object for each
+                element in <code>target</code>, but then appends the resulting
                 <code>WebAnimationInstance</code> objects as children of the
-                given <code>parentTimeline</code>, if provided. If
-                <code>parentTimeline</code> is <code>null</code>, the
+                given <code>parentTimeline</code>, if provided.
+                If <code>parentTimeline</code> is <code>null</code>, the
                 <code>WebAnimationInstance</code> objects will not be added to
                 any group.
               </p>
-              <p>
-                The handling of <code>target</code> is the same as for
-                <code>animate</code>.
-              </p>
-              <p>
-                <code>startTime</code> represents a time in the context of the
-                <code>WebTimelineInstance</code> to which it will be appended.
-                In this case that <code>parentTimeline</code> is not null, this
-                will be <code>parentTimeline</code>.
-                If this parameter is not specified it will default to the
-                current time of <code>parentTimeline</code> if it is not null,
-                otherwise it will default to 0.
-              </p>
+              <dl class="parameters">
+                <dt>any target</dt>
+                <dd>
+                  As with <code>animate</code>.
+                </dd>
+                <dt>WebTimeline? parentTimeline</dt>
+                <dd>
+                  The timeline to which animation instances should be appended.
+                </dd>
+                <dt>optional float startTime</dt>
+                <dd>
+                  <p>
+                    Represents a time in the context of the
+                    <code>WebTimelineInstance</code> to which the generated
+                    <code>WebAnimationInstance</code> objects will be appended.
+                  </p>
+                  <p>
+                    If this parameter is not specified it will default to the
+                    current time of <code>parentTimeline</code> if it is not
+                    <code>null</code>, otherwise it will default to zero.
+                  </p>
+                </dd>
+              </dl>
+            </dd>
+            <dt>sequence&lt;WebAnimationInstance&gt; animateLive (any target,
+              optional float startTime)</dt>
+            <dd>
+              As with <code>animate</code> with the exception that the animation
+              instances generated by this method are live.
+            </dd>
+            <dt>sequence&lt;WebAnimationInstance&gt; animateLiveWithParent
+              (any target, WebTimeline? parentTimeline, optional float
+              startTime)</dt>
+            <dd>
+              As with <code>animateWithParent</code> with the exception that the
+              animation instances generated by this method are live.
             </dd>
           </dl>
           <div class="feedbackWanted">
@@ -282,10 +394,10 @@
               It would be nice to also support an array of Elements.
             </p>
             <p>
-              Regarding start time, it is necessary to be able to specify it.
+              We also need to be able to specify the start time.
               However, it is probably very useful to have a default behaviour
-              that uses the current time of the container. That is, ideally this
-              parameter should be optional.
+              that uses the current time of the container.
+              That is, ideally this parameter should be optional.
             </p>
             <p>
               Regarding the parent animation group, there are three possible
@@ -305,8 +417,12 @@
               insert.)</li>
             </ul>
             <p>
-              That gives you up to 18 permutations of ways of calling
-              <code>animate</code>. At the same time, we want
+              Finally, we want to be able to trigger both live and independent
+              animations.
+            </p>
+            <p>
+              That gives you up to 36 permutations of ways of calling
+              <code>animate</code> (and cousins). At the same time, we want
               <code>animate</code> to be as simple to use as possible. The above
               interface is an attempt to balance these requirements. It depends
               on WebIDL and ECMAScript either being able to do overloading by
@@ -321,9 +437,6 @@
 
     <section>
       <h2>Timing animations</h2>
-      <p>
-        Explanation about timing stuff, active time, simple time etc.
-      </p>
       <section class="informative">
         <h3>Animation phases</h3>
         <p>
