@@ -262,6 +262,16 @@
       <p>
         Once independent, animation instances cannot be made live again.
       </p>
+      <p class="note">
+        One implication of the fact that a live instance can be converted to an
+        independent instance is that when a live instance is created, the object
+        identity of its <code>function</code> and <code>timing</code> properties
+        must differ from those of the animation from which it was created. This
+        is because, for example, modifying the <code>timing.duration</code>
+        property of a live animation instance and hence converting it to an
+        independent animation instance, cannot at the same time change the
+        object identity of the <code>timing</code> property.
+      </p>
       <pre class="example sh_javascript">
         // Create a new animation
         var anim = new WebAnimation();
