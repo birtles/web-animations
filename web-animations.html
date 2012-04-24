@@ -162,53 +162,9 @@
       <section>
         <h3>The <code>WebAnimationInstance</code> interface</h3>
         <dl title="interface WebAnimationInstance : WebTimedItem" class="idl">
-          <dt>attribute WebAnimationFunctionCollection functions</dt>
+          <dt>attribute WebAnimationFunction function</dt>
           <dd>
-            <p>
-              A read-only set of animation functions to animate, one per target
-              property / attribute. As with <code>HTMLCollection</code>, in
-              ECMAScript you should be able to just use
-              <code>functions["height"]</code> to get the appropriate function
-              (rather than <code>functions.namedItem("height")</code>).
-            </p>
-            <div class="feedbackWanted">
-              <p>
-                I'm not sure how to do this. A few options:
-              </p>
-              <ol>
-                <li>
-                  Make this a read-only copy of
-                  <code>animation.functions</code>. i.e. the object identities
-                  are different but this object still tracks changes to that
-                  one. This means if you want to update to the "master" object
-                  you have to go to the template to do it. Then maybe you have
-                  a <code>setFunctions</code> object here to take any function
-                  collection and make a read-only copy here (that way you can
-                  plug in your own one and still revert to the original).
-                </li>
-                <li>
-                  Have a separate <code>localFunctions</code> property. Then
-                  have <code>functions</code> be the union of
-                  <code>localFunctions</code> and
-                  <code>animation.functions</code>. When two functions are
-                  indexed on the same property, <code>localFunctions</code>
-                  wins. This approach doesn't let you drop the function property
-                  for a property though unless you add some kind of
-                  null-function in.
-                </li>
-                <li>
-                  Have a <code>overrideFunctions</code> property that, if set,
-                  simply overrides <code>animation.functions</code> wholesale.
-                </li>
-                <li>
-                  Just make <code>functions</code> refer to
-                  <code>animation.functions</code>. i.e. changes made to
-                  <code>functions</code> here affect all animation instances
-                  from the same template. I don't like this at all, especially
-                  since it's inconsistent with what we do for timing properties.
-                </li>
-              </ol>
-            </div>
+            The animation function to apply.
           </dd>
           <dt>readonly attribute WebAnimation animation</dt>
           <dd>
@@ -246,13 +202,9 @@
             <dd>
               The timing parameters to use for generated animations.
             </dd>
-            <dt>attribute WebAnimationFunctionCollection functions</dt>
+            <dt>attribute WebAnimationFunction function</dt>
             <dd>
-              A series of animation functions, one per target property
-              / attribute. As with <code>HTMLCollection</code>, in ECMAScript
-              you should be able to just use <code>functions["height"]</code> to
-              get the appropriate function (rather than
-              <code>functions.namedItem("height")</code>).
+              The animation function to apply.
             </dd>
             <dt>sequence&lt;WebAnimationInstance&gt; animate (any target,
               optional float startTime)</dt>
@@ -1571,60 +1523,6 @@
               "auto", or something like "1px/s" (not sure what the datatype
               should be here). Not sure yet how this will work with adaptive
               duration if other animation functions use also this.
-            </dd>
-            <dt>WebAnimationFunction clone ()</dt>
-            <dd>
-              Returns a copy of this object.
-              <span class="todo">As with
-              <code>WebAnimationFunctionCollection</code> this only exists so
-              functions can be changed in flight</span>
-            </dd>
-          </dl>
-        </p>
-      </section>
-      <section>
-        <h3>The <code>WebAnimationFunctionCollection</code> interface</h3>
-        <p>
-          Yeah, the name is a mouthful, but like <code>HTMLCollection</code> you
-          rarely use this directly. I'm not sure if &lsquo;collection&rsquo; is
-          the right terminology. It's basically an unordered list.
-          <dl title="[Constructor] interface WebAnimationFunctionCollection"
-            class="idl">
-            <dt>readonly attribute unsigned long length</dt>
-            <dd>
-              The number of functions in the collection.
-            </dd>
-            <dt>WebAnimationFunction? item(unsigned long index)</dt>
-            <dd>
-              Gets the function at <code>index</code> if it exists. We only
-              have this so you can enumerate the list. But the danger is then
-              apps start to assume the list is in a certain order. So wherever
-              we use this we really should define that order.
-            </dd>
-            <dt>WebAnimationFunction? namedItem(DOMString propertyName)</dt>
-            <dd>
-              Returns the <code>WebAnimationFunction</code> with
-              <code>property</code> = <code>propertyName</code> or null
-              otherwise. 
-            </dd>
-            <dt>WebAnimationFunction add(WebAnimationFunction function)</dt>
-            <dd>
-              Adds <code>function</code> to the collection. If there is already
-              a function in the collection targetting the same property (do we
-              compare properties in a case-insensitive manner? After stripping
-              whitespace?) it will be removed before this is added. If
-              <code>function</code> already exists in this collection no change
-              will be made?? Does that break assumptions about order though? We
-              could just say it will be moved to the end of the list
-            </dd>
-            <dt>WebAnimationFunctionCollection clone ()</td>
-            <dd>
-              Creates a copy of this object and the
-              <code>WebAnimationFunction</code> objects it contains.
-              <span class="todo">This only exists so functions can be changed in
-              flight by cloning the function collection attached to an animation
-              and then attaching the clone to the instance. How important is
-              that though?</span>
             </dd>
           </dl>
         </p>
