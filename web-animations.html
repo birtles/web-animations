@@ -774,6 +774,31 @@
           produce the <var>simple time</var>.
         </p>
         <section>
+          <h4>Calculating the effective animation time</h4>
+          <p>
+            The <var>effective animation time</var> is calculated according to
+            the following steps:
+          </p>
+          <ol>
+            <li>
+              If <var>item time</var> is <code>null</code>, return
+              <code>null</code>.
+            </li>
+            <li>
+              If <var>animation time</var> is not <code>null</code>, return
+              <var>animation time</var>.
+            </li>
+            <li>
+              If <code><var>item time</var> &gt;= <var>animation duration</var>
+              + <var>start delay</var></code>, return <var>animation
+              duration</var>.
+            </li>
+            <li>
+              Otherwise, return <code>max(-<var>start delay</var>, 0)</code>.
+            </li>
+          </ol>
+        </section>
+        <section>
           <h4>Calculating the unscaled simple time</h4>
           <p>
             The <var>unscaled simple time</var> is calculated according to the
@@ -781,48 +806,17 @@
           </p>
           <ol>
             <li>
-              If the <var>item time</var> is null (i.e. the animation's start
-              time is not defined), return <code>null</code>.
+              If the <var>item time</var> is <code>null</code> (i.e. the
+              animation's start time is not defined), return <code>null</code>.
             </li>
             <li>
-              If <var>item time</var> &lt; <var>start delay</var> (i.e. the
-              animation is delayed), return zero.
+              If the <var>simple duration</var> is zero, return zero.
             </li>
             <li>
-              If the simple duration is infinite, return zero.
-            </li>
-            <li>
-              If the simple duration is zero, return the <var>simple
-              duration</var>.
-            </li>
-            <li>
-              If <var>item time</var> &lt; <var>start delay</var> (i.e. the
-              animation is delayed), return zero.
-            </li>
-            <li>
-              If <var>animation time</var> is not <code>null</code> (i.e. the
-              animation is animating), return <code><var>animation time</var>
-              % <var>simple duration</var></code>.
-            </li>
-            <li>
-              Let <var>effective animation time</var> be the value corresponding
-              to the first matching condition of the following:
-              <dl class="switch">
-                <dt>If <var>start delay</var> is negative,</dt>
-                <dd>
-                  <code>min(-<var>start delay</var>, <var>animation
-                    duration</var>)</code>
-                </dd>
-                <dt>Otherwise,</dt>
-                <dd>
-                  <var>animation duration</var>
-                </dd>
-              </dl>
-            </li>
-            <li>
-              If the <var>effective animation time</var> is a positive multiple
-              of the <var>simple duration</var>, return the <var>simple
-              duration</var>.
+              If the <var>effective animation time</var> equals the
+              <var>animation duration</var> and the <var>animation
+              duration</var> is a positive (non-zero) multiple of <var>simple
+              duration</var>, return the <var>simple duration</var>.
             </li>
             <li>
               Otherwise, return <code><var>effective animation time</var>
@@ -918,25 +912,20 @@
               <code>null</code>.
             </li>
             <li>
-              If the <code><var>item time</var> &lt;=
-              min(<var>start delay</var>, 0)</code>, return zero.
+              If the <var>effective animation time</var> is zero, return zero.
             </li>
             <li>
               If the <var>simple duration</var> is zero, return
               <code>floor(<var>iteration count</var>)</code>.
             </li>
             <li>
-              If <var>animation time</var> is not <code>null</code>, let
-              <var>t</var> be the <var>animation time</var>, otherwise, let
-              <var>t</var> be the <var>animation duration</var>.
-            </li>
-            <li>
-              Return <code>floor(<var>t</var> / <var>simple
-              duration</var>)</code>.
+              Return <code>floor(<var>effective animation time</var> /
+              <var>simple duration</var>)</code>.
               <p class="note">
                 If the <var>simple duration</var> is infinite, the
-                result of <code>floor(<var>t</var> / <var>simple
-                duration</var>)</code> will be zero as defined by IEEE 754.
+                result of <code>floor(<var>effective animation time</var> /
+                <var>simple duration</var>)</code> will be zero as defined by
+                IEEE 754.
               </p>
             </li>
           </ol>
