@@ -1126,7 +1126,8 @@
               </p>
               <p>
                 Setting this attribute will affect the item's active duration as
-                described in <a href="#calculating-the-active-duration"></a>.
+                described in <a href="#calculating-the-animation-duration"
+                class="sectionRef"></a>.
               </p>
               <p>
                 The <var>default value</var> is 1.
@@ -1255,6 +1256,14 @@
             Performs a seek operation on this timed item according to the steps
             described in <a href="#seeking-a-timed-item"
             class="sectionRef"></a>.
+          </dd>
+          <dt>void changeSpeed (float speed)</dt>
+          <dd>
+            Updates the <code>timing.speed</code> property to match the
+            <code>speed</code> parameter and performs a compensatory seek such
+            that the <var>animation time</var> does not change. <span
+            class="todo">Need to write out the algorithm for this and clarify
+            the meaning <code>speed</code>.</span>
           </dd>
           <dt>void cancel ()</dt>
           <dd>
