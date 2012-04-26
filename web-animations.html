@@ -707,6 +707,13 @@
             class="sectionRef"></a>.
           </li>
         </ul>
+        <p>
+          If the timed item is not the child of a parent timeline, the
+          <var>item time</var> is null.
+        </p>
+        <p class="todo">
+          Need to define this for the document timeline.
+        </p>
       </section>
       <section>
         <h3>Calculating the animation time</h3>
@@ -715,6 +722,10 @@
           steps:
         </p>
         <ol>
+          <li>
+            If <var>item time</var> is <code>null</code>, return
+            <code>null</code>.
+          </li>
           <li>
             If <code><var>item time</var> + <var>start delay</var></code> is
             negative, return <code>null</code>.
