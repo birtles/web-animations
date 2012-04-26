@@ -1218,11 +1218,14 @@
             object <em>or one of its ancestor animation groups</em> is
             <code>true</code>.
           </dd>
-          <dt>void seek (unsigned long animationTime)</dt>
+          <dt>void seek (unsigned long itemTime)</dt>
           <dd>
             Performs a seek operation on this timed item according to the steps
             described in <a href="#seeking-a-timed-item"
             class="sectionRef"></a>.
+            <code>itemTime</code> is a time in seconds in <em>item time</em>
+            space (see <a href="#simple-time-and-animation-time"
+            class="sectionRef"></a>).
           </dd>
           <dt>void changeSpeed (float speed)</dt>
           <dd>
