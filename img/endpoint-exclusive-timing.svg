@@ -123,10 +123,12 @@
         <circle cx="160" r="3" class="simpleTimeIncludedPoint"/>
         <circle cx="320" cy="-100" r="4" class="simpleTimeExcludedPoint"/>
         <circle cx="320" r="3" class="simpleTimeIncludedPoint"/>
+        <circle cx="400" cy="-50" r="4" class="simpleTimeExcludedPoint"/>
         <mask id="excludedEndPoints">
           <rect x="-10" y="-160" width="420" height="170" fill="white"/>
           <circle cx="160" cy="-100" r="4" fill="black" stroke="none"/>
           <circle cx="320" cy="-100" r="4" fill="black" stroke="none"/>
+          <circle cx="400" cy="-50" r="4" fill="black" stroke="none"/>
         </mask>
       </g>
       <!-- Simple time legend -->
