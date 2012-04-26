@@ -501,11 +501,7 @@
         <h3>Simple time and animation time</h3>
         <p>
           Times in Web Animations are relative to some point of reference. These
-          different points of reference produce different time spaces. An
-          analogue is computer graphics where a graphical element may be present
-          in one of a number of different coordinate spaces. <span
-          class="todo">(This analogue doesn't quite work. Is it better to drop
-          it? Does it make sense to others?)</span>
+          different points of reference produce different time spaces.
         </p>
         <p>
           Within Web Animations, the following time spaces are used:
@@ -526,20 +522,19 @@
           </dd>
           <dt>Item time</dt>
           <dd>
-            A time space whose zero time is when the item becomes active. If the
-            item is not yet active but has a defined start time, this time may
-            be negative.
+            A time space whose zero time is when the item becomes active.
           </dd>
           <dt>Animation time</dt>
           <dd>
-            A time space whose zero time is when the item begins animating. It
-            is undefined when the item is not animating and hence cannot be
-            negative.
+            A time space whose zero time is when the item begins animating.
           </dd>
           <dt>Simple time</dt>
           <dd>
             A time space whose zero time is the beginning of the current
-            iteration. It is defined whenever the parent simple time is defined.
+            iteration.
+            When the animation instance is inactive it is set to the simple time
+            that will produce the appropriate fill value regardless of the
+            setting of the fill mode.
           </dd>
         </dl>
         <p class="feedbackWanted">

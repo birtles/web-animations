@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
   viewBox="0 0 600 330">
   <defs>
     <style type="text/css">
@@ -25,12 +26,14 @@
       marker-end: url(#arrow);
     }
     .activeSpan  {
-      fill: lightgrey;
-      stroke: black;
-    }
-    .animatingSpan  {
       fill: aqua;
       stroke: black;
+    }
+    .startTimeStar {
+      stroke: blue;
+      stroke-linecap: round;
+      stroke-width: 2;
+      fill: none;
     }
     .timeLabel {
       text-anchor: middle;
@@ -93,6 +96,8 @@
       markerWidth="5" markerHeight="5">
       <path d="M0-5l-10 5l10 5z"/>
     </marker>
+    <path d="M-3.5-3.5l7 7M3.5-3.5l-7 7M0-5v10M-5 0h10"
+      class="startTimeStar" id="star"/>
   </defs>
   <!-- Parent simple timeline -->
   <g>
@@ -119,8 +124,8 @@
     </g>
     <!-- Animation shaded areas -->
     <g transform="translate(0 120)">
-      <rect width="325" height="100" class="activeSpan"/>
-      <rect x="75" width="250" height="100" class="animatingSpan"/>
+      <rect x="75" width="250" height="100" class="activeSpan"/>
+      <use xlink:href="#star"/>
     </g>
     <!-- Local timeline -->
     <g transform="translate(-65 220)">
