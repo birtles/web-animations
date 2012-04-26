@@ -87,3 +87,12 @@ dl.switch > dt:before {
 dl.switch ol {
   padding-left: 0px;
 }
+
+/*
+ * On Windows, the bold Arial glyph for right and left arrow is missing the
+ * stem at some font-sizes so use a different font. This affects Firefox,
+ * Chrome, and IE.
+ */
+span.arrow {
+  font-family: Calibri; sans-serif;
+}

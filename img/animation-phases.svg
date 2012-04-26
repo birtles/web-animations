@@ -1,5 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
-  viewBox="0 0 600 280">
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 600 720">
   <defs>
     <style type="text/css">
     svg {
@@ -16,67 +17,134 @@
       stroke-width: 2;
     }
     .activeSpan  {
-      fill: lightgrey;
+      fill: paleturquoise;
       stroke: black;
     }
-    .animatingSpan  {
-      fill: aqua;
-      stroke: black;
-    }
-    .timeLabel, .regionLabel {
+    .timeLabel, .regionLabel, .stateLabel {
       text-anchor: middle;
+    }
+    .stateLabel {
+      fill: navy;
     }
     .bracket {
       stroke: black;
       stroke-width: 1.5;
       fill: none;
     }
+    .startTimeStar {
+      stroke: blue;
+      stroke-linecap: round;
+      stroke-width: 2;
+      fill: none;
+    }
+    .exampleLabel {
+      font-size: 1.5em;
+    }
     </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
       markerHeight="5">
       <path d="M0-5l10 5l-10 5z"/>
     </marker>
+    <path d="M-3.5-3.5l7 7M3.5-3.5l-7 7M0-5v10M-5 0h10"
+      class="startTimeStar" id="star"/>
   </defs>
   <!-- Timeline -->
   <g>
     <text x="1em" y="1.1em">Time</text>
     <line x1="4em" x2="97%" y1="0.8em" y2="0.8em" class="arrowLine"/>
   </g>
-  <!-- A single animation -->
-  <g transform="translate(140 20)">
+  <!-- A simple animation -->
+  <g transform="translate(180 20)">
+    <text x="-130" y="145" class="exampleLabel">(a)</text>
+    <!-- Text labels -->
+    <g transform="translate(0 40)">
+      <text class="timeLabel" y="-0.2em">start time =
+        <tspan x="0" dy="0.9em">start of</tspan>
+        <tspan x="0" dy="0.9em">animation</tspan></text>
+      <text x="250" class="timeLabel">end time</text>
+    </g>
+    <!-- Arrows -->
+    <g transform="translate(0 50)">
+      <path d="M0 25v9" class="dottedArrow"/>
+      <path d="M250 0v34" class="dottedArrow"/>
+    </g>
+    <!-- Animation shaded areas -->
+    <g transform="translate(0 100)">
+      <rect width="250" height="60" class="activeSpan"/>
+      <text x="125" y="35" class="stateLabel">active</text>
+      <use xlink:href="#star"/>
+    </g>
+    <!-- Animation duration label -->
+    <g transform="translate(0 170)">
+      <path d="M0 0s0 7 7 7h111s7 0 7 7c0 0 0-7 7-7h111s7 0 7-7"
+        class="bracket"/>
+      <text x="125" y="35" class="regionLabel">animation duration</text>
+    </g>
+  </g>
+  <!-- Animation with a positive delay -->
+  <g transform="translate(180 240)">
+    <text x="-130" y="145" class="exampleLabel">(b)</text>
     <!-- Text labels -->
     <g transform="translate(0 40)">
       <text class="timeLabel">start time</text>
-      <text x="120" class="timeLabel" y="-0.6em">start of
-                       <tspan x="120" dy="0.9em">animation</tspan></text>
-      <text x="320" class="timeLabel">end time</text>
+      <text x="120" class="timeLabel">start of
+        <tspan x="120" y="0.9em">animation</tspan></text>
+      <text x="370" class="timeLabel">end time</text>
     </g>
     <!-- Arrows -->
     <g transform="translate(0 50)">
       <path d="M0 0v34" class="dottedArrow"/>
-      <path d="M120 0v34" class="dottedArrow"/>
-      <path d="M320 0v34" class="dottedArrow"/>
+      <path d="M120 15v19" class="dottedArrow"/>
+      <path d="M370 0v34" class="dottedArrow"/>
     </g>
     <!-- Animation shaded areas -->
     <g transform="translate(0 100)">
-      <rect width="320" height="60" class="activeSpan"/>
-      <rect x="120" width="200" height="60" class="animatingSpan"/>
+      <rect x="120" width="250" height="60" class="activeSpan"/>
+      <text x="245" y="35" class="stateLabel">active</text>
+      <use xlink:href="#star"/>
     </g>
     <!-- Region labels -->
     <g transform="translate(0 170)">
       <path d="M2 0s0 7 7 7h44s7 0 7 7c0 0 0-7 7-7h44s7 0 7-7" class="bracket"/>
-      <path d="M122 0s0 7 7 7h84s7 0 7 7c0 0 0-7 7-7h84s7 0 7-7"
+      <path d="M122 0s0 7 7 7h111s7 0 7 7c0 0 0-7 7-7h111s7 0 7-7"
         class="bracket"/>
       <g transform="translate(0 34)">
-        <text x="60" class="regionLabel">delayed</text>
-        <text x="220" class="regionLabel">animating</text>
+        <text x="60" class="regionLabel">start delay</text>
+        <text x="245" class="regionLabel">animation duration</text>
       </g>
     </g>
-    <!-- Active region label -->
-    <g transform="translate(0 220)">
-      <path d="M0 0s0 7 7 7h146s7 0 7 7c0 0 0-7 7-7h146s7 0 7-7"
+  </g>
+  <!-- Animation with a negative delay -->
+  <g transform="translate(180 470)">
+    <text x="-130" y="145" class="exampleLabel">(c)</text>
+    <!-- Text labels -->
+    <g transform="translate(0 40)">
+      <text x="120" class="timeLabel">start time</text>
+      <text class="timeLabel">start of
+        <tspan x="0" y="0.9em">animation</tspan></text>
+      <text x="250" class="timeLabel">end time</text>
+    </g>
+    <!-- Arrows -->
+    <g transform="translate(0 50)">
+      <path d="M120 0v34" class="dottedArrow"/>
+      <path d="M0 15v19" class="dottedArrow"/>
+      <path d="M250 0v34" class="dottedArrow"/>
+    </g>
+    <!-- Animation shaded areas -->
+    <g transform="translate(0 100)">
+      <rect width="250" height="60" class="activeSpan"/>
+      <text x="125" y="35" class="stateLabel">active</text>
+      <use x="120" xlink:href="#star"/>
+    </g>
+    <!-- Region labels -->
+    <g transform="translate(0 170)">
+      <path d="M2 0s0 7 7 7h44s7 0 7 7c0 0 0-7 7-7h44s7 0 7-7" class="bracket"/>
+      <path d="M0 40s0 7 7 7h111s7 0 7 7c0 0 0-7 7-7h111s7 0 7-7"
         class="bracket"/>
-      <text x="160" y="35" class="regionLabel">active</text>
+      <g transform="translate(0 34)">
+        <text x="60" class="regionLabel">start delay</text>
+        <text x="125" y="40" class="regionLabel">animation duration</text>
+      </g>
     </g>
   </g>
 </svg>

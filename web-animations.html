@@ -120,13 +120,14 @@
 
     <section>
       <h2>Introduction</h2>
-      <p>
-        Your text...
+      <p class="todo">
+        Shane, onegaishimasu!
       </p>
       <section>
         <h3>Relationship to other specifications</h3>
-        <p>
-          CSS Transitions, CSS Animations, SVG, SMIL
+        <p class="todo">
+          CSS Transitions, CSS Animations, SVG, SMIL<br/>
+          Thanks Shane &#x263A;
         </p>
       </section>
     </section>
@@ -134,18 +135,17 @@
     <section class="informative">
       <h2>The animation timeline</h2>
       <p>
-        Each document contains a timeline to which animations may be added. Each
-        animation has a start time which determines when the animation becomes
-        active. After the animation has completed, the animation becomes
-        inactive.
+        Each document contains a timeline to which animations may be added.
+        Each animation has a time at which it is scheduled to become active.
+        After the animation has completed, the animation becomes inactive.
       </p>
       <div class="figure">
         <object data="img/timeline.svg" width="600"></object>
       </div>
       <p class="caption">
-        At time <em>t</em> animations A and B are active. Animation C has
-        already completed and is now inactive. Animation D has yet to begin and
-        is also inactive.
+        At time <em>t</em> animations A and B are active.
+        Animation C has already completed and is now inactive.
+        Animation D has yet to begin and is also inactive.
       </p>
       <section>
         <h3>Start of the timeline</h3>
@@ -448,39 +448,53 @@
     <section>
       <h2>Timing animations</h2>
       <section class="informative">
-        <h3>Animation phases</h3>
+        <h3>Animation states</h3>
         <p>
           An individual animation instance can be in one of three possible
-          states, called phases:
+          states:
         </p>
         <dl>
           <dt>Inactive</dt>
           <dd>The animation instance has yet to start or has already finished.
           Whether it effects its target depends on its fill mode.</dd>
-          <dt>Delayed (active)</dt>
-          <dd>The animation instance is waiting to start (assuming time is
-          progressing forwards). Depending on the animation instance's fill
-          mode, it may apply a backwards fill to its target at this time.</dd>
-          <dt>Animating (active)</dt>
+          <dt>Active</dt>
           <dd>The animation instance is executing, and will apply its effect to
           its target.</dd>
+          <dt>Chillin' like a villain</dt>
+          <dd>The animation instance does not have a parent timeline. It will
+          not apply its effect to its target since it has no sense of time.
+          </dd>
         </dl>
         <p>
-          An animation instance is considered <em>active</em> if it is in the
-          <em>delayed</em> or <em>animating</em> phases.
+          The period that an animation instance is active is called the
+          <em>active interval</em>. Each animation instance has only one such
+          interval.
         </p>
         <p>
-          These phases can be visualized as follows:
+          The start of the interval is determined by the <var>start
+          time</var> of the animation instance but may be shifted by
+          a <var>start delay</var> on the animation instance.
+        </p>
+        <p>
+          The end of the interval is determined by the <var>animation
+          duration</var> (see <a href="#calculating-the-animation-duration"
+          class="sectionRef"></a>).
+        </p>
+        <p>
+          Some examples are illustrated below.
         </p>
         <div class="figure">
           <object data="img/animation-phases.svg" width="600"></object>
         </div>
         <p class="caption">
-          Animation phases.
-        </p>
-        <p>
-          Depending on the an animation instance's properties, it may not enter
-          all of these phases.
+          Examples of the effect of the start delay on endpoints of the active
+          interval.<br>
+          (a) An animation instance with no delay; the start time and start of
+          animation are coincident.<br>
+          (b) An animation instance with a positive delay; the start of
+          animation is deferred by the delay.<br>
+          (c) An animation instance with a negative delay; the start of
+          animation is brought forward by the delay.
         </p>
       </section>
       <section class="informative">
@@ -1794,7 +1808,7 @@
       </section>
       <section>
         <h3>The <code>WebMediaItem</code> interface</h3>
-        <dl title="interface WebMediaItem" class="idl">
+        <dl title="interface WebMediaItem : WebTimedItem" class="idl">
           <dt>attribute HTMLMediaElement element</dt>
           <dd>
             A pointer to the element?
