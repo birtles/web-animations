@@ -643,22 +643,6 @@
             return <var>duration</var>.
           </dd>
           <dt>
-            If the <var>duration</var> timing property has the special value of
-            "untilParentEnd",
-          </dt>
-          <dd>
-            return <var>the simple duration of the parent timeline</var>
-            - <var>the item's start time</var> - <var>the item's start
-            delay</var>.
-          </dd>
-          <dt>
-            If the <var>duration</var> timing property is set (but not one of
-            the above values),
-          </dt>
-          <dd>
-            return <code>Infinity</code>.
-          </dd>
-          <dt>
             Otherwise,
           </dt>
           <dd>
@@ -670,22 +654,6 @@
           the type of the item. For animation instances the <var>intrinsic
           duration</var> is <code>Infinity</code>.
         </p>
-        <div class="todo">
-          <p>
-            If we support <code>pace="10px/s"</code> then, when specified, it
-            will allow animation instances to have an intrinsic duration.
-          </p>
-          <p>
-            In specifying that, we need to define what happens when the simple
-            duration and intrinsic duration don't match. Basically, if the
-            simple duration is shorter, you chop off the remaining time. If the
-            simple duration is longer, you do your fill behavior for that time.
-            It probably makes most sense to specify that behavior where we
-            define the mapping from simple time to the paced time. (Basically,
-            if the paced time ends up being greater than the specified duration
-            then you clamp to the specified duration and invoke fill behavior.)
-          </p>
-        </div>
         <p>
           The intrinsic duration for timeline instances and media items is
           described under <a
@@ -714,13 +682,6 @@
             / abs(<var>speed</var>)</code>.
           </li>
         </ol>
-        <p class="todo">
-          Allow <var>iteration count</var> to take a special "untilParentEnd"
-          value.
-        </p>
-        <p class="todo">
-          Do we need to support min/max?
-        </p>
       </section>
       <section>
         <h3>Calculating the item time</h3>
