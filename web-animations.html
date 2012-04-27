@@ -1394,7 +1394,7 @@
           </li>
         </p>
       </section>
-      <section>
+      <section class="informative">
         <h3>Types of groups</h3>
         <p>
           Groups can be used to provide synchronization behavior for its
@@ -1403,9 +1403,16 @@
           another type runs the children in sequence.
         </p>
         <p>
-          Compare the two arragements illustrated below:
+          Compare the two arrangements illustrated below:
         </p>
-        <!-- Figure -->
+        <div class="figure">
+          <object data="img/grouping-types.svg" width="600"></object>
+        </div>
+        <p class="caption">
+          Two types of animation groups.<br>
+          (a) is a parallel group where all the children run simultaneously.<br>
+          (b) is a sequence group where the children run in turn.
+        </p>
         <p>
           Groups can also contain other groups which allows for more
           sophisticated synchronization.
