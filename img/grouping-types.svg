@@ -61,7 +61,6 @@
       <text x="1em" y="1.1em">Time</text>
       <g transform="translate(80 15)">
         <path d="M0 0H400" class="arrowLine"/>
-        <path d="M0 5v-10m50" class="line"/>
       </g>
     </g>
   </defs>

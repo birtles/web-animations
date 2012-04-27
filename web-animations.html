@@ -1417,7 +1417,17 @@
           Groups can also contain other groups which allows for more
           sophisticated synchronization.
         </p>
-        <!-- Figure -->
+        <div class="figure">
+          <object data="img/grouping-nesting.svg" width="600"></object>
+        </div>
+        <p class="caption">
+          A sequence animation group that contains a parallel animation group as
+          a child.<br>
+          The parallel group waits for the previous child of the sequence
+          group to finish, and then the children of the parallel group play
+          simultaneously.
+          After they have finished the next child of the sequence group plays.
+        </p>
         <p>
           Web Animations defines three types of animation groups.
         </p>
