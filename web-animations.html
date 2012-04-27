@@ -1304,44 +1304,114 @@
     <section>
       <h2>Grouping and synchronization</h2>
       <p>
-        Describe basic properties: can be seeked etc.
+        While it is possible to set the timing properties of animations and
+        their instances individually, it is often useful to bundle animations
+        together and control their timing as a group.
       </p>
       <p>
-        Describe different types: par, seq, mediagroup. Do we need a concept of
-        "effective start time" for seq?
+        This can be used to share common timing properties as illustrated below:
+      </p>
+      <div class="figure">
+        <object data="img/grouping-delay.svg" width="800"></object>
+      </div>
+      <p class="caption">
+        Using groups to share common timing properties.<br>
+        (a) Shows setting a delay of 5 seconds in individual animations.<br>
+        (b) Produces the same effect by setting the delay on the group.
       </p>
       <p>
-        Describe how repetition works.
+        As well as sharing timing information, by grouping animations together
+        they can be seeked, paused, and stopped as a unit.
+      </p>
+      <section>
+        <h3>Relationship of group time to child time</h3>
+        <p>
+          Operate inside an iteration of the parent
+          It cascades down
+        </p>
+        <p>
+          See what effect this has on repetition
+        </p>
+        <p>
+          See what effect this has on negative delays and duration
+        </p>
+        <p>
+          See what effect this has on fill
+        </p>
+        <p>
+          Similarly speed will speed up all children. Reversing the group will
+          reverse the children. Applying a timing function will affect all
+          children.
+        </p>
+      </section>
+      <section>
+        <h3>Types of groups</h3>
+        <p>
+          Groups can be used to provide synchronization behavior for its
+          children.
+          For example, one type of group runs its children in parallel, whilst
+          another type runs the children in sequence.
+        </p>
+        <p>
+          Compare the two arragements illustrated below:
+        </p>
+        <!-- Figure -->
+        <p>
+          Groups can also contain other groups which allows for more
+          sophisticated synchronization.
+        </p>
+        <!-- Figure -->
+        <p>
+          Web Animations defines three types of animation groups.
+        </p>
+        <dl>
+          <dt>Parallel groups</dt>
+          <dd>
+          </dd>
+          <dt>Sequence groups</dt>
+          <dd>
+          </dd>
+          <dt>Media groups</dt>
+          <dd>
+          </dd>
+        </dl>
+      </section>
+        
+      <p>
+        How timing works. Just falls out of the above definitions.
+        Example of repetition.
+        Example of fill behaviour.
       </p>
       <p>
-        Need to define "animation group time". I think this is probably the same
-        as the <code>startTime</code> member of the <a>WebTimedItem</a>
-        interface. Since, if you add a delay to an animation group, its
-        intuitive that zero-time for that group is when the delay finishes (or
-        does the group behave as if it is paused for the delay? i.e. the
-        animation group time is zero at the start of the delay and at the end?)
+        Calculating the start time for children.
       </p>
       <p>
         Integration with <code>&lt;video&gt;</code> etc.
       </p>
-      <p>
-        Describe how the document timeline is just an animation group instance
-        with the following special properties:
-      </p>
-      <ul>
-        <li>
-          It cannot be appended as a child of another group. As a result the
-          <code>parentGroup</code> property returns <code>null</code>.
-        </li>
-        <li>
-          A lot of other properties are read-only like
-          <code>iterationCount</code> etc.
-        </li>
-        <li>
-          Its startTime represents real-world time??? Can we align with the
-          timestamps used in DOM (e.g. for events) here?
-        </li>
-      </ul>
+      <section>
+        <h3>The document timeline</h3>
+        <p>
+          We have previously referred to the <em>document timeline</em> as...
+        </p>
+        <p>
+          Describe how the document timeline is just an animation group instance
+          with the following special properties:
+        </p>
+        <ul>
+          <li>
+            It cannot be appended as a child of another group. As a result the
+            <code>parentGroup</code> property returns <code>null</code>.
+          </li>
+          <li>
+            A lot of other properties are read-only like
+            <code>iterationCount</code> etc.
+          </li>
+          <li>
+            Its startTime represents real-world time??? Can we align with the
+            timestamps used in DOM (e.g. for events) here?
+          </li>
+        </ul>
+      </section>
       <section>
         <h3>Calculating the intrinsic duration of an animation group
             instance</h3>
@@ -1362,6 +1432,9 @@
             Same as parallel?
           </dd>
         </dl>
+      </section>
+      <section>
+        <h3>Calculating the start time for children of a sequence group</h3>
       </section>
       <section>
         <h3>The <code>WebAnimationGroupInstance</code> interface</h3>
