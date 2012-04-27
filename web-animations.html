@@ -236,6 +236,10 @@
           the <code>WebAnimationInstance</code> object.
         </dd>
       </dl>
+      <p class="todo">
+        Add a non-normative diagram which shows a live animation instance and an
+        independent one.
+      </p>
       <p>
         Live animation instances can be converted to independent animation
         instances by one of two means:
@@ -479,6 +483,34 @@
             time.
           </dd>
         </dl>
+        <div class="todo">
+          <p>
+            Revise this so to use the following states:
+          </p>
+          <ul>
+            <li>Inactive&mdash;includes both animations that don't have a parent
+            (and therefore no time) and those that simply aren't filling or
+            active</li>
+            <li>Filling (active)</li>
+            <li>Animating (active)</li>
+          </ul>
+          <p>
+            Basically, the fill mode affects the state and the return value of
+            <code>iterationTime</code>.
+          </p>
+          <p>
+            Add a diagram showing these states.
+          </p>
+          <p>
+            Revise the algorithms to that the <var>iteration time</var>
+            incorporates the fill mode.
+          </p>
+          <p>
+            The active interval below will become the <em>animation
+            interval</em>. Need to update the delay examples diagram to say
+            &ldquo;animating&rdquo;.
+          </p>
+        </div>
         <p>
           The period that an animation instance is active is called the
           <em>active interval</em>. Each animation instance has only one such
@@ -517,32 +549,36 @@
           Times in Web Animations are relative to some point of reference. These
           different points of reference produce different time spaces.
         </p>
+        <p class="todo">
+          Re-introduce coordinate space analogue? Drop "document time space" and
+          "parent iteration time space" ?
+        </p>
         <p>
           Within Web Animations, the following time spaces are used:
         </p>
         <dl>
-          <dt>Document time</dt>
+          <dt>Document time space</dt>
           <dd>
             A time space whose zero point is the start time of the document
             timeline as defined in <a href="#start-of-the-timeline"
             class="sectionRef"></a>.
           </dd>
-          <dt>Parent iteration time</dt>
+          <dt>Parent iteration time space</dt>
           <dd>
             A time space whose zero time is the beginning of the parent
             animation group's current iteration.
             Unless the document creates additional animation groups, this will
             be equivalent to document time.
           </dd>
-          <dt>Item time</dt>
+          <dt>Item time space</dt>
           <dd>
             A time space whose zero time is when the item becomes active.
           </dd>
-          <dt>Animation time</dt>
+          <dt>Animation time space</dt>
           <dd>
             A time space whose zero time is when the item begins animating.
           </dd>
-          <dt>Iteration time</dt>
+          <dt>Iteration time space</dt>
           <dd>
             A time space whose zero time is the beginning of the current
             iteration.
@@ -561,6 +597,11 @@
           A comparison of item time, animation time, and iteration time for an
           animation with a iteration duration of 1s and an iteration count of
           2.5.
+        </p>
+        <p class="todo">
+          Need to explain that while the time space is unbounded, some times
+          as-used-in-Web-Animations are clamped??? Either that or just remove
+          the clamped parts from the diagram.
         </p>
         <section>
           <h4>Iteration duration and animation duration</h4>
@@ -641,7 +682,11 @@
         </section>
       </section>
       <section>
-        <h3>Calculating the itreation duration</h3>
+        <h3>Calculating the iteration duration</h3>
+        <p class="todo">
+          The following algorithms are pretty intimidating apparently. Put them
+          after the IDL? Or try to reduce the number of terms?
+        </p>
         <p>
           The <var>iteration duration</var> is calculated according to the
           following steps:
@@ -1299,6 +1344,24 @@
           <li>Reversing</li>
         </ul>
       </p>
+    </section>
+
+    <section>
+      <h2>Controlling animation playback rate</h2>
+      <p class="todo">
+        TBD.
+        Need to define timing functions and the ability to provide custom
+        functions to scale a time.
+        Not even sure what this section should be called or if it should be
+        subsection of the previous section.
+        &ldquo;Scaling the time&rdquo;?
+      </p>
+      <h3>The <code>WebTimingFunction</code> interface</h3>
+      <p class="todo">
+        TBD.
+      </p>
+      <dl title="interface WebTimingFunction" class="idl">
+      </dl>
     </section>
 
     <section class="informative">
