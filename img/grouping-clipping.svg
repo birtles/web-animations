@@ -84,6 +84,7 @@
     <rect width="200" height="150" class="groupSpan"/>
     <text x="5" y="25" class="groupParams">startTime: 2s
       <tspan x="5" dy="1em">duration: 4s</tspan></text>
+    <use xlink:href="#star"/>
     <g transform="translate(0 60)">
       <!-- Ghost of clipped bit -->
       <rect x="-50" width="350" height="75" class="activeSpan"
@@ -93,7 +94,6 @@
       <text x="5" y="25" class="animParams">startTime: 0s
         <tspan x="5" dy="1em">delay: -1s</tspan>
         <tspan x="5" dy="1em">iterationCount: infinite</tspan></text>
-      <use xlink:href="#star"/>
     </g>
   </g>
 </svg>

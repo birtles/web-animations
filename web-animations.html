@@ -1371,7 +1371,7 @@
         <p class="caption">
           In the first instance, an animation has a negative delay and an
           infinite iteration count.<br>
-          However, when a simiilar animation is placed inside a group with
+          However, when a similar animation is placed inside a group with
           a specified duration it has the effect of clipping the animation's
           duration.
         </p>
@@ -1424,33 +1424,25 @@
         <dl>
           <dt>Parallel groups</dt>
           <dd>
+            TBD
           </dd>
           <dt>Sequence groups</dt>
           <dd>
+            TBD
           </dd>
           <dt>Media groups</dt>
           <dd>
+            TBD
           </dd>
         </dl>
       </section>
-        
-      <p>
-        How timing works. Just falls out of the above definitions.
-        Example of repetition.
-        Example of fill behaviour.
-      </p>
-      <p>
-        Calculating the start time for children.
-      </p>
       <p>
         Integration with <code>&lt;video&gt;</code> etc.
       </p>
       <section>
         <h3>The document timeline</h3>
         <p>
-          We have previously referred to the <em>document timeline</em> as...
-        </p>
-        <p>
+          TBD.
           Describe how the document timeline is just an animation group instance
           with the following special properties:
         </p>
@@ -1472,17 +1464,18 @@
       <section>
         <h3>Calculating the intrinsic duration of an animation group
             instance</h3>
+        <p>
+          TBD, but basically:
+        </p>
         <dl class="switch">
           <dt>If the type is parallel,</dt>
           <dd>
-            calc the endTime for each child and take the
-            max. If any child has dur of type "parentEnd" skip it.
+            Calc the endTime for each child and take the max
           </dd>
           <dt>If the type is sequence</dt>
           <dd>
-            If it's seq, sum all the active durations + start delays
-            (including negatives). If any child has a dur of parentEnd,
-            treat it as zero and ignore the start delay???
+            Sum all the animation durations + start delays (including
+            negatives)
           </dd>
           <dt>If the type is media group</dt>
           <dd>
@@ -1492,6 +1485,7 @@
       </section>
       <section>
         <h3>Calculating the start time for children of a sequence group</h3>
+        <p>TBD</p>
       </section>
       <section>
         <h3>The <code>WebAnimationGroupInstance</code> interface</h3>
