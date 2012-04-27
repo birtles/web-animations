@@ -46,14 +46,6 @@
     .groupParams {
       fill: darkgreen;
     }
-    .bracket {
-      stroke: black;
-      stroke-width: 1.5;
-      fill: none;
-    }
-    .exampleLabel {
-      font-size: 1.5em;
-    }
     </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
       markerHeight="5">

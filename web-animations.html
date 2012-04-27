@@ -1359,15 +1359,39 @@
           playing 6 times.
         </p>
         <p>
-          See what effect this has on negative delays and duration
+          A further result of the children of a group basing their timing on the
+          group's <var>iteration time</var> is that they cannot animate outside
+          of the group's active interval. This is because the <var>iteration
+          time</var> of a group will not change outside its active interval.
+          This allows groups to clip the playback of their children.
+        </p>
+        <div class="figure">
+          <object data="img/grouping-clipping.svg" width="600"></object>
+        </div>
+        <p class="caption">
+          In the first instance, an animation has a negative delay and an
+          infinite iteration count.<br>
+          However, when a simiilar animation is placed inside a group with
+          a specified duration it has the effect of clipping the animation's
+          duration.
         </p>
         <p>
-          See what effect this has on fill
+          Some further consequences of group children basing their timing on
+          their parent group's <var>iteration time</var> are:
         </p>
-        <p>
-          Similarly speed will speed up all children. Reversing the group will
-          reverse the children. Applying a timing function will affect all
-          children.
+        <ul>
+          <li>
+            Setting the speed of an animation group will speed up or slow down
+            all children.
+          </li>
+          <li>
+            Changing the playback direction of an animation group will change
+            the direction of all children.
+          </li>
+          <li>
+            Applying a timing function to an animation group will affect the
+            playback rate of all children.
+          </li>
         </p>
       </section>
       <section>
