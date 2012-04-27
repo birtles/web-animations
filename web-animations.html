@@ -1598,6 +1598,20 @@
         </p>
         <p>
           <dl title="[Constructor] interface WebAnimationFunction" class="idl">
+            <dt>const unsigned short WEBA_OPERATION_REPLACE = 0</dt>
+            <dd>
+              This animation should replace the value it is composited with.
+            </dd>
+            <dt>const unsigned short WEBA_OPERATION_ACCUMULATE = 1</dt>
+            <dd>
+              This animation should add to the value it is composited with.
+              The meaning of addition is dependent on the type of animation.
+            </dd>
+            <dt>const unsigned short WEBA_OPERATION_MERGE = 2</dt>
+            <dd>
+              This animation should merge with the value it is composited with.
+              The meaning of merge is dependent on the type of animation.
+              The duration of the merge is the calculated animation duration of the <code>WebAnimation</code> containing this <code>WebAnimationFunction</code>.
             <dt>attribute DOMString property</dt>
             <dd>
               The target attribute / property. <code>property</code> is probably
@@ -1608,13 +1622,14 @@
               The series of values that make up this function sorted by their
               offset within the iteration duration of the animation.
             </dd>
-            <dt>attribute unsigned short additive</dt>
+            <dt>attribute unsigned short operation</dt>
             <dd>
-              This depends how addition works
+              The operation used to composite this animation with the stack, as specified by one of the <code>WEBA_OPERATION_*</code> constants defined in this interface.
             </dd>
-            <dt>attribute unsigned short accumulate</dt>
+            <dt>attribute unsigned short accumulateOperation</dt>
             <dd>
-              This also depends how addition works
+              The operation used to composite each iteration of this animation
+              with the result of compositing the previous animation, as specified by one of the <code>WEBA_OPERATION_*</code> constants defined in this interface.
             </dd>
             <dt>attribute DOMString? pace</dt>
             <dd>
@@ -1756,14 +1771,59 @@
         </p>
       </section>
       <section>
-        <h3>Animation combinators</h3>
+        <h3>Resolving the Animation Stack</h3>
         <p class="todo">
-          There are 3 - <code>Replace</code>, <code>Accumulate</code>, and 
-          <code>Blend</code>. <code>Blend</code> requires an additional 
-          parameter specifying how the blend values vary over time.
-          We need a way to specify these somehow - probably as part of the
-          <code>AnimationFunction</code> interface.
+          Put information here about how at each time <code>t</code> a cumulative animation result is generated for each property and target which is being animated, and that the final result is applied to the target's property.
         </p>
+        <p class="todo">
+          Are we going to go down the path of base- and anim-val, like SVG does?
+          Or direct manipulation of properties, like CSS?
+        </p>
+      </section>
+      <section>
+        <h3>Animation combinators</h3>
+        <p>
+          When an animation applies to a target and property that animations earlier in the animation stack have already applied to, the cumulative animation result from the stack is composited with the new animation to produce a new cumulative animation result.
+          The possible combinators are defined as <code>WEBA_OPERATION_*</code> constants in the <code>WebAnimationFunction</code> interface.
+        </p>
+        <section>
+          <h4>The REPLACE combinator</h4>
+          <p>
+            When an animation <code>a</code> is composited over a cumulative animation result <code>c</code> using the REPLACE combinator, the new cumulative animation result is always <code>a</code>.
+          </p>
+        </section>
+        <section>
+          <h4>The ACCUMULATE combinator</h4>
+          <p>
+            When a path animation <code>a</code> is composited over a cumulative animation result <code>c</code> using the ACCUMULATE combinator, the effective transform of <code>a</code> is calculated (see <a href="#animations-in-the-timeline" class="sectionRef"></a>).
+            This transform is then post-multiplied to the cumulative animation result to generate a new cumulative animation result.
+          </p>
+          <p>
+            When a transform animation <code>a</code> is composited over a cumulative animation result <code>c</code> using the ACCUMULATE combinator, <code>a</code> is post-multiplied to the cumulative animation result to generate a new cumulative animation result.
+          </p>
+          <p>
+            When a simple animation (i.e. an animation which is not a path animation nor a transform animation) <code>a</code> is composited over a cumulative animation result <code>c</code> using the ACCUMULATE combinator, the new cumulative animation result is the sum of <code>a</code> and <code>c</code>, clipped if necessary to the appropriate domain.
+          </p>
+        </section>
+        <section>
+          <h4>The MERGE combinator</h4>
+          <p>
+            All MERGE operators are governed by an interpolation parameter <code>p</code> that is calculated as the ratio of <code>(currentTime - parent.startTime) / parent.animationDuration</code>, where <code>parent</code> is the <code>WebAnimation</code> which references the <code>WebAnimationFunction</code> that is being composited.
+          </p>
+          <p>
+            When a path animation <code>a</code> is composited over a cumulative animation result <code>c</code> using the MERGE combinator, the effective transform of <code>a</code> is calculated (see <a href="#animations-in-the-timeline" class="sectionRef"></a>).
+            This transform is then interpolated with <code>c</code> using the rules provided in ??? to provide the new cumulative animation result.
+          </p>
+          <p class="todo">
+            Reference the CSS Transforms Module Level 3 here and below.
+          </p>
+          <p>
+            When a transform animation <code>a</code> is composited over a cumulative animation result <code>c</code> using the MERGE combinator, <code>a</code> is interpolated with <code>c</code> using the rules provide in ??? to provide the new cumulative animation result.
+          </p>
+          <p>
+            When a simple animation <code>a</code> is composited over a cumulative animation result <code>c</code> using the MERGE combinator, the new cumulative animation result is calculated as the weighted sum of <code>a</code> and <code>c</code>, with weights of <code>(1-p)</code> and <code>p</code> respectively.
+          </p>
+        </section>
       </section>
     </section>
 
