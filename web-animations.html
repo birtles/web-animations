@@ -1301,7 +1301,7 @@
       </p>
     </section>
 
-    <section>
+    <section class="informative">
       <h2>Grouping and synchronization</h2>
       <p>
         While it is possible to set the timing properties of animations and
@@ -1316,21 +1316,33 @@
       </div>
       <p class="caption">
         Using groups to share common timing properties.<br>
-        (a) Shows setting a delay of 5 seconds in individual animations.<br>
+        (a) Shows setting a delay of 5 seconds on individual animations.<br>
         (b) Produces the same effect by setting the delay on the group.
       </p>
       <p>
         As well as sharing timing information, by grouping animations together
         they can be seeked, paused, and stopped as a unit.
       </p>
-      <section>
+      <section class="informative">
         <h3>Relationship of group time to child time</h3>
         <p>
-          Operate inside an iteration of the parent
-          It cascades down
+          The timing of the children of a group is based on the timing of the
+          group. Specifically, times for the children are based on the parent's
+          <em>iteration time</em>. That is, the children animate <em>inside</em>
+          an iteration of the parent.
         </p>
         <p>
-          See what effect this has on repetition
+          As an example, consider repetition. If a group has an iteration count
+          of 3, then the children of of the group will all play three times
+          since they effectively play <em>inside</em> the group's iterations.
+        </p>
+        <div class="figure">
+          <object data="img/grouping-repetition.svg" width="600"></object>
+        </div>
+        <p class="caption">
+          Since children of an animation group base their timing on the group's
+          <var>iteration time</var>, when the group repeats, the children play
+          again.
         </p>
         <p>
           See what effect this has on negative delays and duration

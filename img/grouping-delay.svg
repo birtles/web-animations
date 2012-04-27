@@ -7,17 +7,13 @@
     svg {
       font-size: 1.2em;
     }
-    .line, .arrowLine, .dottedArrow {
+    .line, .arrowLine {
       stroke: black;
       stroke-width: 1.5;
       fill: none;
     }
-    .arrowLine, .dottedArrow {
+    .arrowLine {
       marker-end: url(#arrow);
-    }
-    .dottedArrow {
-      stroke-dasharray: 4 4;
-      stroke-width: 2;
     }
     .activeSpan  {
       fill: paleturquoise;
@@ -65,7 +61,6 @@
   <!-- Before groups -->
   <g>
     <use xlink:href="#timeline"/>
-    <!-- Animation with a positive delay -->
     <g transform="translate(80 20)">
       <!-- Animation shaded areas -->
       <g transform="translate(90 20)">
