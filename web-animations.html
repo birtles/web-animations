@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- vim: set expandtab ts=2 sw=2 tw=80: -->
 <html>
   <head>
     <title>Web Animations 1.0</title>
@@ -10,93 +11,93 @@
       class='remove'></script>
     <script class='remove'>
       var respecConfig = {
-          // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use
-          // ED.
-          specStatus: "unofficial",
+        // specification status (e.g. WD, LCWD, NOTE, etc.). If in doubt use
+        // ED.
+        specStatus: "unofficial",
 
-          // the specification's short name, as in
-          // http://www.w3.org/TR/short-name/
-          // shortName:            "web-anim",
+        // the specification's short name, as in
+        // http://www.w3.org/TR/short-name/
+        // shortName:            "web-anim",
 
-          // if your specification has a subtitle that goes below the main
-          // formal title, define it here
-          // subtitle   :  "an excellent document",
+        // if your specification has a subtitle that goes below the main
+        // formal title, define it here
+        // subtitle   :  "an excellent document",
 
-          // if you wish the publication date to be other than today, set this
-          // publishDate:  "2009-08-06",
+        // if you wish the publication date to be other than today, set this
+        // publishDate:  "2009-08-06",
 
-          // if the specification's copyright date is a range of years, specify
-          // the start date here:
-          // copyrightStart: "2005"
+        // if the specification's copyright date is a range of years, specify
+        // the start date here:
+        // copyrightStart: "2005"
 
-          // if there is a previously published draft, uncomment this and set
-          // its YYYY-MM-DD date and its maturity status
-          // previousPublishDate: "1977-03-15",
-          // previousMaturity: "WD",
+        // if there is a previously published draft, uncomment this and set
+        // its YYYY-MM-DD date and its maturity status
+        // previousPublishDate: "1977-03-15",
+        // previousMaturity: "WD",
 
-          // if there a publicly available Editor's Draft, this is the link
-          // edDraftURI:
-          // "http://dev.w3.org/2009/dap/ReSpec.js/documentation.html",
+        // if there a publicly available Editor's Draft, this is the link
+        // edDraftURI:
+        // "http://dev.w3.org/2009/dap/ReSpec.js/documentation.html",
 
-          // if this is a LCWD, uncomment and set the end of its review period
-          // lcEnd: "2009-08-05",
+        // if this is a LCWD, uncomment and set the end of its review period
+        // lcEnd: "2009-08-05",
 
-          // if you want to have extra CSS, append them to this list
-          // it is recommended that the respec.css stylesheet be kept
-          extraCSS: ["http://dev.w3.org/2009/dap/ReSpec.js/css/respec.css",
-                     "web-animations.css"],
+        // if you want to have extra CSS, append them to this list
+        // it is recommended that the respec.css stylesheet be kept
+        extraCSS: ["http://dev.w3.org/2009/dap/ReSpec.js/css/respec.css",
+                   "web-animations.css"],
 
-          // Turning off inlineCSS for now since if extraCSS points to
-          // a relative URL your testing from a file URL the XHR will fail.
-          // Probably should turn this back on once this is hosted on a server
-          // somewhere.
-          inlineCSS: false,
+        // Turning off inlineCSS for now since if extraCSS points to
+        // a relative URL your testing from a file URL the XHR will fail.
+        // Probably should turn this back on once this is hosted on a server
+        // somewhere.
+        inlineCSS: false,
 
-          // editors, add as many as you like
-          // only "name" is required
-          editors:  [
-              { name: "Brian Birtles", mailto: "bbirtles@mozilla.com",
-                company: "Mozilla Japan", companyURL: "http://mozilla.jp/" },
-              { name: "Shane Stephens", mailto: "shans@google.com",
-                company: "Google, Inc", companyURL: "http://www.google.com/" },
-              { name: "Rik Cabanier", mailto: "cabanier@adobe.com",
-                company: "Adobe Systems", companyURL: "http://www.adobe.com/" },
-              { name: "Alex Danilo", mailto: "adanilo@google.com",
-                company: "Google, Inc", companyURL: "http://www.google.com/" },
-          ],
+        // editors, add as many as you like
+        // only "name" is required
+        editors:  [
+            { name: "Brian Birtles", mailto: "bbirtles@mozilla.com",
+              company: "Mozilla Japan", companyURL: "http://mozilla.jp/" },
+            { name: "Shane Stephens", mailto: "shans@google.com",
+              company: "Google, Inc", companyURL: "http://www.google.com/" },
+            { name: "Rik Cabanier", mailto: "cabanier@adobe.com",
+              company: "Adobe Systems", companyURL: "http://www.adobe.com/" },
+            { name: "Alex Danilo", mailto: "adanilo@google.com",
+              company: "Google, Inc", companyURL: "http://www.google.com/" },
+        ],
 
-          // authors, add as many as you like.
-          // This is optional, uncomment if you have authors as well as editors.
-          // only "name" is required. Same format as editors.
+        // authors, add as many as you like.
+        // This is optional, uncomment if you have authors as well as editors.
+        // only "name" is required. Same format as editors.
 
-          //authors:  [
-          //    { name: "Your Name", url: "http://example.org/",
-          //      company: "Your Company", companyURL: "http://example.com/" },
-          //],
+        //authors:  [
+        //    { name: "Your Name", url: "http://example.org/",
+        //      company: "Your Company", companyURL: "http://example.com/" },
+        //],
 
-          // XXX If we continue using ReSpec then we need to tweak it to support
-          // multiple working groups. It includes updating the patent section
-          // prose to say "groups" instead of "group" etc.
-          // name of the WG
-          // wg: "CSS Working Group (part of the Style Activity) and the SVG " +
-          //     "Working Group (part of the Graphics Activity)",
+        // XXX If we continue using ReSpec then we need to tweak it to support
+        // multiple working groups. It includes updating the patent section
+        // prose to say "groups" instead of "group" etc.
+        // name of the WG
+        // wg: "CSS Working Group (part of the Style Activity) and the SVG " +
+        //     "Working Group (part of the Graphics Activity)",
 
-          // URI of the public WG page
-          // wgURI: "http://www.w3.org/Graphics/fx/",
+        // URI of the public WG page
+        // wgURI: "http://www.w3.org/Graphics/fx/",
 
-          // name (without the @w3c.org) of the public mailing to which comments
-          // are due
-          wgPublicList: "public-fx",
+        // name (without the @w3c.org) of the public mailing to which comments
+        // are due
+        wgPublicList: "public-fx",
 
-          // URI of the patent status for this WG, for Rec-track documents
-          // !!!! IMPORTANT !!!!
-          // This is important for Rec-track documents, do not copy a patent URI
-          // from a random document unless you know what you're doing. If in
-          // doubt ask your friendly neighbourhood Team Contact.
-          wgPatentURI:  "",
+        // URI of the patent status for this WG, for Rec-track documents
+        // !!!! IMPORTANT !!!!
+        // This is important for Rec-track documents, do not copy a patent URI
+        // from a random document unless you know what you're doing. If in
+        // doubt ask your friendly neighbourhood Team Contact.
+        wgPatentURI:  "",
 
-          noIDLSorting: true,
-          noIDLIn: true
+        noIDLSorting: true,
+        noIDLIn: true
       };
     </script>
     <!--
@@ -198,6 +199,14 @@
             </p>
           </dd>
         </dl>
+        <div class="feedbackWanted">
+          We've used <code>Web*</code> as a prefix on all interfaces in this
+          specification. Is this required? Are we likely to get clashes with
+          existing content if we define, for example, <code>Animation</code>? Is
+          <code>Web*</code> a suitable prefix? An alternative might be
+          <code>FX*</code> but <code>FXAnimation</code> sounds tacky and very
+          80s.
+        </div>
       </section>
     </section>
 
@@ -326,10 +335,11 @@
                 <dt>optional float startTime</dt>
                 <dd>
                   The start time for the animation instance in the time space of
-                  the <code>WebTimelineInstance</code> to which it is appended.
+                  the <code>WebAnimationGroupInstance</code> to which it is
+                  appended.
                   If this parameter is not specified it will default to the
-                  current time of the <code>WebTimelineInstance</code> to which
-                  it is appended.
+                  current time of the <code>WebAnimationGroupInstance</code> to
+                  which it is appended.
                 </dd>
               </dl>
             </dd>
@@ -340,8 +350,8 @@
                 independent <code>WebAnimationInstance</code> object for each
                 element in <code>target</code>, but then appends the resulting
                 <code>WebAnimationInstance</code> objects as children of the
-                given <code>parentTimeline</code>, if provided.
-                If <code>parentTimeline</code> is <code>null</code>, the
+                given <code>parentGroup</code>, if provided.
+                If <code>parentGroup</code> is <code>null</code>, the
                 <code>WebAnimationInstance</code> objects will not be added to
                 any group.
               </p>
@@ -350,20 +360,22 @@
                 <dd>
                   As with <code>animate</code>.
                 </dd>
-                <dt>WebTimeline? parentTimeline</dt>
+                <dt>WebAnimationGroupInstance? parentGroup</dt>
                 <dd>
-                  The timeline to which animation instances should be appended.
+                  The animation group instance to which animation instances
+                  should be appended.
                 </dd>
                 <dt>optional float startTime</dt>
                 <dd>
                   <p>
                     Represents a time in the context of the
-                    <code>WebTimelineInstance</code> to which the generated
-                    <code>WebAnimationInstance</code> objects will be appended.
+                    <code>WebAnimationGroupInstance</code> to which the
+                    generated <code>WebAnimationInstance</code> objects will be
+                    appended.
                   </p>
                   <p>
                     If this parameter is not specified it will default to the
-                    current time of <code>parentTimeline</code> if it is not
+                    current time of <code>parentGroup</code> if it is not
                     <code>null</code>, otherwise it will default to zero.
                   </p>
                 </dd>
@@ -376,8 +388,8 @@
               instances generated by this method are live.
             </dd>
             <dt>sequence&lt;WebAnimationInstance&gt; animateLiveWithParent
-              (any target, WebTimeline? parentTimeline, optional float
-              startTime)</dt>
+              (any target, WebAnimationGroupInstance? parentGroup,
+               optional float startTime)</dt>
             <dd>
               As with <code>animateWithParent</code> with the exception that the
               animation instances generated by this method are live.
@@ -461,8 +473,10 @@
           <dd>The animation instance is executing, and will apply its effect to
           its target.</dd>
           <dt>Chillin' like a villain</dt>
-          <dd>The animation instance does not have a parent timeline. It will
-          not apply its effect to its target since it has no sense of time.
+          <dd>
+            The animation instance does not have a parent animation group. It
+            will not apply its effect to its target since it has no sense of
+            time.
           </dd>
         </dl>
         <p>
@@ -498,7 +512,7 @@
         </p>
       </section>
       <section class="informative">
-        <h3>Simple time and animation time</h3>
+        <h3>Iteration time and animation time</h3>
         <p>
           Times in Web Animations are relative to some point of reference. These
           different points of reference produce different time spaces.
@@ -511,9 +525,9 @@
           <dd>
             A time space whose zero point is the start time of the document
             timeline as defined in <a href="#start-of-the-timeline"
-              class="sectionRef"></a>.
+            class="sectionRef"></a>.
           </dd>
-          <dt>Parent simple time</dt>
+          <dt>Parent iteration time</dt>
           <dd>
             A time space whose zero time is the beginning of the parent
             animation group's current iteration.
@@ -528,19 +542,15 @@
           <dd>
             A time space whose zero time is when the item begins animating.
           </dd>
-          <dt>Simple time</dt>
+          <dt>Iteration time</dt>
           <dd>
             A time space whose zero time is the beginning of the current
             iteration.
-            When the animation instance is inactive it is set to the simple time
-            that will produce the appropriate fill value regardless of the
+            When the animation instance is inactive it is set to the iteration
+            time that will produce the appropriate fill value regardless of the
             setting of the fill mode.
           </dd>
         </dl>
-        <p class="feedbackWanted">
-          It might make more sense to call simple time, interval time. Likewise
-          simple duration &rarr; interval duration.
-        </p>
         <p>
           Some of these time spaces are demonstrated below.
         </p>
@@ -548,40 +558,41 @@
           <object data="img/time-spaces.svg" width="600"></object>
         </div>
         <p class="caption">
-          A comparison of item time, animation time, and simple time for an
-          animation with a simple duration of 1s and an iteration count of 2.5.
+          A comparison of item time, animation time, and iteration time for an
+          animation with a iteration duration of 1s and an iteration count of
+          2.5.
         </p>
         <section>
-          <h4>Simple duration and animation duration</h4>
+          <h4>Iteration duration and animation duration</h4>
           <p>
             These time spaces can also be used to describe intervals and
-            durations. The distinction between simple duration and active
+            durations. The distinction between iteration duration and active
             duration is particularly common. The definition of these terms falls
             out of the definition of the time spaces and is summarized as
             follows:
           </p>
           <dl>
-            <dt>Simple duration</dt>
+            <dt>Iteration duration</dt>
             <dd>
               The time taken for a single iteration of the item to complete.
             </dd>
             <dt>Animation duration</dt>
             <dd>
               The time taken for the animation phase of the item to complete.
-              This may be longer or shorter than the simple duration.
+              This may be longer or shorter than the iteration duration.
             </dd>
           </dl>
           <p>
             This may be visualized as follows:
           </p>
           <div class="figure">
-            <object data="img/simple-and-animation-duration.svg"
+            <object data="img/iteration-and-animation-duration.svg"
                 width="600"></object>
           </div>
           <p class="caption">
-            A comparison of the simple and animation durations for an animation
-            with an iteration count of 2.5.<br>
-            Note that the simple duration for the final iteration does not
+            A comparison of the iteration and animation durations for an
+            animation with an iteration count of 2.5.<br>
+            Note that the iteration duration for the final iteration does not
             change, it is simply cut-off by the animation duration.
           </p>
         </section>
@@ -597,9 +608,10 @@
           </p>
           <p>
             In the examples below, for the repeated animation, at animation time
-            1s, the simple time is 0. For the sequenced animation, at parent
-            simple time 1s, animation A has become inactive, and animation B is
-            now active; there is no overlap.
+            1s, the iteration time is 0.
+            For the sequenced animation, at parent iteration time 1s, animation
+            A has become inactive, and animation B is now active; there is no
+            overlap.
           </p>
           <div class="figure">
             <object data="img/endpoint-exclusive-timing.svg"
@@ -614,7 +626,7 @@
             An exception to this behaviour is that when performing a fill, if
             the fill begins at an interval endpoint, the endpoint is used. This
             behavior falls out of the algorithm given in <a
-            href="#calculating-the-unscaled-simple-time"
+            href="#calculating-the-unscaled-iteration-time"
             class="sectionRef"></a> and is demonstrated below.
           </p>
           <div class="figure">
@@ -629,9 +641,9 @@
         </section>
       </section>
       <section>
-        <h3>Calculating the simple duration</h3>
+        <h3>Calculating the itreation duration</h3>
         <p>
-          The <var>simple duration</var> is calculated according to the
+          The <var>iteration duration</var> is calculated according to the
           following steps:
         </p>
         <dl class="switch">
@@ -655,9 +667,9 @@
           duration</var> is <code>Infinity</code>.
         </p>
         <p>
-          The intrinsic duration for timeline instances and media items is
-          described under <a
-          href="#calculating-the-intrinsic-duration-of-a-timeline-instance"
+          The intrinsic duration for animation group instances and media items
+          is described under <a
+          href="#calculating-the-intrinsic-duration-of-an-animation-group-instance"
           class="sectionRef"></a> and <a
           href="#the-intrinsic-duration-of-a-media-item"
           class="sectionRef"></a> respectively.
@@ -671,7 +683,7 @@
         </p>
         <ol>
           <li>
-            Let the <var>repeated duration</var> be <code><var>simple
+            Let the <var>repeated duration</var> be <code><var>iteration
             duration</var> * <var>iteration count</var></code>.
           </li>
           <li>
@@ -696,7 +708,8 @@
         <p>where:</p>
         <ul>
           <li>
-            <var>parent time</var> is the simple time of the parent timeline.
+            <var>parent time</var> is the iteration time of the parent animation
+            group instance.
           </li>
           <li>
             <var>start time</var> is the item's start time.
@@ -708,8 +721,8 @@
           </li>
         </ul>
         <p>
-          If the timed item is not the child of a parent timeline, the
-          <var>item time</var> is null.
+          If the timed item is not the child of a parent animation group
+          instance, the <var>item time</var> is null.
         </p>
         <p class="todo">
           Need to define this for the document timeline.
@@ -741,13 +754,13 @@
         </ol>
       </section>
       <section>
-        <h3>Calculating the simple time</h3>
+        <h3>Calculating the iteration time</h3>
         <p>
-          The simple time is calculated by first dividing the <var>animation
-          time</var> into intervals. This is called the <var>unscaled simple
+          The iteration time is calculated by first dividing the <var>animation
+          time</var> into intervals. This is called the <var>unscaled iteration
           time</var>. Following this, timing manipulations specified on the
-          timed item are applied to the <var>unscaled simple time</var> to
-          produce the <var>simple time</var>.
+          timed item are applied to the <var>unscaled iteration time</var> to
+          produce the <var>iteration time</var>.
         </p>
         <section>
           <h4>Calculating the effective animation time</h4>
@@ -775,10 +788,10 @@
           </ol>
         </section>
         <section>
-          <h4>Calculating the unscaled simple time</h4>
+          <h4>Calculating the unscaled iteration time</h4>
           <p>
-            The <var>unscaled simple time</var> is calculated according to the
-            following steps:
+            The <var>unscaled iteration time</var> is calculated according to
+            the following steps:
           </p>
           <ol>
             <li>
@@ -786,34 +799,34 @@
               animation's start time is not defined), return <code>null</code>.
             </li>
             <li>
-              If the <var>simple duration</var> is zero, return zero.
+              If the <var>iteration duration</var> is zero, return zero.
             </li>
             <li>
               If the <var>effective animation time</var> equals the
               <var>animation duration</var> and the <var>animation
-              duration</var> is a positive (non-zero) multiple of <var>simple
-              duration</var>, return the <var>simple duration</var>.
+              duration</var> is a positive (non-zero) multiple of <var>iteration
+              duration</var>, return the <var>iteration duration</var>.
             </li>
             <li>
               Otherwise, return <code><var>effective animation time</var>
-              % <var>simple duration</var></code>.
+              % <var>iteration duration</var></code>.
             </li>
           </ol>
         </section>
         <section>
           <h4>Applying time manipulations</h4>
           <p>
-            The <var>unscaled simple time</var> is converted into the
-            <var>simple time</var> using the following steps:
+            The <var>unscaled iteration time</var> is converted into the
+            <var>iteration time</var> using the following steps:
           <ol>
             <li>
-              If the <var>unscaled simple time</var> is <code>null</code>,
+              If the <var>unscaled iteration time</var> is <code>null</code>,
               return <code>null</code>.
             </li>
             <li>
-              Let <var>scaled simple time</var> be the result of applying any
+              Let <var>scaled iteration time</var> be the result of applying any
               timing function defined for this timed element to the
-              <var>unscaled simple time</var>. <span class="todo">(Need more
+              <var>unscaled iteration time</var>. <span class="todo">(Need more
               detail here, or a link to where this is defined.)</span>
             </li>
             <li>
@@ -845,8 +858,8 @@
                     <li>
                       If the animation is not animating, and the
                       <var>animation duration</var> is a positive multiple of
-                      the <var>simple duration</var> increment <var>d</var> by
-                      1.
+                      the <var>iteration duration</var> increment <var>d</var>
+                      by 1.
                     </li>
                     <li>
                       If <code><var>d</var> % 2 != 0</code>, let the
@@ -863,10 +876,10 @@
             </li>
             <li>
               If the <var>current direction</var> is forwards then return
-              the <var>scaled simple time</var>.
+              the <var>scaled iteration time</var>.
               <p>
-                Otherwise, return the <var>simple duration</var> - <var>scaled 
-                simple time</var>.
+                Otherwise, return the <var>iteration duration</var>
+                - <var>scaled iteration time</var>.
               </p>
             </li>
           </ol>
@@ -891,16 +904,16 @@
               If the <var>effective animation time</var> is zero, return zero.
             </li>
             <li>
-              If the <var>simple duration</var> is zero, return
+              If the <var>iteration duration</var> is zero, return
               <code>floor(<var>iteration count</var>)</code>.
             </li>
             <li>
               Return <code>floor(<var>effective animation time</var> /
-              <var>simple duration</var>)</code>.
+              <var>iteration duration</var>)</code>.
               <p class="note">
-                If the <var>simple duration</var> is infinite, the
+                If the <var>iteration duration</var> is infinite, the
                 result of <code>floor(<var>effective animation time</var> /
-                <var>simple duration</var>)</code> will be zero as defined by
+                <var>iteration duration</var>)</code> will be zero as defined by
                 IEEE 754.
               </p>
             </li>
@@ -911,18 +924,18 @@
         <h3>Pausing a timed item</h3>
         <p>
           Timed items may be paused and resumed independently of the parent
-          timeline they belong to.
-          The effect is that the timeline of the item drifts from that of its
+          animation group instance they belong to.
+          The effect is that the time of the item drifts from that of its
           parent.
           This drift is called the <var>start offset</var> since it acts as an
           additional delay added to the <var>start time</var> of the item.
         </p>
         <p>
-          Timed elements that do not have a parent timeline may still be
+          Timed elements that do not have a parent animation group may still be
           paused and resumed.
           However, except for the case of the document timeline, there will be
           no observable effect until the element is attached to a parent
-          timeline.
+          animation group instance.
         </p>
         <p>
           The <var>start offset</var> produced by pausing can be calculated as
@@ -933,16 +946,17 @@
             Let <var>start offset</var> be initially zero.
           </li>
           <li>
-            When the pause state is newly true, record the <var>parent simple
+            When the pause state is newly true, record the <var>parent iteration
             time</var> as <var>pause start time</var>.
           </li>
           <li>
             On the next sample, increment <var>start offset</var> by
-            <code><var>parent simple time</var> - <var>pause start
+            <code><var>parent iteration time</var> - <var>pause start
             time</var></code>.
           </li>
           <li>
-            Update <var>pause start time</var> to <var>parent simple time</var>.
+            Update <var>pause start time</var> to <var>parent iteration
+            time</var>.
           </li>
           <li>
             Repeat steps 3 and 4 for each sample while paused and when the pause
@@ -960,24 +974,31 @@
         <h3>Seeking a timed item</h3>
         <p>
           Seeking, like pausing, has the effect of causing a timed item's
-          timeline to drift from that of its parent timeline.
+          time to drift from that of its parent animation group instance.
         </p>
         <p>
           When a seek operation is performed, the <var>start offset</var> is set
           according to the following formula:
         </p>
         <blockquote>
-          <code><var>start offset</var> = <var>parent simple time</var>
+          <code><var>start offset</var> = <var>parent iteration time</var>
             - <var>start time</var> - <var>seek time</var></code>
         </blockquote>
         <p>where:</p>
         <ul>
-          <li><var>parent simple time</var> - is the simple time of the parent
-          timeline if there is one, otherwise it is zero.</li>
-          <li><var>start time</var> - is the start time of the item being
-          seeked.</li>
-          <li><var>seek time</var> - is the time to seek to expressed in the
-          item time space.</li>
+          <li>
+            <var>parent iteration time</var> - is the iteration time of the
+            parent animation group instance if there is one, otherwise it is
+            zero.
+          </li>
+          <li>
+            <var>start time</var> - is the start time of the item being
+            seeked.
+          </li>
+          <li>
+            <var>seek time</var> - is the time to seek to expressed in the
+            item time space.
+          </li>
         </ul>
         <p>
           The animation events dispatched when a seek is performed are described
@@ -1136,20 +1157,21 @@
         <h3>The <code>WebTimedItem</code> interface</h3>
         <p>
           Represents the timing properties and methods of an animation actor:
-          either a <a>WebAnimationInstance</a> or a <a>WebTimelineInstance</a>.
+          either a <a>WebAnimationInstance</a> or
+          a <a>WebAnimationGroupInstance</a>.
         </p>
         <dl title="interface WebTimedItem" class="idl">
           <dt>readonly attribute WebTiming timing</dt>
           <dd>
             The timing parameters for this item.
           </dd>
-          <dt>readonly attribute unrestricted float simpleDuration</dt>
+          <dt>readonly attribute unrestricted float iterationDuration</dt>
           <dd>
-            The simple duration calculated for this item. If
+            The iteration duration calculated for this item. If
             <code>timing.duration</code> is set and greater than or equal to
             zero, this will match <code>timing.duration</code>. Otherwise,
             this will reflect the calculated intrinsic duration of the item as
-            described in <a href="#calculating-the-simple-duration"
+            described in <a href="#calculating-the-iteration-duration"
               class="sectionRef"></a>.
           </dd>
           <dt>readonly attribute float animationDuration</dt>
@@ -1173,11 +1195,11 @@
             The time at which the animation ceases to be active expressed in
             seconds relative to the parent animation group.
           </dd>
-          <dt>readonly attribute unrestricted float? simpleTime</dt>
+          <dt>readonly attribute unrestricted float? iterationTime</dt>
           <dd>
-            The time in seconds representing the offset into the simple
+            The time in seconds representing the offset into the iteration
             duration using the steps described in <a
-              href="#calculating-the-simple-time" class="sectionRef"></a>. As
+              href="#calculating-the-iteration-time" class="sectionRef"></a>. As
             a result of that definition, this property will be
             non-<code>null</code> only when the animation is affecting its
             target.
@@ -1191,14 +1213,14 @@
             non-<code>null</code> if and only if the animation is in the
             animating phase.
           </dd>
-          <dt>readonly attribute WebTimeline parentTimeline</dt>
+          <dt>readonly attribute WebAnimationGroupInstance parentGroup</dt>
           <dd>
-            The parent animation timeline.
+            The parent animation group instance.
           </dd>
           <dt>readonly attribute float startOffset</dt>
           <dd>
             The number of seconds that the actual item time of this item
-            lags behind the time given by <code><var>parent simple time</var>
+            lags behind the time given by <code><var>parent iteration time</var>
             - <var>start time</var></code> as a result of pausing and seeking
             this item.
           </dd>
@@ -1224,7 +1246,7 @@
             described in <a href="#seeking-a-timed-item"
             class="sectionRef"></a>.
             <code>itemTime</code> is a time in seconds in <em>item time</em>
-            space (see <a href="#simple-time-and-animation-time"
+            space (see <a href="#iteration-time-and-animation-time"
             class="sectionRef"></a>).
           </dd>
           <dt>void changeSpeed (float speed)</dt>
@@ -1303,19 +1325,26 @@
         Integration with <code>&lt;video&gt;</code> etc.
       </p>
       <p>
-        Describe how the document timeline is just a timeline instance with the
-        following special properties:
+        Describe how the document timeline is just an animation group instance
+        with the following special properties:
       </p>
       <ul>
-        <li>It cannot be appended as a child of another group. As a result the
-        <code>parentTimeline</code> property returns <code>null</code>.</li>
-        <li>A lot of other properties are read-only like
-        <code>iterationCount</code> etc.</li>
-        <li>It's startTime represents real-world time??? Can we align with the
-        timestamps used in DOM (e.g. for events) here?</li>
+        <li>
+          It cannot be appended as a child of another group. As a result the
+          <code>parentGroup</code> property returns <code>null</code>.
+        </li>
+        <li>
+          A lot of other properties are read-only like
+          <code>iterationCount</code> etc.
+        </li>
+        <li>
+          Its startTime represents real-world time??? Can we align with the
+          timestamps used in DOM (e.g. for events) here?
+        </li>
       </ul>
       <section>
-        <h3>Calculating the intrinsic duration of a timeline instance</h3>
+        <h3>Calculating the intrinsic duration of an animation group
+            instance</h3>
         <dl class="switch">
           <dt>If the type is parallel,</dt>
           <dd>
@@ -1335,10 +1364,10 @@
         </dl>
       </section>
       <section>
-        <h3>The <code>WebTimelineInstance</code> interface</h3>
+        <h3>The <code>WebAnimationGroupInstance</code> interface</h3>
         <p>
           Represents a list of timed items which may be animation instances or
-          nested timeline instances. Order is significant only when
+          nested animation group instances. Order is significant only when
           <code>type</code> is <code>WEBA_SYNC_SEQ</code>.
         </p>
         <div class="feedbackWanted">
@@ -1377,40 +1406,8 @@
             an exception if it belongs to another group?
           </p>
         </div>
-        <div class="feedbackWanted">
-          <p>
-            The naming of all these objects deserves further consideration. We
-            currently have:
-          </p>
-          <ul>
-            <li><code>WebAnimationInstance</code></li>
-            <li><code>WebAnimation</code></li>
-            <li><code>WebTimelineInstance</code></li>
-            <li><code>WebTimeline</code></li>
-          </ul>
-          <p>
-            Some alternatives:
-          </p>
-          <ul>
-            <li><code>WebAnimationInstance</code></li>
-            <li><code>WebAnimation</code></li>
-            <li><code>WebAnimationGroupInstance</code></li>
-            <li><code>WebAnimationGroup</code></li>
-          </ul>
-          <ul>
-            <li><code>WebAnimation</code></li>
-            <li><code>WebAnimationDef</code></li>
-            <li><code>WebTimeline</code></li>
-            <li><code>WebTimelineDef</code></li>
-          </ul>
-          <ul>
-            <li><code>WebAnimation</code></li>
-            <li><code>WebAnimator</code></li>
-            <li><code>WebAnimationGroup</code></li>
-            <li><code>WebAnimatorGroup</code></li>
-          </ul>
-        </div>
-        <dl title="[Constructor] interface WebTimelineInstance : WebTimedItem"
+        <dl title="[Constructor] interface WebAnimationGroupInstance
+                   : WebTimedItem"
           class="idl">
           <dt>const unsigned short WEBA_SYNC_PAR = 0</dt>
           <dd>
@@ -1431,9 +1428,9 @@
           <dt>attribute unsigned short type</dt>
           <dd>
             <p>
-              The type of synchronization provided by this timeline instance
-              as specified by one of the <code>WEBA_SYNC_*</code> constants
-              defined in this interface.
+              The type of synchronization provided by this animation group
+              instance as specified by one of the <code>WEBA_SYNC_*</code>
+              constants defined in this interface.
             </p>
             <p>
               Setting this value has the following effect:
@@ -1453,9 +1450,9 @@
                 Seek the container time to zero.
               </li>
               <li>
-                Calculate the effective start time of each child in the timeline
-                instance using the new synchronization type <span
-                class="todo">(Need a cross-reference to somewhere where we
+                Calculate the effective start time of each child in the
+                animation group instance using the new synchronization type.
+                <span class="todo">(Need a cross-reference to somewhere where we
                 describe this behaviour and define things like "effective
                 start time".)</span>
               </li>
@@ -1565,9 +1562,12 @@
             interface would be something like:
           </p>
           <ul>
-            <li><code>Sample(float simpleProgress, Element target, any
-              underlyingValue)</code> (where <code>simpleProgress</code> is the
-            ratio of <var>simple time</var> to <var>simple duration</var>)</li>
+            <li>
+              <code>Sample(float iterationProgress, Element target, any
+              underlyingValue)</code> (where <code>iterationProgress</code> is
+              the ratio of <var>iteration time</var> to <var>iteration
+              duration</var>)
+            </li>
           </ul>
           <p>
             Implementations of the function would be expected to produce the
@@ -1612,7 +1612,7 @@
             <dt>attribute WebAnimationFrameList frames</dt>
             <dd>
               The series of values that make up this function sorted by their
-              offset within the simple duration of the animation.
+              offset within the iteration duration of the animation.
             </dd>
             <dt>attribute unsigned short operation</dt>
             <dd>
@@ -1651,7 +1651,7 @@
             <dt>attribute float offset</dt>
             <dd>
               A value between 0 and 1 (inclusive) representing the offset within
-              the simple duration of the animation where this value should
+              the iteration duration of the animation where this value should
               appear. Ignored if we're using paced timing?<br>
               What happens if you change it? The array returned by the
               <code>WebAnimationFunction</code> is updated? I guess that's fine
