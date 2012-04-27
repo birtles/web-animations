@@ -498,7 +498,7 @@
         </p>
       </section>
       <section class="informative">
-        <h3>Simple time and animation time</h3>
+        <h3>Iteration time and animation time</h3>
         <p>
           Times in Web Animations are relative to some point of reference. These
           different points of reference produce different time spaces.
@@ -513,7 +513,7 @@
             timeline as defined in <a href="#start-of-the-timeline"
               class="sectionRef"></a>.
           </dd>
-          <dt>Parent simple time</dt>
+          <dt>Parent iteration time</dt>
           <dd>
             A time space whose zero time is the beginning of the parent
             animation group's current iteration.
@@ -528,19 +528,15 @@
           <dd>
             A time space whose zero time is when the item begins animating.
           </dd>
-          <dt>Simple time</dt>
+          <dt>Iteration time</dt>
           <dd>
             A time space whose zero time is the beginning of the current
             iteration.
-            When the animation instance is inactive it is set to the simple time
-            that will produce the appropriate fill value regardless of the
+            When the animation instance is inactive it is set to the iteration
+            time that will produce the appropriate fill value regardless of the
             setting of the fill mode.
           </dd>
         </dl>
-        <p class="feedbackWanted">
-          It might make more sense to call simple time, interval time. Likewise
-          simple duration &rarr; interval duration.
-        </p>
         <p>
           Some of these time spaces are demonstrated below.
         </p>
@@ -548,40 +544,41 @@
           <object data="img/time-spaces.svg" width="600"></object>
         </div>
         <p class="caption">
-          A comparison of item time, animation time, and simple time for an
-          animation with a simple duration of 1s and an iteration count of 2.5.
+          A comparison of item time, animation time, and iteration time for an
+          animation with a iteration duration of 1s and an iteration count of
+          2.5.
         </p>
         <section>
-          <h4>Simple duration and animation duration</h4>
+          <h4>Iteration duration and animation duration</h4>
           <p>
             These time spaces can also be used to describe intervals and
-            durations. The distinction between simple duration and active
+            durations. The distinction between iteration duration and active
             duration is particularly common. The definition of these terms falls
             out of the definition of the time spaces and is summarized as
             follows:
           </p>
           <dl>
-            <dt>Simple duration</dt>
+            <dt>Iteration duration</dt>
             <dd>
               The time taken for a single iteration of the item to complete.
             </dd>
             <dt>Animation duration</dt>
             <dd>
               The time taken for the animation phase of the item to complete.
-              This may be longer or shorter than the simple duration.
+              This may be longer or shorter than the iteration duration.
             </dd>
           </dl>
           <p>
             This may be visualized as follows:
           </p>
           <div class="figure">
-            <object data="img/simple-and-animation-duration.svg"
+            <object data="img/iteration-and-animation-duration.svg"
                 width="600"></object>
           </div>
           <p class="caption">
-            A comparison of the simple and animation durations for an animation
-            with an iteration count of 2.5.<br>
-            Note that the simple duration for the final iteration does not
+            A comparison of the iteration and animation durations for an
+            animation with an iteration count of 2.5.<br>
+            Note that the iteration duration for the final iteration does not
             change, it is simply cut-off by the animation duration.
           </p>
         </section>
@@ -597,9 +594,10 @@
           </p>
           <p>
             In the examples below, for the repeated animation, at animation time
-            1s, the simple time is 0. For the sequenced animation, at parent
-            simple time 1s, animation A has become inactive, and animation B is
-            now active; there is no overlap.
+            1s, the iteration time is 0.
+            For the sequenced animation, at parent iteration time 1s, animation
+            A has become inactive, and animation B is now active; there is no
+            overlap.
           </p>
           <div class="figure">
             <object data="img/endpoint-exclusive-timing.svg"
@@ -614,7 +612,7 @@
             An exception to this behaviour is that when performing a fill, if
             the fill begins at an interval endpoint, the endpoint is used. This
             behavior falls out of the algorithm given in <a
-            href="#calculating-the-unscaled-simple-time"
+            href="#calculating-the-unscaled-iteration-time"
             class="sectionRef"></a> and is demonstrated below.
           </p>
           <div class="figure">
@@ -629,9 +627,9 @@
         </section>
       </section>
       <section>
-        <h3>Calculating the simple duration</h3>
+        <h3>Calculating the itreation duration</h3>
         <p>
-          The <var>simple duration</var> is calculated according to the
+          The <var>iteration duration</var> is calculated according to the
           following steps:
         </p>
         <dl class="switch">
@@ -671,7 +669,7 @@
         </p>
         <ol>
           <li>
-            Let the <var>repeated duration</var> be <code><var>simple
+            Let the <var>repeated duration</var> be <code><var>iteration
             duration</var> * <var>iteration count</var></code>.
           </li>
           <li>
@@ -696,7 +694,7 @@
         <p>where:</p>
         <ul>
           <li>
-            <var>parent time</var> is the simple time of the parent timeline.
+            <var>parent time</var> is the iteration time of the parent timeline.
           </li>
           <li>
             <var>start time</var> is the item's start time.
@@ -741,13 +739,13 @@
         </ol>
       </section>
       <section>
-        <h3>Calculating the simple time</h3>
+        <h3>Calculating the iteration time</h3>
         <p>
-          The simple time is calculated by first dividing the <var>animation
-          time</var> into intervals. This is called the <var>unscaled simple
+          The iteration time is calculated by first dividing the <var>animation
+          time</var> into intervals. This is called the <var>unscaled iteration
           time</var>. Following this, timing manipulations specified on the
-          timed item are applied to the <var>unscaled simple time</var> to
-          produce the <var>simple time</var>.
+          timed item are applied to the <var>unscaled iteration time</var> to
+          produce the <var>iteration time</var>.
         </p>
         <section>
           <h4>Calculating the effective animation time</h4>
@@ -775,10 +773,10 @@
           </ol>
         </section>
         <section>
-          <h4>Calculating the unscaled simple time</h4>
+          <h4>Calculating the unscaled iteration time</h4>
           <p>
-            The <var>unscaled simple time</var> is calculated according to the
-            following steps:
+            The <var>unscaled iteration time</var> is calculated according to
+            the following steps:
           </p>
           <ol>
             <li>
@@ -786,34 +784,34 @@
               animation's start time is not defined), return <code>null</code>.
             </li>
             <li>
-              If the <var>simple duration</var> is zero, return zero.
+              If the <var>iteration duration</var> is zero, return zero.
             </li>
             <li>
               If the <var>effective animation time</var> equals the
               <var>animation duration</var> and the <var>animation
-              duration</var> is a positive (non-zero) multiple of <var>simple
-              duration</var>, return the <var>simple duration</var>.
+              duration</var> is a positive (non-zero) multiple of <var>iteration
+              duration</var>, return the <var>iteration duration</var>.
             </li>
             <li>
               Otherwise, return <code><var>effective animation time</var>
-              % <var>simple duration</var></code>.
+              % <var>iteration duration</var></code>.
             </li>
           </ol>
         </section>
         <section>
           <h4>Applying time manipulations</h4>
           <p>
-            The <var>unscaled simple time</var> is converted into the
-            <var>simple time</var> using the following steps:
+            The <var>unscaled iteration time</var> is converted into the
+            <var>iteration time</var> using the following steps:
           <ol>
             <li>
-              If the <var>unscaled simple time</var> is <code>null</code>,
+              If the <var>unscaled iteration time</var> is <code>null</code>,
               return <code>null</code>.
             </li>
             <li>
-              Let <var>scaled simple time</var> be the result of applying any
+              Let <var>scaled iteration time</var> be the result of applying any
               timing function defined for this timed element to the
-              <var>unscaled simple time</var>. <span class="todo">(Need more
+              <var>unscaled iteration time</var>. <span class="todo">(Need more
               detail here, or a link to where this is defined.)</span>
             </li>
             <li>
@@ -845,8 +843,8 @@
                     <li>
                       If the animation is not animating, and the
                       <var>animation duration</var> is a positive multiple of
-                      the <var>simple duration</var> increment <var>d</var> by
-                      1.
+                      the <var>iteration duration</var> increment <var>d</var>
+                      by 1.
                     </li>
                     <li>
                       If <code><var>d</var> % 2 != 0</code>, let the
@@ -863,10 +861,10 @@
             </li>
             <li>
               If the <var>current direction</var> is forwards then return
-              the <var>scaled simple time</var>.
+              the <var>scaled iteration time</var>.
               <p>
-                Otherwise, return the <var>simple duration</var> - <var>scaled 
-                simple time</var>.
+                Otherwise, return the <var>iteration duration</var>
+                - <var>scaled iteration time</var>.
               </p>
             </li>
           </ol>
@@ -891,16 +889,16 @@
               If the <var>effective animation time</var> is zero, return zero.
             </li>
             <li>
-              If the <var>simple duration</var> is zero, return
+              If the <var>iteration duration</var> is zero, return
               <code>floor(<var>iteration count</var>)</code>.
             </li>
             <li>
               Return <code>floor(<var>effective animation time</var> /
-              <var>simple duration</var>)</code>.
+              <var>iteration duration</var>)</code>.
               <p class="note">
-                If the <var>simple duration</var> is infinite, the
+                If the <var>iteration duration</var> is infinite, the
                 result of <code>floor(<var>effective animation time</var> /
-                <var>simple duration</var>)</code> will be zero as defined by
+                <var>iteration duration</var>)</code> will be zero as defined by
                 IEEE 754.
               </p>
             </li>
@@ -933,16 +931,17 @@
             Let <var>start offset</var> be initially zero.
           </li>
           <li>
-            When the pause state is newly true, record the <var>parent simple
+            When the pause state is newly true, record the <var>parent iteration
             time</var> as <var>pause start time</var>.
           </li>
           <li>
             On the next sample, increment <var>start offset</var> by
-            <code><var>parent simple time</var> - <var>pause start
+            <code><var>parent iteration time</var> - <var>pause start
             time</var></code>.
           </li>
           <li>
-            Update <var>pause start time</var> to <var>parent simple time</var>.
+            Update <var>pause start time</var> to <var>parent iteration
+            time</var>.
           </li>
           <li>
             Repeat steps 3 and 4 for each sample while paused and when the pause
@@ -967,17 +966,23 @@
           according to the following formula:
         </p>
         <blockquote>
-          <code><var>start offset</var> = <var>parent simple time</var>
+          <code><var>start offset</var> = <var>parent iteration time</var>
             - <var>start time</var> - <var>seek time</var></code>
         </blockquote>
         <p>where:</p>
         <ul>
-          <li><var>parent simple time</var> - is the simple time of the parent
-          timeline if there is one, otherwise it is zero.</li>
-          <li><var>start time</var> - is the start time of the item being
-          seeked.</li>
-          <li><var>seek time</var> - is the time to seek to expressed in the
-          item time space.</li>
+          <li>
+            <var>parent iteration time</var> - is the iteration time of the
+            parent timeline if there is one, otherwise it is zero.
+          </li>
+          <li>
+            <var>start time</var> - is the start time of the item being
+            seeked.
+          </li>
+          <li>
+            <var>seek time</var> - is the time to seek to expressed in the
+            item time space.
+          </li>
         </ul>
         <p>
           The animation events dispatched when a seek is performed are described
@@ -1143,13 +1148,13 @@
           <dd>
             The timing parameters for this item.
           </dd>
-          <dt>readonly attribute unrestricted float simpleDuration</dt>
+          <dt>readonly attribute unrestricted float iterationDuration</dt>
           <dd>
-            The simple duration calculated for this item. If
+            The iteration duration calculated for this item. If
             <code>timing.duration</code> is set and greater than or equal to
             zero, this will match <code>timing.duration</code>. Otherwise,
             this will reflect the calculated intrinsic duration of the item as
-            described in <a href="#calculating-the-simple-duration"
+            described in <a href="#calculating-the-iteration-duration"
               class="sectionRef"></a>.
           </dd>
           <dt>readonly attribute float animationDuration</dt>
@@ -1173,11 +1178,11 @@
             The time at which the animation ceases to be active expressed in
             seconds relative to the parent animation group.
           </dd>
-          <dt>readonly attribute unrestricted float? simpleTime</dt>
+          <dt>readonly attribute unrestricted float? iterationTime</dt>
           <dd>
-            The time in seconds representing the offset into the simple
+            The time in seconds representing the offset into the iteration
             duration using the steps described in <a
-              href="#calculating-the-simple-time" class="sectionRef"></a>. As
+              href="#calculating-the-iteration-time" class="sectionRef"></a>. As
             a result of that definition, this property will be
             non-<code>null</code> only when the animation is affecting its
             target.
@@ -1198,7 +1203,7 @@
           <dt>readonly attribute float startOffset</dt>
           <dd>
             The number of seconds that the actual item time of this item
-            lags behind the time given by <code><var>parent simple time</var>
+            lags behind the time given by <code><var>parent iteration time</var>
             - <var>start time</var></code> as a result of pausing and seeking
             this item.
           </dd>
@@ -1224,7 +1229,7 @@
             described in <a href="#seeking-a-timed-item"
             class="sectionRef"></a>.
             <code>itemTime</code> is a time in seconds in <em>item time</em>
-            space (see <a href="#simple-time-and-animation-time"
+            space (see <a href="#iteration-time-and-animation-time"
             class="sectionRef"></a>).
           </dd>
           <dt>void changeSpeed (float speed)</dt>
@@ -1565,9 +1570,12 @@
             interface would be something like:
           </p>
           <ul>
-            <li><code>Sample(float simpleProgress, Element target, any
-              underlyingValue)</code> (where <code>simpleProgress</code> is the
-            ratio of <var>simple time</var> to <var>simple duration</var>)</li>
+            <li>
+              <code>Sample(float iterationProgress, Element target, any
+              underlyingValue)</code> (where <code>iterationProgress</code> is
+              the ratio of <var>iteration time</var> to <var>iteration
+              duration</var>)
+            </li>
           </ul>
           <p>
             Implementations of the function would be expected to produce the
@@ -1598,7 +1606,7 @@
             <dt>attribute WebAnimationFrameList frames</dt>
             <dd>
               The series of values that make up this function sorted by their
-              offset within the simple duration of the animation.
+              offset within the iteration duration of the animation.
             </dd>
             <dt>attribute unsigned short additive</dt>
             <dd>
@@ -1636,7 +1644,7 @@
             <dt>attribute float offset</dt>
             <dd>
               A value between 0 and 1 (inclusive) representing the offset within
-              the simple duration of the animation where this value should
+              the iteration duration of the animation where this value should
               appear. Ignored if we're using paced timing?<br>
               What happens if you change it? The array returned by the
               <code>WebAnimationFunction</code> is updated? I guess that's fine

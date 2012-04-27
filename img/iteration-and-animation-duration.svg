@@ -54,7 +54,7 @@
       <rect width="400" height="80" class="animatingSpan"/>
       <path d="M160 0v80m160-80v80" class="intervalBoundary"/>
     </g>
-    <!-- Simple duration label -->
+    <!-- Iteration duration label -->
     <g transform="translate(0 160)">
       <path d="M2 0s0 10 10 10h58s10 0 10 10c0 0 0-10 10-10h58s10 0 10-10"
         class="bracket"/>
@@ -63,9 +63,9 @@
       <path d="M322 0s0 10 10 10h58s10 0 10 10c0 0 0-10 10-10h58s10 0 10-10"
         class="bracket"/>
       <g transform="translate(0 38)">
-        <text x="80" class="durationLabel">simple duration</text>
-        <text x="240" class="durationLabel">simple duration</text>
-        <text x="400" class="durationLabel">simple duration</text>
+        <text x="80" class="durationLabel">iteration duration</text>
+        <text x="240" class="durationLabel">iteration duration</text>
+        <text x="400" class="durationLabel">iteration duration</text>
       </g>
     </g>
   </g>

@@ -32,14 +32,14 @@
     .regionLabel {
       text-anchor: middle;
     }
-    .simpleTime, .simpleTimeDotted {
+    .iterationTime, .iterationTimeDotted {
       stroke: green;
       stroke-width: 3;
       fill: none;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
-    .simpleTimeDotted {
+    .iterationTimeDotted {
       stroke-dasharray: 3 6;
     }
     .excludedPoint {
@@ -84,11 +84,11 @@
         <rect width="300" height="100" class="animatingSpan"/>
         <path d="M150 0v100m150-100v100" class="intervalBoundary"/>
       </g>
-      <!-- Simple time -->
+      <!-- Iteration time -->
       <g transform="translate(0 130)">
-        <!-- Simple time solid parts -->
+        <!-- Iteration time solid parts -->
         <path d="M0 0l150-100m0 100l150-100h200"
-          class="simpleTime" mask="url(#excludedEndPoints)"/>
+          class="iterationTime" mask="url(#excludedEndPoints)"/>
         <!-- End-points to demonstrate end-point exlcusive timing -->
         <circle cx="150" cy="-100" r="4" class="excludedPoint"/>
         <circle cx="150" cy="0" r="3" class="includedPoint"/>
@@ -101,8 +101,8 @@
     </g>
     <!-- Legend -->
     <g transform="translate(160 160)">
-      <path d="M0 0h40" class="simpleTime"/>
-      <text x="50px" y="0.4em" class="legendText">Simple time</text>
+      <path d="M0 0h40" class="iterationTime"/>
+      <text x="50px" y="0.4em" class="legendText">Iteration time</text>
     </g>
   </g>
 </svg>
