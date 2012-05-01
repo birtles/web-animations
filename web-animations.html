@@ -1304,46 +1304,27 @@
           </dd>
           <dt>void cancel ()</dt>
           <dd>
-            Terminates the item and all its descendents such that they become
-            inactive. Currently active items will have their
-            <code>endTime</code> set to the current time of their parent
-            group.
+            Removes the timed item from its parent group. As a result, the
+            timed item will no longer affect its target.
           </dd>
         </dl>
         <div class="feedbackWanted">
           How about a <code>reverse</code> method? What it does is call
-          <code>cancel</code> on the timed item. Then it generates a clone with
-          the <code>startTime</code> set to the current time. Then it sets the
-          <code>direction</code> to its opposite (i.e. normal&#x2194;reverse,
-          alternate&#x2194;alternate-reverse) and returns the new timed item?
+          <code>cancel</code> on the timed item.
+          Then it generates a clone with the <code>startTime</code> set to the
+          current time (actually, we probably want to use the delay so the
+          reverse animation has the same priority).
+          Then it sets the <code>direction</code> to its opposite (i.e.
+          normal&#x2194;reverse, alternate&#x2194;alternate-reverse) and returns
+          the new timed item? (Need to make sure we avoid object-slicing here.)
         </div>
         <div class="todo">
           <p>
-            Similar to <code>cancel</code>, do we want a method to terminate and
-            then remove an item from its parent group? It seems like that's what
-            you want to do for interactive stuff, UI stuff etc. That way you
-            don't need to worry about removing those animations on a backwards
-            seek?</span>
-          </p>
-          <p>
-            Probably want methods for getting the startTime etc. in document
-            time (i.e. in terms of the root time container). Or is it ok just to
-            have a method on the parent animation group you pass your time to
-            and it does the conversion? Note that the conversion is not
-            necessarily as trivial as it seems if the parent animation group is
-            paused.
+            Do we need means for getting the startTime etc. in document
+            time (i.e. in terms of the root time container).
           </p>
         </div>
       </section>
-      <p>
-        Need to add:
-        <ul>
-          <li>Pre-defined timing functions, spline-based timing functions etc.
-          (want to allow a series of splines, not just four points)</li>
-          <li>Custom easing functions</li>
-          <li>Reversing</li>
-        </ul>
-      </p>
     </section>
 
     <section>
