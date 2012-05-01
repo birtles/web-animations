@@ -113,50 +113,72 @@
       <section>
         <h3>Relationship to other Specifications</h3>
         <p>
-          This specification extends the CSS Transitions [[!CSS3-TRANSITIONS]]
-          and CSS Animations [[!CSS3-ANIMATIONS]] specifications.
+          This specification extends the CSS Transitions [[CSS3-TRANSITIONS]]
+          and CSS Animations [[CSS3-ANIMATIONS]] specifications.
         </p>
       </section>
     </section>
 
     <section>
       <h2>CSS Transitions</h2>
-      <section>
-        <p>
-          Section 3 of [[CSS3-TRANSITIONS]] defines the conditions under which a CSS Transition should occur. When these conditions are met, an implementation will behave as if the following objects were constructed via the Web Animation JS API:
-          <ul>
-            <li>
-              The <var>from frame</var>, a <code>WebAnimationFrame</code> with an <var>offset</var> of 0 and a <var>value</var> of the computed style of the property referenced by <var>transition-property</var> just before the transition occurs. 
-            </li>
-            <li>
-              The <var>to frame</var>, a <code>WebAnimationFrame</code> with an <var>offset</var> of 1 and a <var>value</var> of the current computed style of the property referenced by <var>transition-property</var>.
-            </li>
-            <li>
-              The <var>frame list</var>, a <code>WebAnimationFrameList</code> containing the <var>from frame</var>  and <var>to frame</var>.
-            </li>
-            <li>
-              The <var>animation function</var>, a <code>WebKeyframesAnimationFunction</code> with a <var>property</var> equal to the property being transitioned, <var>frames</var> set to the <var>frame list</var>, an <var>operation</var> of "replace", an <var>accumulateOperation</var> of "replace", and a <var>pace</var> of undefined.
-            </li>
-            <li>
-              The <var>animation timing</var>, a <code>WebTiming</code> with a <var>iterationDuration</var> equal to the <var>transition-duration</var>, a <var>timingFunction</var> equivalent to <var>transition-timing-function</var> (see section ??), and all other properties left at their default values.
-            </li> 
-            <li>
-              The <var>animation</var>, a <code>WebAnimation</code> associating <var>animation function</var> with <var>animation timing</var>.
-            </li>
-            <li>
-              The <var>animation instance</var>, a <code>WebAnimationInstance</code> that is equivalent to one constructed by calling <var>animation.animateLive(element)</var>
-            </li>
-          </ul>
-        </p>
-        <p class="note">
-          This process implies that when <var>transition-property</var> is set to a list of property names, or the special keyword "all", multiple <code>WebAnimationInstance</code> objects will end up being generated.
-        </p>
+      <p>
+        Section 3 of [[!CSS3-TRANSITIONS]] defines the conditions under which a CSS Transition should occur. When these conditions are met, an implementation will behave as if the following objects were constructed via the Web Animation JS API:
+        <ul>
+          <li>
+            The <var>from frame</var>, a <code>WebAnimationFrame</code> with an <var>offset</var> of 0 and a <var>value</var> of the computed style of the property referenced by <var>transition-property</var> just before the transition occurs. 
+          </li>
+          <li>
+            The <var>to frame</var>, a <code>WebAnimationFrame</code> with an <var>offset</var> of 1 and a <var>value</var> of the current computed style of the property referenced by <var>transition-property</var>.
+          </li>
+          <li>
+            The <var>frame list</var>, a <code>WebAnimationFrameList</code> containing the <var>from frame</var>  and <var>to frame</var>.
+          </li>
+          <li>
+            The <var>animation function</var>, a <code>WebKeyframesAnimationFunction</code> with a <var>property</var> equal to the property being transitioned, <var>frames</var> set to the <var>frame list</var>, an <var>operation</var> of "replace", an <var>accumulateOperation</var> of "replace", and a <var>pace</var> of undefined.
+          </li>
+          <li>
+            The <var>animation timing</var>, a <code>WebTiming</code> with a <var>iterationDuration</var> equal to the <var>transition-duration</var>, a <var>timingFunction</var> equivalent to <var>transition-timing-function</var> (see section ??), and all other properties left at their default values.
+          </li> 
+          <li>
+            The <var>animation</var>, a <code>WebAnimation</code> associating <var>animation function</var> with <var>animation timing</var>.
+          </li>
+          <li>
+            The <var>animation instance</var>, a <code>WebAnimationInstance</code> that is equivalent to one constructed by calling <var>animation.animateLive(element)</var>
+          </li>
+        </ul>
+      </p>
+      <p class="note">
+        This process implies that when <var>transition-property</var> is set to a list of property names, or the special keyword "all", multiple <code>WebAnimationInstance</code> objects will end up being generated.
+      </p>
     </section>
     <section>
       <h2>@keyframes rules</h2>
     </section>
     <section>
       <h2>CSS Animations</h2>
+      <p>
+        Section 2 of the [[!CSS3-ANIMATIONS]] specification defines the conditions under which a CSS Animation should occur. When these conditions are met, an implementation will behave as if the following objects were constructed via the Web Animation JS API:
+        <ul>
+ 
+          <li>
+            A set of <var>animation functions</var>, constructed from the <code>@keyframes</code> declaration referenced by <var>animation-name</var> as described in section ??.
+          </li>
+          <li>
+            For each <var>animation function</var> in the set of <var>animation functions</var>, the following objects:
+            <ul>
+              <li>
+                An <var>animation timing</var>, a <code>WebTiming</code> with a <var>iterationDuration</var> equal to the <var>animation-duration</var>, a <var>timingFunction</var> equivalent to <var>animation-timing-function</var> (see section ??), and all other properties left at their default values.
+              </li> 
+              <li>
+                An <var>animation</var>, a <code>WebAnimation</code> associating <var>animation function</var> with <var>animation timing</var>.
+              </li>
+              <li>
+                An <var>animation instance</var>, a <code>WebAnimationInstance</code> that is equivalent to one constructed by calling <var>animation.animateLive(element)</var>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </p>
     </section>
   </body>
 </html>
