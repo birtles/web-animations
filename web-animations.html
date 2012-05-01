@@ -690,6 +690,277 @@
         </section>
       </section>
       <section>
+        <h3>Specifying timing properties</h3>
+        <p>
+          Timing properties are collected under the <code>WebTiming</code>
+          interface.
+          All properties have a default value associated with them with is the
+          value used when a new <code>WebTiming</code> object is constructed.
+        </p>
+        <section>
+          <h3>The <code>WebTiming</code> interface</h3>
+          <dl title="interface WebTiming" class="idl">
+            <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
+            <dd>
+              No fill.
+            </dd>
+            <dt>const unsigned short WEBA_FILL_FORWARDS = 1</dt>
+            <dd>
+              Fill forwards (=<code>fill="freeze"</code> in SVG speak).
+            </dd>
+            <dt>const unsigned short WEBA_FILL_BACKWARDS = 2</dt>
+            <dd>
+              Fill backwards.
+            </dd>
+            <dt>const unsigned short WEBA_FILL_BOTH = 3</dt>
+            <dd>
+              Fill backwards and forwards.
+            </dd>
+            <dt>const unsigned short WEBA_DIRECTION_NORMAL = 0</dt>
+            <dd>
+              All iterations are played as specified.
+            </dd>
+            <dt>const unsigned short WEBA_DIRECTION_REVERSE = 1</dt>
+            <dd>
+              All iterations are played in the reverse direction from the way
+              they were specified.
+            </dd>
+            <dt>const unsigned short WEBA_DIRECTION_ALTERNATE = 2</dt>
+            <dd>
+              Even iterations are played as specified, odd iterations are played
+              in the reverse direction from the way they were specified.
+            </dd>
+            <dt>const unsigned short WEBA_DIRECTION_ALTERNATE_REVERSE = 3</dt>
+            <dd>
+              Even iterations are played in the reverse direction from the way
+              they were specified, odd iterations are played as specified.
+            </dd>
+            <dt>attribute float startDelay</dt>
+            <dd>
+              <p>
+                The number of seconds from the timed item's
+                <code>startTime</code> until the timed item should begin
+                executing.
+              </p>
+              <p>
+                The <var>default value</var> is 0.
+              </p>
+            </dd>
+            <dt>attribute unrestricted float? iterationDuration</dt>
+            <dd>
+              <p>
+                The duration specified for a single iteration.
+                This may be <code>null</code> in which case the intrinsic
+                duration will be used.
+                If set, it must be greater than or equal to zero (including
+                positive infinity).
+              </p>
+              <p>
+                The <var>default value</var> is <code>null</code>.
+              </p>
+            </dd>
+            <dt>attribute unrestricted float iterationCount</dt>
+            <dd>
+              <p>
+                A real number greater than or equal to zero (including positive
+                infinity) representing the number of times to repeat the
+                animation.
+              </p>
+              <p>
+                The <var>default value</var> is 1.
+              </p>
+            </dd>
+            <dt>attribute float speed</dt>
+            <dd>
+              <p>
+                A real number that acts as a multiplier on the item's rate of
+                play. For example, a value of 2.0 will cause the item to run at
+                twice its usual speed. A value of -1.0 will cause the item to
+                play backwards.
+              </p>
+              <p>
+                Setting this attribute will affect the item's active duration as
+                described in <a href="#calculating-the-animation-duration"
+                class="sectionRef"></a>.
+              </p>
+              <p>
+                The <var>default value</var> is 1.
+              </p>
+            </dd>
+            <dt>attribute unsigned short direction</dt>
+            <dd>
+              <p>
+                Direction behavior as specified by one of the
+                <code>WEBA_DIRECTION_*</code> constants defined in this
+                interface.
+              </p>
+              <p>
+                The <var>default value</var> is
+                <code>WEBA_DIRECTION_NORMAL</code>.
+              </p>
+            </dd>
+            <dt>attribute WebTimingFunction timingFunction</dt>
+            <dd class="todo">
+              TBD.
+            </dd>
+            <dt>attribute unsigned short fill</dt>
+            <dd>
+              <p>
+                Fill mode as specified by one of the <code>WEBA_FILL_*</code>
+                constants defined in this interface.
+              </p>
+              <p>
+                The <var>default value</var> is <code>WEBA_FILL_NONE</code>.
+              </p>
+            </dd>
+          </dl>
+        </section>
+      </section>
+      <section>
+        <h3>The <code>WebTimedItem</code> interface</h3>
+        <p>
+          Represents the timing properties and methods of an animation actor:
+          either a <a>WebAnimationInstance</a> or
+          a <a>WebAnimationGroupInstance</a>.
+        </p>
+        <dl title="interface WebTimedItem" class="idl">
+          <dt>readonly attribute WebTiming timing</dt>
+          <dd>
+            The timing parameters for this item.
+          </dd>
+          <dt>readonly attribute unrestricted float iterationDuration</dt>
+          <dd>
+            The iteration duration calculated for this item.
+            If <code>timing.iterationDuration</code> is set and greater than or
+            equal to zero, this will match
+            <code>timing.iterationDuration</code>.
+            Otherwise, this will reflect the calculated intrinsic duration of
+            the item as described in <a
+            href="#calculating-the-iteration-duration"
+            class="sectionRef"></a>.
+          </dd>
+          <dt>readonly attribute float animationDuration</dt>
+          <dd>
+            The amount of time in seconds the animation is scheduled to animate
+            as described in <a href="#calculating-the-animation-duration"
+              class="sectionRef"></a>.
+          </dd>
+          <dt>readonly attribute unsigned long? currentIteration</dt>
+          <dd>
+            The number of iterations that have completed as described in <a
+              href="#calculating-the-current-iteration" class="sectionRef"></a>.
+          </dd>
+          <dt>readonly attribute float startTime</dt>
+          <dd>
+            <p>
+              The time at which the animation becomes active expressed in
+              seconds relative to the parent animation group.
+            </p>
+            <p class="todo">
+              As with <code>endTime</code> and the proposed <code>stop()</code>
+              method below, add <code>start()</code> to set this here?
+              Throws exception for children of a sequence container?
+            </p>
+          </dd>
+          <dt>readonly attribute float endTime</dt>
+          <dd>
+            <p>
+              The time at which the animation ceases to be active expressed in
+              seconds relative to the parent animation group.
+            </p>
+            <p class="todo">
+              I think we need a means to change this while leaving the animation
+              in the tree, e.g. <code>stop(optional timeFromNow = 0)</code>.
+              For most interactive animations though <code>cancel()</code>
+              (which removes the item from the tree) should be suitable.
+            </p>
+          </dd>
+          <dt>readonly attribute unrestricted float? iterationTime</dt>
+          <dd>
+            The time in seconds representing the offset into the iteration
+            duration using the steps described in <a
+              href="#calculating-the-iteration-time" class="sectionRef"></a>. As
+            a result of that definition, this property will be
+            non-<code>null</code> only when the animation is affecting its
+            target.
+          </dd>
+          <dt>readonly attribute float? animationTime</dt>
+          <dd>
+            The time in seconds representing the offset into the animation
+            phase. It is calculated using the steps described in <a
+              href="#calculating-the-animation-time" class="sectionRef"></a>. As
+            a result of that definition, this property will be
+            non-<code>null</code> if and only if the animation is in the
+            animating phase.
+          </dd>
+          <dt>readonly attribute WebAnimationGroupInstance parentGroup</dt>
+          <dd>
+            The parent animation group instance.
+          </dd>
+          <dt>readonly attribute float startOffset</dt>
+          <dd>
+            The number of seconds that the actual item time of this item
+            lags behind the time given by <code><var>parent iteration time</var>
+            - <var>start time</var></code> as a result of pausing and seeking
+            this item.
+          </dd>
+          <dt>void setPauseState (bool pauseState)</dt>
+          <dd>
+            Sets the pause state of this timed item.
+          </dd>
+          <dt>bool getPauseState ()</dt>
+          <dd>
+            Returns the pause state of this timed item. Note that even if this
+            returns false, the timed item might still be effectively paused by
+            an ancestor animation group.
+          </dd>
+          <dt>bool isPaused ()</dt>
+          <dd>
+            Returns <code>true</code> if the pause state of this
+            object <em>or one of its ancestor animation groups</em> is
+            <code>true</code>.
+          </dd>
+          <dt>void seek (unsigned long itemTime)</dt>
+          <dd>
+            Performs a seek operation on this timed item according to the steps
+            described in <a href="#seeking-a-timed-item"
+            class="sectionRef"></a>.
+            <code>itemTime</code> is a time in seconds in <em>item time</em>
+            space (see <a href="#iteration-time-and-animation-time"
+            class="sectionRef"></a>).
+          </dd>
+          <dt>void changeSpeed (float speed)</dt>
+          <dd>
+            Updates the <code>timing.speed</code> property to match the
+            <code>speed</code> parameter and performs a compensatory seek such
+            that the <var>animation time</var> does not change. <span
+            class="todo">Need to write out the algorithm for this and clarify
+            the meaning <code>speed</code>.</span>
+          </dd>
+          <dt>void cancel ()</dt>
+          <dd>
+            Removes the timed item from its parent group. As a result, the
+            timed item will no longer affect its target.
+          </dd>
+        </dl>
+        <div class="feedbackWanted">
+          How about a <code>reverse</code> method? What it does is call
+          <code>cancel</code> on the timed item.
+          Then it generates a clone with the <code>startTime</code> set to the
+          current time (actually, we probably want to use the delay so the
+          reverse animation has the same priority).
+          Then it sets the <code>direction</code> to its opposite (i.e.
+          normal&#x2194;reverse, alternate&#x2194;alternate-reverse) and returns
+          the new timed item? (Need to make sure we avoid object-slicing here.)
+        </div>
+        <div class="todo">
+          <p>
+            Do we need means for getting the startTime etc. in document
+            time (i.e. in terms of the root time container)?
+          </p>
+        </div>
+      </section>
+      <section>
         <h3>Calculating the iteration duration</h3>
         <p class="todo">
           The following algorithms are pretty intimidating apparently. Put them
@@ -1110,277 +1381,6 @@
           do add some feature here, it should ideally work the same when the
           document is played in reverse.
         </p>
-      </section>
-      <section>
-        <h3>Specifying timing properties</h3>
-        <p>
-          Timing properties are collected under the <code>WebTiming</code>
-          interface.
-          All properties have a default value associated with them with is the
-          value used when a new <code>WebTiming</code> object is constructed.
-        </p>
-        <section>
-          <h3>The <code>WebTiming</code> interface</h3>
-          <dl title="interface WebTiming" class="idl">
-            <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
-            <dd>
-              No fill.
-            </dd>
-            <dt>const unsigned short WEBA_FILL_FORWARDS = 1</dt>
-            <dd>
-              Fill forwards (=<code>fill="freeze"</code> in SVG speak).
-            </dd>
-            <dt>const unsigned short WEBA_FILL_BACKWARDS = 2</dt>
-            <dd>
-              Fill backwards.
-            </dd>
-            <dt>const unsigned short WEBA_FILL_BOTH = 3</dt>
-            <dd>
-              Fill backwards and forwards.
-            </dd>
-            <dt>const unsigned short WEBA_DIRECTION_NORMAL = 0</dt>
-            <dd>
-              All iterations are played as specified.
-            </dd>
-            <dt>const unsigned short WEBA_DIRECTION_REVERSE = 1</dt>
-            <dd>
-              All iterations are played in the reverse direction from the way
-              they were specified.
-            </dd>
-            <dt>const unsigned short WEBA_DIRECTION_ALTERNATE = 2</dt>
-            <dd>
-              Even iterations are played as specified, odd iterations are played
-              in the reverse direction from the way they were specified.
-            </dd>
-            <dt>const unsigned short WEBA_DIRECTION_ALTERNATE_REVERSE = 3</dt>
-            <dd>
-              Even iterations are played in the reverse direction from the way
-              they were specified, odd iterations are played as specified.
-            </dd>
-            <dt>attribute float startDelay</dt>
-            <dd>
-              <p>
-                The number of seconds from the timed item's
-                <code>startTime</code> until the timed item should begin
-                executing.
-              </p>
-              <p>
-                The <var>default value</var> is 0.
-              </p>
-            </dd>
-            <dt>attribute unrestricted float? iterationDuration</dt>
-            <dd>
-              <p>
-                The duration specified for a single iteration.
-                This may be <code>null</code> in which case the intrinsic
-                duration will be used.
-                If set, it must be greater than or equal to zero (including
-                positive infinity).
-              </p>
-              <p>
-                The <var>default value</var> is <code>null</code>.
-              </p>
-            </dd>
-            <dt>attribute unrestricted float iterationCount</dt>
-            <dd>
-              <p>
-                A real number greater than or equal to zero (including positive
-                infinity) representing the number of times to repeat the
-                animation.
-              </p>
-              <p>
-                The <var>default value</var> is 1.
-              </p>
-            </dd>
-            <dt>attribute float speed</dt>
-            <dd>
-              <p>
-                A real number that acts as a multiplier on the item's rate of
-                play. For example, a value of 2.0 will cause the item to run at
-                twice its usual speed. A value of -1.0 will cause the item to
-                play backwards.
-              </p>
-              <p>
-                Setting this attribute will affect the item's active duration as
-                described in <a href="#calculating-the-animation-duration"
-                class="sectionRef"></a>.
-              </p>
-              <p>
-                The <var>default value</var> is 1.
-              </p>
-            </dd>
-            <dt>attribute unsigned short direction</dt>
-            <dd>
-              <p>
-                Direction behavior as specified by one of the
-                <code>WEBA_DIRECTION_*</code> constants defined in this
-                interface.
-              </p>
-              <p>
-                The <var>default value</var> is
-                <code>WEBA_DIRECTION_NORMAL</code>.
-              </p>
-            </dd>
-            <dt>attribute WebTimingFunction timingFunction</dt>
-            <dd class="todo">
-              TBD.
-            </dd>
-            <dt>attribute unsigned short fill</dt>
-            <dd>
-              <p>
-                Fill mode as specified by one of the <code>WEBA_FILL_*</code>
-                constants defined in this interface.
-              </p>
-              <p>
-                The <var>default value</var> is <code>WEBA_FILL_NONE</code>.
-              </p>
-            </dd>
-          </dl>
-        </section>
-      </section>
-      <section>
-        <h3>The <code>WebTimedItem</code> interface</h3>
-        <p>
-          Represents the timing properties and methods of an animation actor:
-          either a <a>WebAnimationInstance</a> or
-          a <a>WebAnimationGroupInstance</a>.
-        </p>
-        <dl title="interface WebTimedItem" class="idl">
-          <dt>readonly attribute WebTiming timing</dt>
-          <dd>
-            The timing parameters for this item.
-          </dd>
-          <dt>readonly attribute unrestricted float iterationDuration</dt>
-          <dd>
-            The iteration duration calculated for this item.
-            If <code>timing.iterationDuration</code> is set and greater than or
-            equal to zero, this will match
-            <code>timing.iterationDuration</code>.
-            Otherwise, this will reflect the calculated intrinsic duration of
-            the item as described in <a
-            href="#calculating-the-iteration-duration"
-            class="sectionRef"></a>.
-          </dd>
-          <dt>readonly attribute float animationDuration</dt>
-          <dd>
-            The amount of time in seconds the animation is scheduled to animate
-            as described in <a href="#calculating-the-animation-duration"
-              class="sectionRef"></a>.
-          </dd>
-          <dt>readonly attribute unsigned long? currentIteration</dt>
-          <dd>
-            The number of iterations that have completed as described in <a
-              href="#calculating-the-current-iteration" class="sectionRef"></a>.
-          </dd>
-          <dt>readonly attribute float startTime</dt>
-          <dd>
-            <p>
-              The time at which the animation becomes active expressed in
-              seconds relative to the parent animation group.
-            </p>
-            <p class="todo">
-              As with <code>endTime</code> and the proposed <code>stop()</code>
-              method below, add <code>start()</code> to set this here?
-              Throws exception for children of a sequence container?
-            </p>
-          </dd>
-          <dt>readonly attribute float endTime</dt>
-          <dd>
-            <p>
-              The time at which the animation ceases to be active expressed in
-              seconds relative to the parent animation group.
-            </p>
-            <p class="todo">
-              I think we need a means to change this while leaving the animation
-              in the tree, e.g. <code>stop(optional timeFromNow = 0)</code>.
-              For most interactive animations though <code>cancel()</code>
-              (which removes the item from the tree) should be suitable.
-            </p>
-          </dd>
-          <dt>readonly attribute unrestricted float? iterationTime</dt>
-          <dd>
-            The time in seconds representing the offset into the iteration
-            duration using the steps described in <a
-              href="#calculating-the-iteration-time" class="sectionRef"></a>. As
-            a result of that definition, this property will be
-            non-<code>null</code> only when the animation is affecting its
-            target.
-          </dd>
-          <dt>readonly attribute float? animationTime</dt>
-          <dd>
-            The time in seconds representing the offset into the animation
-            phase. It is calculated using the steps described in <a
-              href="#calculating-the-animation-time" class="sectionRef"></a>. As
-            a result of that definition, this property will be
-            non-<code>null</code> if and only if the animation is in the
-            animating phase.
-          </dd>
-          <dt>readonly attribute WebAnimationGroupInstance parentGroup</dt>
-          <dd>
-            The parent animation group instance.
-          </dd>
-          <dt>readonly attribute float startOffset</dt>
-          <dd>
-            The number of seconds that the actual item time of this item
-            lags behind the time given by <code><var>parent iteration time</var>
-            - <var>start time</var></code> as a result of pausing and seeking
-            this item.
-          </dd>
-          <dt>void setPauseState (bool pauseState)</dt>
-          <dd>
-            Sets the pause state of this timed item.
-          </dd>
-          <dt>bool getPauseState ()</dt>
-          <dd>
-            Returns the pause state of this timed item. Note that even if this
-            returns false, the timed item might still be effectively paused by
-            an ancestor animation group.
-          </dd>
-          <dt>bool isPaused ()</dt>
-          <dd>
-            Returns <code>true</code> if the pause state of this
-            object <em>or one of its ancestor animation groups</em> is
-            <code>true</code>.
-          </dd>
-          <dt>void seek (unsigned long itemTime)</dt>
-          <dd>
-            Performs a seek operation on this timed item according to the steps
-            described in <a href="#seeking-a-timed-item"
-            class="sectionRef"></a>.
-            <code>itemTime</code> is a time in seconds in <em>item time</em>
-            space (see <a href="#iteration-time-and-animation-time"
-            class="sectionRef"></a>).
-          </dd>
-          <dt>void changeSpeed (float speed)</dt>
-          <dd>
-            Updates the <code>timing.speed</code> property to match the
-            <code>speed</code> parameter and performs a compensatory seek such
-            that the <var>animation time</var> does not change. <span
-            class="todo">Need to write out the algorithm for this and clarify
-            the meaning <code>speed</code>.</span>
-          </dd>
-          <dt>void cancel ()</dt>
-          <dd>
-            Removes the timed item from its parent group. As a result, the
-            timed item will no longer affect its target.
-          </dd>
-        </dl>
-        <div class="feedbackWanted">
-          How about a <code>reverse</code> method? What it does is call
-          <code>cancel</code> on the timed item.
-          Then it generates a clone with the <code>startTime</code> set to the
-          current time (actually, we probably want to use the delay so the
-          reverse animation has the same priority).
-          Then it sets the <code>direction</code> to its opposite (i.e.
-          normal&#x2194;reverse, alternate&#x2194;alternate-reverse) and returns
-          the new timed item? (Need to make sure we avoid object-slicing here.)
-        </div>
-        <div class="todo">
-          <p>
-            Do we need means for getting the startTime etc. in document
-            time (i.e. in terms of the root time container)?
-          </p>
-        </div>
       </section>
     </section>
 
