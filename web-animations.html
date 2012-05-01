@@ -159,6 +159,9 @@
           SMIL Animation [[SMIL-ANIMATION]] specification and hence SVG's
           reliance on SMIL.
         </p>
+        <p>
+          This specifications makes some additions to some interfaces defined in
+          HTML5 [[HTML5]].
       </section>
     </section>
 
@@ -1807,20 +1810,26 @@
           </dd>
           <dt>attribute unsigned short operation</dt>
           <dd>
-            The operation used to composite this animation with the stack, as 
-            specified by one of the <code>WEBA_OPERATION_*</code> constants defined in this interface.
+            <p>
+              The operation used to composite this animation with the stack, as 
+              specified by one of the <code>WEBA_OPERATION_*</code> constants 
+              defined in this interface.
+            </p>
+            <p>
+              This value defaults to <code>WEBA_OPERATION_REPLACE</code>
+            </p>
           </dd>
           <dt>attribute unsigned short accumulateOperation</dt>
           <dd>
-            The operation used to composite each iteration of this animation
-            with the result of compositing the previous animation, as specified
-            by one of the <code>WEBA_OPERATION_*</code> constants defined in
-            this interface.
-          </dd>
-          <dt>attribute WebTimingFunction timingFunction</dt>
-          <dd>
-            The timing function to use for segments that do not define local
-            timing functions.
+            <p>
+              The operation used to composite each iteration of this animation
+              with the result of compositing the previous animation, as specified
+              by one of the <code>WEBA_OPERATION_*</code> constants defined in
+              this interface.
+            </p>
+            <p>
+              This value defaults to <code>WEBA_OPERATION_REPLACE</code>.
+            </p>
           </dd>
           <dt>attribute DOMString? pace</dt>
           <dd>
@@ -2035,7 +2044,8 @@
               The <var>local time function</var> is the
               <var>timingFunction</var> of the <var>before frame</var>, if it
               exists; otherwise the <var>timingFunction</var> of the
-              <code>WebAnimationFunction</code> interface.
+              <code>WebAnimationInstance</code> interface's <var>timing</var> 
+              attribute.
             </li>
             <li>
               Find the <var>local time fraction</var> by subtracting
