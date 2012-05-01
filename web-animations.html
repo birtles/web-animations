@@ -498,15 +498,7 @@
         </p>
         <div class="todo">
           <p>
-            Basically, the fill mode affects the state and the return value of
-            <code>iterationTime</code>.
-          </p>
-          <p>
             Add a diagram showing these states.
-          </p>
-          <p>
-            Revise the algorithms to that the <var>iteration time</var>
-            incorporates the fill mode.
           </p>
         </div>
         <section>
@@ -879,19 +871,20 @@
           <dd>
             The time in seconds representing the offset into the iteration
             duration using the steps described in <a
-              href="#calculating-the-iteration-time" class="sectionRef"></a>. As
-            a result of that definition, this property will be
-            non-<code>null</code> only when the animation is affecting its
-            target.
+            href="#calculating-the-iteration-time" class="sectionRef"></a>.
+            As a result of that definition, this property will be
+            non-<code>null</code> only when the item is in active state (see <a
+            href="#animation-states" class="sectionRef"></a>.
           </dd>
           <dt>readonly attribute float? animationTime</dt>
           <dd>
             The time in seconds representing the offset into the animation
-            phase. It is calculated using the steps described in <a
-              href="#calculating-the-animation-time" class="sectionRef"></a>. As
-            a result of that definition, this property will be
+            phase.
+            It is calculated using the steps described in <a
+            href="#calculating-the-animation-time" class="sectionRef"></a>.
+            As a result of that definition, this property will be
             non-<code>null</code> if and only if the animation is in the
-            animating phase.
+            animating state.
           </dd>
           <dt>readonly attribute WebAnimationGroupInstance parentGroup</dt>
           <dd>
@@ -962,10 +955,6 @@
       </section>
       <section>
         <h3>Calculating the iteration duration</h3>
-        <p class="todo">
-          The following algorithms are pretty intimidating apparently. Put them
-          after the IDL? Or try to reduce the number of terms?
-        </p>
         <p>
           The <var>iteration duration</var> is calculated according to the
           following steps:
