@@ -1,7 +1,7 @@
 <!-- vim: set expandtab ts=2 sw=2 tw=80: -->
 <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
   xmlns:xlink="http://www.w3.org/1999/xlink"
-  viewBox="0 0 600 720">
+  viewBox="0 0 600 750">
   <defs>
     <style type="text/css">
     svg {
@@ -17,7 +17,7 @@
       stroke-dasharray: 4 4;
       stroke-width: 2;
     }
-    .activeSpan  {
+    .animatingSpan  {
       fill: paleturquoise;
       stroke: black;
     }
@@ -71,8 +71,8 @@
     </g>
     <!-- Animation shaded areas -->
     <g transform="translate(0 100)">
-      <rect width="250" height="60" class="activeSpan"/>
-      <text x="125" y="35" class="stateLabel">active</text>
+      <rect width="250" height="60" class="animatingSpan"/>
+      <text x="125" y="35" class="stateLabel">animating</text>
       <use xlink:href="#star"/>
     </g>
     <!-- Animation duration label -->
@@ -100,8 +100,8 @@
     </g>
     <!-- Animation shaded areas -->
     <g transform="translate(0 100)">
-      <rect x="120" width="250" height="60" class="activeSpan"/>
-      <text x="245" y="35" class="stateLabel">active</text>
+      <rect x="120" width="250" height="60" class="animatingSpan"/>
+      <text x="245" y="35" class="stateLabel">animating</text>
       <use xlink:href="#star"/>
     </g>
     <!-- Region labels -->
@@ -133,18 +133,19 @@
     </g>
     <!-- Animation shaded areas -->
     <g transform="translate(0 100)">
-      <rect width="250" height="60" class="activeSpan"/>
-      <text x="125" y="35" class="stateLabel">active</text>
+      <rect width="250" height="60" class="animatingSpan"/>
+      <text x="125" y="35" class="stateLabel">animating</text>
       <use x="120" xlink:href="#star"/>
     </g>
     <!-- Region labels -->
     <g transform="translate(0 170)">
       <path d="M2 0s0 7 7 7h44s7 0 7 7c0 0 0-7 7-7h44s7 0 7-7" class="bracket"/>
-      <path d="M0 40s0 7 7 7h111s7 0 7 7c0 0 0-7 7-7h111s7 0 7-7"
+      <path d="M0 60s0 7 7 7h111s7 0 7 7c0 0 0-7 7-7h111s7 0 7-7"
         class="bracket"/>
       <g transform="translate(0 34)">
-        <text x="60" class="regionLabel">start delay</text>
-        <text x="125" y="40" class="regionLabel">animation duration</text>
+        <text x="60" class="regionLabel">(negative)
+          <tspan x="60" dy="0.9em">start delay</tspan></text>
+        <text x="125" y="60" class="regionLabel">animation duration</text>
       </g>
     </g>
   </g>

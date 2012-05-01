@@ -139,15 +139,14 @@
       <h2>The animation timeline</h2>
       <p>
         Each document contains a timeline to which animations may be added.
-        Each animation has a time at which it is scheduled to become active.
-        After the animation has completed, the animation becomes inactive.
+        Each animation has an interval during which it is scheduled to animate.
       </p>
       <div class="figure">
         <object data="img/timeline.svg" width="600"></object>
       </div>
       <p class="caption">
-        At time <em>t</em> animations A and B are active.
-        Animation C has already completed and is now inactive.
+        At time <em>t</em> animations A and B are animating.
+        Animation C has finished animating and is now inactive.
         Animation D has yet to begin and is also inactive.
       </p>
       <section>
@@ -472,30 +471,32 @@
           states:
         </p>
         <dl>
-          <dt>Inactive</dt>
-          <dd>The animation instance has yet to start or has already finished.
-          Whether it effects its target depends on its fill mode.</dd>
-          <dt>Active</dt>
-          <dd>The animation instance is executing, and will apply its effect to
-          its target.</dd>
-          <dt>Chillin' like a villain</dt>
+          <dt>Animating (active)</dt>
           <dd>
-            The animation instance does not have a parent animation group. It
-            will not apply its effect to its target since it has no sense of
-            time.
+            The animation instance is executing, and will apply its effect to
+            its target.
+          </dd>
+          <dt>Filling (active)</dt>
+          <dd>
+            The animation instance has yet to start executing or has already
+            finished but is still effecting its target due to the fill mode
+            specified (see <a href="#animation-fill-behavior"
+              class="sectionRef"></a>).
+          </dd>
+          <dt>Inactive</dt>
+          <dd>
+            The animation instance has yet to start executing or has already
+            finished and is not effecting its target. Animations that do not
+            belong to a group and consequently have no notion of time are also
+            considered inactive (see <a href="#grouping-and-synchronization"
+            class="sectionRef"></a>).
           </dd>
         </dl>
+        <p>
+          An animation instance is considered <em>active</em> if it is in either
+          the <em>animating</em> or <em>filling</em> state.
+        </p>
         <div class="todo">
-          <p>
-            Revise this so to use the following states:
-          </p>
-          <ul>
-            <li>Inactive&mdash;includes both animations that don't have a parent
-            (and therefore no time) and those that simply aren't filling or
-            active</li>
-            <li>Filling (active)</li>
-            <li>Animating (active)</li>
-          </ul>
           <p>
             Basically, the fill mode affects the state and the return value of
             <code>iterationTime</code>.
@@ -507,43 +508,42 @@
             Revise the algorithms to that the <var>iteration time</var>
             incorporates the fill mode.
           </p>
+        </div>
+        <section>
+          <h3>The animation interval</h3>
           <p>
-            The active interval below will become the <em>animation
-            interval</em>. Need to update the delay examples diagram to say
-            &ldquo;animating&rdquo;.
+            The period that an animation instance is animating is called the
+            <em>animation interval</em>.
+            Each animation instance has only one such interval.
           </p>
-        </div>
-        <p>
-          The period that an animation instance is active is called the
-          <em>active interval</em>. Each animation instance has only one such
-          interval.
-        </p>
-        <p>
-          The start of the interval is determined by the <var>start
-          time</var> of the animation instance but may be shifted by
-          a <var>start delay</var> on the animation instance.
-        </p>
-        <p>
-          The end of the interval is determined by the <var>animation
-          duration</var> (see <a href="#calculating-the-animation-duration"
-          class="sectionRef"></a>).
-        </p>
-        <p>
-          Some examples are illustrated below.
-        </p>
-        <div class="figure">
-          <object data="img/active-interval-examples.svg" width="600"></object>
-        </div>
-        <p class="caption">
-          Examples of the effect of the start delay on endpoints of the active
-          interval.<br>
-          (a) An animation instance with no delay; the start time and start of
-          animation are coincident.<br>
-          (b) An animation instance with a positive delay; the start of
-          animation is deferred by the delay.<br>
-          (c) An animation instance with a negative delay; the start of
-          animation is brought forward by the delay.
-        </p>
+          <p>
+            The start of the interval is determined by the <var>start
+            time</var> of the animation instance but may be shifted by
+            a <var>start delay</var> on the animation instance.
+          </p>
+          <p>
+            The end of the interval is determined by the <var>animation
+            duration</var> (see <a href="#calculating-the-animation-duration"
+            class="sectionRef"></a>).
+          </p>
+          <p>
+            Some examples are illustrated below.
+          </p>
+          <div class="figure">
+            <object data="img/animation-interval-examples.svg"
+              width="600"></object>
+          </div>
+          <p class="caption">
+            Examples of the effect of the start delay on endpoints of the
+            animation interval.<br>
+            (a) An animation instance with no delay; the start time and start of
+            animation are coincident.<br>
+            (b) An animation instance with a positive delay; the start of
+            animation is deferred by the delay.<br>
+            (c) An animation instance with a negative delay; the start of
+            animation is brought forward by the delay.
+          </p>
+        </section>
       </section>
       <section>
         <h3>Animation fill behavior</h3>
