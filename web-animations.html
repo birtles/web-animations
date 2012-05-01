@@ -755,14 +755,14 @@
           equation:
         </p>
         <blockquote>
-          <code><var>item time</var> = <var>parent time</var>
+          <code><var>item time</var> = <var>parent iteration time</var>
             - <var>start time</var> - <var>start offset</var></code>
         </blockquote>
         <p>where:</p>
         <ul>
           <li>
-            <var>parent time</var> is the iteration time of the parent animation
-            group instance.
+            <var>parent iteration time</var> is the iteration time of the parent
+            animation group instance.
           </li>
           <li>
             <var>start time</var> is the item's start time.
@@ -775,7 +775,7 @@
         </ul>
         <p>
           If the timed item is not the child of a parent animation group
-          instance, the <var>item time</var> is null.
+          instance, the <var>item time</var> is <code>null</code>.
         </p>
         <p class="todo">
           Need to define this for the document timeline.
@@ -832,11 +832,42 @@
             </li>
             <li>
               If <code><var>item time</var> &gt;= <var>animation duration</var>
-              + <var>start delay</var></code>, return <var>animation
-              duration</var>.
+              + <var>start delay</var></code>, the result depends on the
+              <var>fill mode</var> as follows,
+              <dl class="switch">
+                <dt>
+                  If the <var>fill mode</var> is <em>forwards</em> or
+                  <em>both</em>,
+                </dt>
+                <dd>
+                  return <var>animation duration</var>.
+                <dd>
+                <dt>
+                  Otherwise,
+                </dt>
+                <dd>
+                  return <code>null</code>.
+                </dd>
+              </dl>
             </li>
             <li>
-              Otherwise, return zero.
+              Otherwise, the result depends on the <var>fill mode</var> as
+              follows,
+              <dl class="switch">
+                <dt>
+                  If the <var>fill mode</var> is <em>backwards</em> or
+                  <em>both</em>,
+                </dt>
+                <dd>
+                  return zero.
+                <dd>
+                <dt>
+                  Otherwise,
+                </dt>
+                <dd>
+                  return <code>null</code>.
+                </dd>
+              </dl>
             </li>
           </ol>
         </section>
@@ -1539,8 +1570,8 @@
         </ul>
       </section>
       <section>
-        <h3>Calculating the intrinsic duration of an animation group
-            instance</h3>
+        <h3>Calculating the intrinsic duration of an animation group instance
+        </h3>
         <p>
           TBD, but basically:
         </p>
