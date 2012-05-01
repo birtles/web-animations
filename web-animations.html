@@ -1753,17 +1753,64 @@
 
       <section class="informative">
       <p>
-        Each <code>WebAnimation</code> object contains an embedded <code>WebAnimationFunction</code> object that describes how animation values should be calculated for the <code>WebAnimation</code> for any given time.
+        Each <code>WebAnimation</code> object contains an object which
+        subclasses <code>WebAnimationFunction</code>. These objects describe
+        how animation values should be calculated for the
+        <code>WebAnimation</code> for any given time.
       </p>
     </section>
-
       <section>
         <h3>The <code>WebAnimationFunction</code> interface</h3>
+        <dl title="[Constructor] interface WebAnimationFunction" class="idl">
+          <dt>const unsigned short WEBA_OPERATION_REPLACE = 0</dt>
+          <dd>
+            This animation should replace the value it is composited with.
+          </dd>
+          <dt>const unsigned short WEBA_OPERATION_ACCUMULATE = 1</dt>
+          <dd>
+            This animation should add to the value it is composited with.
+            The meaning of addition is dependent on the type of animation.
+          </dd>
+          <dt>const unsigned short WEBA_OPERATION_MERGE = 2</dt>
+          <dd>
+            This animation should merge with the value it is composited with.
+            The meaning of merge is dependent on the type of animation.
+            The duration of the merge is the calculated animation duration
+            of the <code>WebAnimation</code> containing this <code>WebAnimationFunction</code>.
+          </dd>
+          <dt>attribute unsigned short operation</dt>
+          <dd>
+            The operation used to composite this animation with the stack, as 
+            specified by one of the <code>WEBA_OPERATION_*</code> constants defined in this interface.
+          </dd>
+          <dt>attribute unsigned short accumulateOperation</dt>
+          <dd>
+            The operation used to composite each iteration of this animation
+            with the result of compositing the previous animation, as specified
+            by one of the <code>WEBA_OPERATION_*</code> constants defined in
+            this interface.
+          </dd>
+          <dt>attribute DOMString? pace</dt>
+          <dd>
+            This is just a placeholder for some kind of
+            <i>whole-animation-function</i> timing control.
+            For example, SVG has <code>calcMode="paced"</code> which looks at
+            all the frames in the animation and adjusts the timing so the pace
+            of change is constant (this is especially useful for motion on
+            a path).<br>
+            The example here could take values <code>null</code> (default),
+            "auto", or something like "1px/s" (not sure what the datatype
+            should be here).
+            Not sure yet how this will work with adaptive duration if other
+            animation functions use also this.
+          </dd>
+        </dl>
+      </section>
+      <section>
+        <h3>The <code>WebKeyframesAnimationFunction</code> interface</h3>
         <div class="todo">
           <p>
-            This should probably become a superclass from which we create
-            <code>WebKeyframesFunction</code> and
-            <code>WebTwoValuedFunction</code>. It seems like it might even be
+            It seems like it might even be
             useful to allow script to provide its own function. I'm not sure how
             that works exactly, but if we were to support that, then the
             interface would be something like:
@@ -1796,22 +1843,7 @@
           a <code>WebAnimation</code>, however, are live.
         </p>
         <p>
-          <dl title="[Constructor] interface WebAnimationFunction" class="idl">
-            <dt>const unsigned short WEBA_OPERATION_REPLACE = 0</dt>
-            <dd>
-              This animation should replace the value it is composited with.
-            </dd>
-            <dt>const unsigned short WEBA_OPERATION_ACCUMULATE = 1</dt>
-            <dd>
-              This animation should add to the value it is composited with.
-              The meaning of addition is dependent on the type of animation.
-            </dd>
-            <dt>const unsigned short WEBA_OPERATION_MERGE = 2</dt>
-            <dd>
-              This animation should merge with the value it is composited with.
-              The meaning of merge is dependent on the type of animation.
-              The duration of the merge is the calculated animation duration
-              of the <code>WebAnimation</code> containing this <code>WebAnimationFunction</code>.
+          <dl title="[Constructor] interface WebKeyframesAnimationFunction : WebAnimationFunction" class="idl">
             <dt>attribute DOMString property</dt>
             <dd>
               The target attribute / property. <code>property</code> is probably
@@ -1821,29 +1853,6 @@
             <dd>
               The series of values that make up this function sorted by their
               offset within the iteration duration of the animation.
-            </dd>
-            <dt>attribute unsigned short operation</dt>
-            <dd>
-              The operation used to composite this animation with the stack, as specified by one of the <code>WEBA_OPERATION_*</code> constants defined in this interface.
-            </dd>
-            <dt>attribute unsigned short accumulateOperation</dt>
-            <dd>
-              The operation used to composite each iteration of this animation
-              with the result of compositing the previous animation, as specified by one of the <code>WEBA_OPERATION_*</code> constants defined in this interface.
-            </dd>
-            <dt>attribute DOMString? pace</dt>
-            <dd>
-              This is just a placeholder for some kind of
-              <i>whole-animation-function</i> timing control.
-              For example, SVG has <code>calcMode="paced"</code> which looks at
-              all the frames in the animation and adjusts the timing so the pace
-              of change is constant (this is especially useful for motion on
-              a path).<br>
-              The example here could take values <code>null</code> (default),
-              "auto", or something like "1px/s" (not sure what the datatype
-              should be here).
-              Not sure yet how this will work with adaptive duration if other
-              animation functions use also this.
             </dd>
           </dl>
         </p>
@@ -1915,6 +1924,14 @@
         </p>
       </section>
       <section>
+        <h3>The <code>WebPathAnimationFunction</code> interface</h3>
+        <p class="todo">
+          Need to fill this out.
+        </p>
+        <dl title="[Constructor] interface WebPathAnimationFunction : WebAnimationFunction" class="idl">
+        </dl>
+      </section>
+      <section>
         <h3>Calculating the current time fraction</h3>
         <p class="todo">
           Essentially, this section will describe how the timingFunction is 
@@ -1923,13 +1940,16 @@
         </p>
       </section>
       <section>
-        <h3>Calculating the animation value for a <code>WebAnimationFunction</code></h3>
+        <h3>Calculating the animation value for a <code>WebKeyframesAnimationFunction</code></h3>
         <p class="todo">
           The current process below doesn't allow for per-keyframe-frame 
           timing, which the CSS specification does. Should we include this 
           feature?
         <p>
-          When a <code>WebAnimation</code> contains a pointer to a <code>WebAnimationFunction</code>, the <var>animation value</var> for that animation at given current time <var>t</var> is calculated according to the following steps:
+          When a <code>WebAnimation</code> contains a pointer to a
+          <code>WebKeyframesAnimationFunction</code>, the <var>animation
+          value</var> for that animation at given current time <var>t</var> is
+          calculated according to the following steps:
 
           <ol>
             <li>
