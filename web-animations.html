@@ -1168,13 +1168,14 @@
                 The <var>default value</var> is 0.
               </p>
             </dd>
-            <dt>attribute unrestricted float? duration</dt>
+            <dt>attribute unrestricted float? iterationDuration</dt>
             <dd>
               <p>
-                The duration specified for a single iteration. This may be
-                <code>null</code> in which case the intrinsic duration will be
-                used. If set, it must be greater than or equal to zero
-                (including positive infinity).
+                The duration specified for a single iteration.
+                This may be <code>null</code> in which case the intrinsic
+                duration will be used.
+                If set, it must be greater than or equal to zero (including
+                positive infinity).
               </p>
               <p>
                 The <var>default value</var> is <code>null</code>.
@@ -1251,12 +1252,14 @@
           </dd>
           <dt>readonly attribute unrestricted float iterationDuration</dt>
           <dd>
-            The iteration duration calculated for this item. If
-            <code>timing.duration</code> is set and greater than or equal to
-            zero, this will match <code>timing.duration</code>. Otherwise,
-            this will reflect the calculated intrinsic duration of the item as
-            described in <a href="#calculating-the-iteration-duration"
-              class="sectionRef"></a>.
+            The iteration duration calculated for this item.
+            If <code>timing.iterationDuration</code> is set and greater than or
+            equal to zero, this will match
+            <code>timing.iterationDuration</code>.
+            Otherwise, this will reflect the calculated intrinsic duration of
+            the item as described in <a
+            href="#calculating-the-iteration-duration"
+            class="sectionRef"></a>.
           </dd>
           <dt>readonly attribute float animationDuration</dt>
           <dd>
