@@ -121,10 +121,27 @@
       This is the abstract for your specification.
     </section>
 
-    <section>
+    <section class="informative">
       <h2>Introduction</h2>
-      <p class="todo">
-        Shane, onegaishimasu!
+      <p>
+        CSS Transitions, CSS Animations, and SVG all provide mechanisms that
+        generate animated content on a web page. The three specifications
+        provide fundamentally the same functionality, but in different subsets
+        and with incompatible syntaxes tuned to specific use cases.
+      </p>
+      <p>
+        Furthermore, these three specifications do not play well with
+        Javascript, in the sense that any Javascript modification of animated
+        content produced by these specifications must occur through the CSSOM
+        or DOM, which provide general-purpose APIs for access to CSS and DOM
+        primitives rather than APIs tuned to the creation and manipulation
+        of animations specifically.
+      </p>
+      <p>
+        This specification proposes an abstract animations model that
+        encompasses the abilities of CSS and SVG, and additionally exposes
+        an API to Javascript that makes it much easier to create and
+        manipulate animations.
       </p>
       <section>
         <h3>Relationship to other specifications</h3>
