@@ -1232,13 +1232,28 @@
           </dd>
           <dt>readonly attribute float startTime</dt>
           <dd>
-            The time at which the animation becomes active expressed in
-            seconds relative to the parent animation group.
+            <p>
+              The time at which the animation becomes active expressed in
+              seconds relative to the parent animation group.
+            </p>
+            <p class="todo">
+              As with <code>endTime</code> and the proposed <code>stop()</code>
+              method below, add <code>start()</code> to set this here?
+              Throws exception for children of a sequence container?
+            </p>
           </dd>
           <dt>readonly attribute float endTime</dt>
           <dd>
-            The time at which the animation ceases to be active expressed in
-            seconds relative to the parent animation group.
+            <p>
+              The time at which the animation ceases to be active expressed in
+              seconds relative to the parent animation group.
+            </p>
+            <p class="todo">
+              I think we need a means to change this while leaving the animation
+              in the tree, e.g. <code>stop(optional timeFromNow = 0)</code>.
+              For most interactive animations though <code>cancel()</code>
+              (which removes the item from the tree) should be suitable.
+            </p>
           </dd>
           <dt>readonly attribute unrestricted float? iterationTime</dt>
           <dd>
