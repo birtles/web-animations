@@ -168,6 +168,61 @@
     </section>
 
     <section class="informative">
+      <h2>Web Animations overview</h2>
+      <p>
+        At a glance, Web Animations can be considered in two largely independent
+        pieces, a <em>timing model</em> and a <em>animation model</em>. The role
+        of these pieces is as follows:
+      </p>
+      <dl>
+        <dt>Timing model</dt>
+        <dd>
+          Takes a moment in time and converts it to a proportional distance
+          within a single iteration of an animation.
+        </dd>
+        <dt>Animation model</dt>
+        <dd>
+          Takes the distances produced by the timing model and converts them
+          into a series of values to apply to the target properties and
+          attributes.
+        </dd>
+      </dl>
+      <p>
+        Graphically, this flow can be represented as follows:
+      </p>
+      <div class="figure">
+        <object data="img/timing-and-animation-models.svg" width="700"></object>
+      </div>
+      <p class="caption">
+        Overview of the operation of Web Animations.<br>
+        The current time is input to the timing model which produces a distance
+        within an iteration.<br>
+        This distance is used as input to the animation model which produces the
+        values to apply.
+      </p>
+      <p>
+        For example, consider an animation that:
+      </p>
+      <ul>
+        <li>starts after 3 seconds,</li>
+        <li>runs twice,</li>
+        <li>takes 2 seconds every time, and</li>
+        <li>changes the width of a rectangle from 50 to 100.</li>
+      </ul>
+      <p>
+        The first three points apply to the timing model.
+        At a time of 6 seconds, it will calculate that the animation should be
+        half way through its second iteration and produces the result 0.5.
+        The animation model then uses that information to calculate a width for
+        the rectangle of 75.
+      </p>
+      <p>
+        This specification begins with the timing model and then proceeds to the
+        animation model.
+      </p>
+    </section>
+
+    <section class="informative">
       <h2>The animation timeline</h2>
       <p>
         Each document contains a timeline to which animations may be added.
