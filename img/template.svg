@@ -41,6 +41,31 @@
       fill: paleturquoise;
       stroke: black;
     }
+    .parGroupSpan  {
+      fill: lightgreen;
+      stroke: black;
+    }
+    .seqGroupSpan  {
+      fill: navajowhite;
+      stroke: black;
+    }
+    .parGroupParams {
+      fill: darkgreen;
+    }
+    .seqGroupParams {
+      fill: chocolate;
+    }
+    .groupRepeatBoundary, .animRepeatBoundary {
+      stroke-dasharray: 4 4;
+    }
+    .groupRepeatBoundary {
+      stroke: darkgreen;
+      stroke-width: 3;
+    }
+    .animRepeatBoundary {
+      stroke: navy;
+      stroke-width: 2;
+    }
 
     /*
      * Text labels
