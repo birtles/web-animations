@@ -582,10 +582,71 @@
           </p>
         </section>
       </section>
-      <section>
+      <section class="informative">
         <h3>Animation fill behavior</h3>
-        <p class="todo">
-          TBD.
+        <p>
+          Outside of the animation interval, an animation instance may still
+          effect its target depending on its fill mode. The different modes are
+          as follows:
+        </p>
+        <dl>
+          <dt>none</dt>
+          <dd>
+            The animation instance does not effect its target outside the active
+            interval.
+          </dd>
+          <dt>forwards</dt>
+          <dd>
+            For times that occur later than the animation interval, the
+            animation instance will continue to apply to its target the
+            animation value that was used at the end of the animation interval.
+
+            For times that occur before the animation interval, the animation
+            instance will not effect its target.
+          </dd>
+          <dt>backwards</dt>
+          <dd>
+            For times that occur before the animation interval, the animation
+            instance will apply the same animation value that will be used at
+            the start of the animation interval.
+
+            For times that occur later than the animation interval, the
+            animation instance will not effect its target.
+          </dd>
+          <dt>both</dt>
+          <dd>
+            For times that occur before the animation interval, the backwards
+            fill behavior is used.
+
+            For times that occur after the animation interval, the forwards fill
+            behavior is used.
+          </dd>
+        </dl>
+        <p>
+          Some examples of the these fill modes and the corresponding animation
+          states are illustrated below.
+        </p>
+        <div class="figure">
+          <object data="img/animation-state-and-fill-behavior.svg"
+            width="600"></object>
+        </div>
+        <p class="caption">
+          Examples of various fill modes and the animation states produced.<br>
+          (a) fill mode &lsquo;none&rsquo;. The animation instance never enters
+          the filling state.<br>
+          (b) fill mode &lsquo;forwards&rsquo;. The animation instance enters
+          the filling state after the animation interval has complete.<br>
+          (c) fill mode &lsquo;backwards&rsquo;. The animation instance enter
+          the filling state until the start of the animation interval.<br>
+          (d) fill mode &lsquo;both&rsquo;. Outside of the animation interval
+          the animation instance is in the filling state.
+        </p>
+        <p>
+          The normative definition of fill behavior is incorporated in the
+          calculation of the animation time in <a
+          href="#calculating-the-animation-time" class="sectionRef"></a> and the
+          calculation of the iteration time in <a
+          href="#calculating-the-iteration-time" class="sectionRef"></a>.
         </p>
       </section>
       <section class="informative">
