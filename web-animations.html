@@ -526,11 +526,26 @@
           An animation instance is considered <em>active</em> if it is in either
           the <em>animating</em> or <em>filling</em> state.
         </p>
-        <div class="todo">
-          <p>
-            Add a diagram showing these states.
-          </p>
+        <p>
+          An animation may not enter all of these states depending on when it
+          starts, its duration, and the fill behavior defined (see <a
+          href="#animation-fill-behavior" class="sectionRef"></a>). An example
+          sequence of states is illustrated below.
+        </p>
+        <div class="figure">
+          <object data="img/animation-states.svg" width="600"></object>
         </div>
+        <p class="caption">
+          An example of the animation states for an animation with a forwards
+          fill.<br>
+          The animation is initially inactive. This may be due to a positive
+          delay or positive start time (see <a href="#the-animation-interval"
+          class="sectionRef"></a>).<br>
+          Then the animation begins executing and enters the animating
+          state.<br>
+          When the animation has completed, a forwards fill is applied and the
+          animation enters the filling state.
+        </p>
         <section>
           <h3>The animation interval</h3>
           <p>
