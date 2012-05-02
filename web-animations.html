@@ -2770,9 +2770,46 @@
       </p>
       <section>
         <h3>Synchronizing event handlers</h3>
-        <p>
-          Your text...
-        </p>
+        <div class="todo">
+          <p>
+            The proposal to-date is as follows.
+            Requirements for dispatch of animation events:
+          </p>
+          <ol>
+            <li>
+              Animations triggered by an event handler appear to have started at
+              the time the event was scheduled to be triggered.
+            </li>
+            <li>
+              No effect of an animation for any time 't' can be reflected in
+              style, DOM or animation object until any animation event handlers
+              associated with dispatch times at or before 't' have returned from
+              execution.
+            </li>
+          </ol>
+          <p>In effect this is roughly the same as saying:</p>
+          <blockquote>
+            When event handlers due to  animation events run, the state of the
+            world (DOM properties etc.) so  far as it is influenced by
+            animation, is as if the current time was the time when the event was
+            scheduled to be triggered.
+          </blockquote>
+          <p>
+            There may be many ways to realise this, including:
+          </p>
+          <ul>
+            <li>
+              dispatching animation events synchronously
+            </li>
+            <li>
+              careful updating of the animation time (after waiting for
+              corresponding animation events to return)
+            </li>
+            <li>
+              pausing the world
+            </li>
+          </ul>
+        </div>
       </section>
     </section>
 
