@@ -2438,15 +2438,26 @@
       </section>
       <section>
         <h3>Calculating the current time fraction</h3>
-        <p class="todo">
-          This is just <var>iteration time</var> (as defined in <a
-            href="#calculating-the-iteration-time" class="sectionRef"></a>)
-          divided by <var>iteration duration</var> (as defined in <a
-            href="#calculating-the-iteration-duration" class="sectionRef"></a>).
-          This isn't the job of the animation model to calculate, this is the
-          output of the timing model.
-          I've called this the iteration distance elsewhere.
-        </p>
+        <div class="todo">
+          <p>
+            This is just <var>iteration time</var> (as defined in <a
+              href="#calculating-the-iteration-time" class="sectionRef"></a>)
+            divided by <var>iteration duration</var> (as defined in <a
+              href="#calculating-the-iteration-duration"
+              class="sectionRef"></a>).
+            This isn't the job of the animation model to calculate, this is the
+            output of the timing model.
+            I've called this the iteration distance elsewhere.
+          </p>
+          <p>
+            To be more specific, the two pieces of output needed from the timing
+            model are the iteration distance (<code>iteration time / iteration
+              duration</code>) and the current iteration (needed for accumulate
+            behavior etc., see definition in <a
+              href="#calculating-the-current-iteration"
+              class="sectionRef"></a>).
+          </p>
+        </div>
       </section>
       <section>
         <h3>Calculating the animation value for a <code>WebKeyframesAnimationFunction</code></h3>
