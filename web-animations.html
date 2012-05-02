@@ -1973,6 +1973,32 @@
         </dl>
       </section>
       <section>
+        <h3>The <code>WebGroupedAnimationFunction</code> interface</h3>
+        <p>
+          The <code>WebGroupedAnimationFunction</code> interface represents a
+          set of animation functions that share the same
+          <code>WebAnimation</code> parent.
+        </p>
+        <dl title="[Constructor] interface WebGroupedAnimationFunction : WebAnimationFunction" class="idl">
+          <dt>readonly attribute unsigned long length</dt>
+          <dd>
+            The number of animation functions in the group.
+          </dd>
+          <dt>WebAnimationFunction? item(unsigned long index)</dt>
+          <dd>
+            Returns the function at <code>index</code> if it exists, or null.
+          </dd>
+          <dt>void add(WebAnimationFunction function)</dt>
+          <dd>
+            Adds <code>function</code> to the group.
+          </dd>
+          <dt>void remove(unsigned long index)</dt>
+          <dd>
+            Removes the function at <code>index</code> if it exists.
+          </dd>
+        </dl>
+      </section>
+      <section>
         <h3>Calculating the current time fraction</h3>
         <p class="todo">
           Essentially, this section will describe how the timingFunction is 
