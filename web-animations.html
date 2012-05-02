@@ -1410,7 +1410,7 @@
                 If the <var>iteration duration</var> is infinite, the
                 result of <code>floor(<var>animation time</var> /
                 <var>iteration duration</var>)</code> will be zero as defined by
-                IEEE 754.
+                IEEE 754-2008.
               </p>
             </li>
           </ol>
@@ -1676,21 +1676,34 @@
         <dl>
           <dt>Parallel groups</dt>
           <dd>
-            TBD
+            Children of the group play simultaneously.
+            The start time of children is taken as relative to the start of the
+            current iteration of the group, that is, it is in the group's
+            <em>iteration time space</em>.
           </dd>
           <dt>Sequence groups</dt>
           <dd>
-            TBD
+            Children of the group play in turn beginning with the first child
+            and proceeding to the last.
+            Any start time specified on children is ignored and replaced with
+            the time calculated using the procedure in <a
+              href="#calculating-the-start-time-of-children-of-a-sequence-group"
+              class="sectionRef"></a>.
           </dd>
           <dt>Media groups</dt>
           <dd>
-            TBD
+            Children of the group play simultaneously as with parallel groups,
+            however, any seek or pause operations performed on a child of
+            a media group are delegated to the group itself. As such, all
+            children remain in strict synchronization.
           </dd>
         </dl>
+        <p class="todo">
+          Need to explain (with diagrams) that by using negative start delays
+          on children of a sequence group you make the animation intervals of
+          the children overlap.
+        </p>
       </section>
-      <p>
-        Integration with <code>&lt;video&gt;</code> etc.
-      </p>
       <section>
         <h3>The document timeline</h3>
         <p>
@@ -1736,8 +1749,37 @@
         </dl>
       </section>
       <section>
-        <h3>Calculating the start time for children of a sequence group</h3>
-        <p>TBD</p>
+        <h3>Calculating the start time of children of a sequence group</h3>
+        <p>
+          The start time for the children of a sequence animation group instance
+          is calculated according to the following procedure:
+        </p>
+        <ol>
+          <li>Let the <var>accumulated start time</var> be zero.
+          <li>
+            Iterate over each child in the group beginning with the first item
+            in the group and proceeding to the last.
+            For each child perform the following steps:
+            <ol>
+              <li>
+                Let the start time of the child be <var>accumulated start
+                time</var>
+              </li>
+              <li>
+                Increment <var>accumulated start time</var> by
+                <code><var>start delay</var> + <var>animation
+                duration</var></code>
+              </li>
+            </ol>
+          </li>
+        </ol>
+        <p class="note">
+          When <var>animation duration</var> is positive infinity the behavior
+          is defined by IEEE 754-2008.
+          In effect, if any of the children of a sequence animation group
+          instance has an infinite animation duration, any children that occur
+          later in the sequence will not play.
+        </p>
       </section>
       <section>
         <h3>The <code>WebAnimationGroupInstance</code> interface</h3>
