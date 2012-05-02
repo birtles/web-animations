@@ -1816,18 +1816,6 @@
         <dl title="[Constructor] interface WebAnimationGroupInstance
                    : WebTimedItem"
           class="idl">
-          <dt>const unsigned short WEBA_SYNC_PAR = 0</dt>
-          <dd>
-            Parallel synchronization.
-          </dd>
-          <dt>const unsigned short WEBA_SYNC_SEQ = 1</dt>
-          <dd>
-            Sequence synchronization.
-          </dd>
-          <dt>const unsigned short WEBA_SYNC_MEDIA = 2</dt>
-          <dd>
-            Media group synchronization.
-          </dd>
           <dt>readonly attribute unsigned long length</dt>
           <dd>
             The number of timed items in the group.
@@ -1837,7 +1825,7 @@
             <p>
               The type of synchronization provided by this animation group
               instance as specified by one of the <code>WEBA_SYNC_*</code>
-              constants defined in this interface.
+              constants defined on the WebAnimationGroup interface.
             </p>
             <p>
               Setting this value has the following effect:
@@ -2034,11 +2022,30 @@
           </p>
         </div>
         <dl title="[Constructor] interface WebAnimationGroup" class="idl">
+          <dt>const unsigned short WEBA_SYNC_PAR = 0</dt>
+          <dd>
+            Parallel synchronization.
+          </dd>
+          <dt>const unsigned short WEBA_SYNC_SEQ = 1</dt>
+          <dd>
+            Sequence synchronization.
+          </dd>
+          <dt>const unsigned short WEBA_SYNC_MEDIA = 2</dt>
+          <dd>
+            Media group synchronization.
+          </dd>
           <dt>attribute WebTiming timing</dt>
           <dd>
             The timing parameters to use for generated animation group
             instances.
           </dd>
+          <dt>attribute unsigned short type</dt>
+          <dd>
+            <p>
+              The type of synchronization provided by instances of this
+              animation group as specified by one of the
+              <code>WEBA_SYNC_*</code> constants defined in this interface.
+            </p>
           <dt>void clear ()</dt>
           <dd>
             Removes all child templates from the group.
