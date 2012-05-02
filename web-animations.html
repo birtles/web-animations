@@ -2439,13 +2439,12 @@
       <section>
         <h3>Calculating the current time fraction</h3>
         <p class="todo">
-          Essentially, this section will describe how the timingFunction is 
-          used to convert an absolute current time into a fractional time (0 
-          for pre-animate, 0-1 for animating, 1 for post-animate).
-          This is basically taking the current time, subtracting the start
-          time, dividing by the duration, then clipping to the range [0, 1].
-          However, it's complicated somewhat by needing to take iterations
-          and iteration reversal into account. 
+          This is just <var>iteration time</var> (as defined in <a
+            href="#calculating-the-iteration-time" class="sectionRef"></a>)
+          divided by <var>iteration duration</var> (as defined in <a
+            href="#calculating-the-iteration-duration" class="sectionRef"></a>).
+          This isn't the job of the animation model to calculate, this is the
+          output of the timing model.
         </p>
       </section>
       <section>
