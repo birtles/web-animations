@@ -657,34 +657,31 @@
           Times in Web Animations are relative to some point of reference. These
           different points of reference produce different time spaces.
         </p>
-        <p class="todo">
-          Re-introduce coordinate space analogue? Drop "document time space" and
-          "parent iteration time space" ?
+        <p>
+          This can be compared to coordinate spaces as used in computer
+          graphics.
+          The zero time of a time space is analogous to the origin of
+          a coordinate space.
         </p>
         <p>
-          Within Web Animations, the following time spaces are used:
+          Within Web Animations, some of the common time spaces are:
         </p>
         <dl>
           <dt>Document time space</dt>
           <dd>
-            A time space whose zero point is the start time of the document
+            A time space whose zero time is the start time of the document
             timeline as defined in <a href="#start-of-the-timeline"
             class="sectionRef"></a>.
           </dd>
-          <dt>Parent iteration time space</dt>
-          <dd>
-            A time space whose zero time is the beginning of the parent
-            animation group's current iteration.
-            Unless the document creates additional animation groups, this will
-            be equivalent to document time.
-          </dd>
           <dt>Item time space</dt>
           <dd>
-            A time space whose zero time is when the item becomes active.
+            A time space whose zero time is the timed item's (e.g. an animation
+            instance) start time.
           </dd>
           <dt>Animation time space</dt>
           <dd>
-            A time space whose zero time is when the item begins animating.
+            A time space whose zero time is the beginning of a timed item's
+            animation interval.
           </dd>
           <dt>Iteration time space</dt>
           <dd>
@@ -696,7 +693,15 @@
           </dd>
         </dl>
         <p>
-          Some of these time spaces are demonstrated below.
+          In addition to these time spaces, when animation groups are used (see
+          <a href="#grouping-and-synchronization" class="sectionRef"></a>) we
+          can talk about the <em>parent iteration time space</em>. The zero time
+          of <em>parent iteration time space</em> is the beginning of the parent
+          animation group's current iteration. When animation groups are not
+          used, this is equivalent to <em>document time space</em>.
+        </p>
+        <p>
+          Some of these time spaces are illustrated below.
         </p>
         <div class="figure">
           <object data="img/time-spaces.svg" width="600"></object>
@@ -706,10 +711,16 @@
           animation with a iteration duration of 1s and an iteration count of
           2.5.
         </p>
-        <p class="todo">
-          Need to explain that while the time space is unbounded, some times
-          as-used-in-Web-Animations are clamped??? Either that or just remove
-          the clamped parts from the diagram.
+        <p>
+          Note that while the time spaces themselves are not bounded, Web
+          Animations defines <var>animation time</var> and <var>iteration
+          time</var> such that they are clamped to a set range as shown in the
+          diagram.
+          For example, whilst a time of -1 second is a valid time in
+          <em>animation time space</em>, querying the <var>animation time</var>
+          of an animation instance will never return a negative value due to the
+          clamping performed when this value is calculated (see <a
+          href="#calculating-the-animation-time" class="sectionRef"></a>).
         </p>
         <section>
           <h4>Iteration duration and animation duration</h4>

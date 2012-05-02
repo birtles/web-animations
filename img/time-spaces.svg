@@ -40,7 +40,7 @@
     /*
      * Text labels
      */
-    .parentTimelineLabel {
+    .documentTimelineLabel {
       font-size: 0.8em;
     }
     .timeLabel {
@@ -132,10 +132,9 @@
     <path d="M-3.5-3.5l7 7M3.5-3.5l-7 7M0-5v10M-5 0h10"
       class="startTimeStar" id="star"/>
   </defs>
-  <!-- Parent iteration timeline -->
+  <!-- Document timeline -->
   <g>
-    <text x="43" y="1em" class="parentTimelineLabel">Parent
-      iteration time</text>
+    <text x="43" y="1em" class="documentTimelineLabel">Document time</text>
     <line x1="40" x2="95%" y1="22" y2="22" class="arrowLine"/>
     <path d="M40 20v4" class="line"/>
     <text x="40" y="3em" class="localTimelineTick">0</text>
