@@ -4,44 +4,70 @@
   <defs>
     <style type="text/css">
     svg {
-      font-size: 1.2em;
+      font-size: 19px;
+      font-family: sans-serif;
     }
-    .intervalBoundary, .arrowLine {
+
+    /*
+     * Line work
+     */
+    .line, .arrowLine, .dottedArrow, .doubleArrowLine {
       stroke: black;
       stroke-width: 1.5;
       fill: none;
     }
-    .arrowLine {
+    .arrowLine, .dottedArrow {
       marker-end: url(#arrow);
     }
-    .intervalBoundary {
-      stroke: darkblue;
+    .dottedArrow {
+      stroke-dasharray: 4 4;
+      stroke-width: 2;
     }
-    .activeSpan  {
-      fill: lightgrey;
-      stroke: black;
-    }
-    .animatingSpan  {
-      fill: aqua;
-      stroke: black;
+    .doubleArrowLine {
+      marker-start: url(#reverseArrow);
+      marker-end: url(#arrow);
     }
     .bracket {
       stroke: black;
       stroke-width: 1.5;
       fill: none;
     }
-    .regionLabel {
-      text-anchor: middle;
+
+    /*
+     * Animation spans
+     */
+    .animatingSpan  {
+      fill: paleturquoise;
+      stroke: black;
     }
-    .iterationTime, .iterationTimeDotted {
+    .groupRepeatBoundary, .animRepeatBoundary {
+      stroke-dasharray: 4 4;
+    }
+    .groupRepeatBoundary {
+      stroke: darkgreen;
+      stroke-width: 3;
+    }
+    .animRepeatBoundary {
+      stroke: navy;
+      stroke-width: 2;
+    }
+
+    /*
+     * Text labels
+     */
+    .legendText {
+      font-size: 0.7em;
+    }
+
+    /*
+     * Time values
+     */
+    .iterationTime {
       stroke: green;
       stroke-width: 3;
       fill: none;
       stroke-linecap: round;
       stroke-linejoin: round;
-    }
-    .iterationTimeDotted {
-      stroke-dasharray: 3 6;
     }
     .excludedPoint {
       fill: none;
@@ -53,14 +79,19 @@
       stroke: green;
       stroke-width: 2;
     }
-    .legendText {
-      font-size: 0.7em;
-    }
+    </style>
+    <!-- Arrows -->
+    <style type="text/css">
+      .blackArrowHead {
+        fill: black;
+        stroke: none;
+      }
     </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
       markerHeight="5">
-      <path d="M0-5l10 5l-10 5z"/>
+      <path d="M0-5l10 5l-10 5z" class="blackArrowHead"/>
     </marker>
+
     <!-- Fade out effect -->
     <mask id="fadeout" maskContentUnits="objectBoundingBox">
       <rect x="-0.05" y="-0.05" width="1.1" height="1.1"
@@ -68,8 +99,8 @@
     </mask>
     <linearGradient id="fadeoutGrad">
       <stop offset="0" stop-color="white" stop-opacity="1"/>
-      <stop offset="0.65" stop-color="white" stop-opacity="1"/>
-      <stop offset="0.9" stop-color="white" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="white" stop-opacity="1"/>
+      <stop offset="0.85" stop-color="white" stop-opacity="0"/>
     </linearGradient>
   </defs>
   <!-- Timeline -->
@@ -83,7 +114,7 @@
       <!-- Animation shaded areas -->
       <g transform="translate(0 30)">
         <rect width="300" height="100" class="animatingSpan"/>
-        <path d="M150 0v100m150-100v100" class="intervalBoundary"/>
+        <path d="M150 0v100m150-100v100" class="animRepeatBoundary"/>
       </g>
       <!-- Iteration time -->
       <g transform="translate(0 130)">
