@@ -411,7 +411,7 @@
                 in <code>target</code>. For each <code>element</code> in
                 <code>target</code> the associated animation is appended to the
                 animation group corresponding to
-                <code>element.ownerDocument.animationRoot</code>.
+                <code>element.ownerDocument.animationTimeline</code>.
               </p>
               <dl class="parameters">
                 <dt>any target</dt>
@@ -426,12 +426,20 @@
                 </dd>
                 <dt>optional float startTime</dt>
                 <dd>
-                  The start time for the animation instance in the time space of
-                  the <code>WebAnimationGroupInstance</code> to which it is
-                  appended.
-                  If this parameter is not specified it will default to the
-                  current time of the <code>WebAnimationGroupInstance</code> to
-                  which it is appended.
+                  <p>
+                    The start time for the animation instance expressed in
+                    seconds in the iteration time space of the
+                    <code>WebAnimationGroupInstance</code> to which it is
+                    appended (see <a href="#iteration-time-and-animation-time"
+                      class="sectionRef"></a>).
+                  </p>
+                  <p>
+                    If this parameter is not specified it will default to the
+                    current iteration time of the
+                    <code>WebAnimationGroupInstance</code> to which it is
+                    appended if it is not <code>null</code>, otherwise it will
+                    default to zero.
+                  </p>
                 </dd>
               </dl>
             </dd>
@@ -460,15 +468,18 @@
                 <dt>optional float startTime</dt>
                 <dd>
                   <p>
-                    Represents a time in the context of the
-                    <code>WebAnimationGroupInstance</code> to which the
-                    generated <code>WebAnimationInstance</code> objects will be
-                    appended.
+                    The start time for the animation instance expressed in
+                    seconds in the iteration time space of the
+                    <code>WebAnimationGroupInstance</code> to which it is
+                    appended (see <a href="#iteration-time-and-animation-time"
+                      class="sectionRef"></a>).
                   </p>
                   <p>
                     If this parameter is not specified it will default to the
-                    current time of <code>parentGroup</code> if it is not
-                    <code>null</code>, otherwise it will default to zero.
+                    current iteration time of the
+                    <code>WebAnimationGroupInstance</code> to which it is
+                    appended if it is not <code>null</code>, otherwise it will
+                    default to zero.
                   </p>
                 </dd>
               </dl>
@@ -519,8 +530,10 @@
             </p>
             <ul>
               <li>Specify an explicit parent group</li>
-              <li>Use the default animation group (<code>animationRoot</code>)
-              of the element's <code>ownerDocument</code></li>
+              <li>
+                Use the default animation group (<code>animationTimeline</code>)
+                of the element's <code>ownerDocument</code>
+              </li>
               <li>Have no parent group (This is particularly important
               animations destined for sequential animation groups containers
               where the order of children is important and so you might want to
@@ -1019,8 +1032,18 @@
           <dt>readonly attribute float startTime</dt>
           <dd>
             <p>
-              The time at which the animation becomes active expressed in
-              seconds relative to the parent animation group.
+              The start of the animation interval before applying
+              <code>startDelay</code> expressed in seconds in the iteration time
+              space of <code>parentGroup</code>.
+            </p>
+            <p>
+              The value returned may not correspond to the value specified when
+              creating the item (e.g. using <code>WebAnimation.animate</code>).
+              For example, when the parent animation group instance is
+              a sequence group, the value will be determined by the procedure
+              defined in <a
+              href="#calculating-the-start-time-of-children-of-a-sequence-group"
+              class="sectionRef"></a>.
             </p>
             <p class="todo">
               As with <code>endTime</code> and the proposed <code>stop()</code>
@@ -1123,7 +1146,7 @@
         </div>
         <div class="todo">
           <p>
-            Do we need means for getting the startTime etc. in document
+            Do we need a means for getting the startTime etc. in document
             time (i.e. in terms of the root time container)?
           </p>
         </div>
@@ -1707,9 +1730,11 @@
       <section>
         <h3>The document timeline</h3>
         <p>
-          TBD.
-          Describe how the document timeline is just an animation group instance
-          with the following special properties:
+          We have previously referred to the document timeline as the context in
+          which animation takes places. Likewise we have referred to the
+          <em>document time space</em> as the master time space which contains
+          other time spaces. The document timeline is, in fact, a parallel
+          animation group instance with the following special properties:
         </p>
         <ul>
           <li>
@@ -1717,14 +1742,26 @@
             <code>parentGroup</code> property returns <code>null</code>.
           </li>
           <li>
-            A lot of other properties are read-only like
-            <code>iterationCount</code> etc.
+            Attempting to set the <code>type</code> property will result in a
+            DOMException (code: NO_MODIFICATION_ALLOWED_ERR) being thrown.
           </li>
           <li>
-            Its startTime represents real-world time??? Can we align with the
-            timestamps used in DOM (e.g. for events) here?
+            Calls to <code>cancel()</code> will result in a DOMException (code:
+            HIERARCHY_REQUEST_ERR) being thrown.
+          </li>
+          <li>
+            For properties that represent times in <em>parent iteration time
+            space</em> a time space whose zero time is 00:00:00 UTC on 1 January
+            1970 is used instead.
+            For example, the <code>startTime</code> property of the document
+            timeline represents the number of seconds between 00:00:00 UTC on
+            1 January 1970 and when the timeline started (see <a
+              href="#start-of-the-timeline" class="sectionRef"></a>).
           </li>
         </ul>
+        <p class="todo">
+          Move/copy exception behavior to the relevant properties / methods.
+        </p>
       </section>
       <section>
         <h3>Calculating the intrinsic duration of an animation group instance
@@ -2518,20 +2555,21 @@
       <h2>Extensions to Document interfaces</h2>
       <p>
         Since the document acts as a root animation group user agents MUST add
-        an <code>animationRoot</code> member to the document interface for each
-        document type where animation is supported. For example, HTMLDocument
-        and SVGDocument.
+        an <code>animationTimeline</code> member to the document interface for
+        each document type where animation is supported.
+        For example, HTMLDocument and SVGDocument.
       </p>
       <p>
         The definition of this member is given below.
       </p>
       <dl title="partial interface HTMLDocument" class="idl">
-        <dt>readonly attribute WebAnimationGroup animationRoot</dt>
+        <dt>readonly attribute WebAnimationGroupInstance animationTimeline</dt>
         <dd>
-          The animation group corresponding to the root of the document. This
-          group exhibits the special behavior described for a root animation
-          group in
-          <a href="#grouping-and-synchronization" class="sectionRef"></a>.
+          The animation group instance corresponding to the root of the
+          document.
+          This group instance exhibits the special behavior described for the
+          root animation group in <a href="#the-document-timeline"
+          class="sectionRef"></a>.
         </dd>
       </dl>
     </section>
