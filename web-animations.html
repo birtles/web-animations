@@ -1764,61 +1764,6 @@
         </p>
       </section>
       <section>
-        <h3>Calculating the intrinsic duration of an animation group instance
-        </h3>
-        <p>
-          TBD, but basically:
-        </p>
-        <dl class="switch">
-          <dt>If the type is parallel,</dt>
-          <dd>
-            Calc the endTime for each child and take the max
-          </dd>
-          <dt>If the type is sequence</dt>
-          <dd>
-            Sum all the animation durations + start delays (including
-            negatives)
-          </dd>
-          <dt>If the type is media group</dt>
-          <dd>
-            Same as parallel?
-          </dd>
-        </dl>
-      </section>
-      <section>
-        <h3>Calculating the start time of children of a sequence group</h3>
-        <p>
-          The start time for the children of a sequence animation group instance
-          is calculated according to the following procedure:
-        </p>
-        <ol>
-          <li>Let the <var>accumulated start time</var> be zero.
-          <li>
-            Iterate over each child in the group beginning with the first item
-            in the group and proceeding to the last.
-            For each child perform the following steps:
-            <ol>
-              <li>
-                Let the start time of the child be <var>accumulated start
-                time</var>
-              </li>
-              <li>
-                Increment <var>accumulated start time</var> by
-                <code><var>start delay</var> + <var>animation
-                duration</var></code>
-              </li>
-            </ol>
-          </li>
-        </ol>
-        <p class="note">
-          When <var>animation duration</var> is positive infinity the behavior
-          is defined by IEEE 754-2008.
-          In effect, if any of the children of a sequence animation group
-          instance has an infinite animation duration, any children that occur
-          later in the sequence will not play.
-        </p>
-      </section>
-      <section>
         <h3>The <code>WebAnimationGroupInstance</code> interface</h3>
         <p>
           Represents a list of timed items which may be animation instances or
@@ -1995,6 +1940,61 @@
             when this method was called.
           </dd>
         </dl>
+      </section>
+      <section>
+        <h3>Calculating the intrinsic duration of an animation group instance
+        </h3>
+        <p>
+          TBD, but basically:
+        </p>
+        <dl class="switch">
+          <dt>If the type is parallel,</dt>
+          <dd>
+            Calc the endTime for each child and take the max
+          </dd>
+          <dt>If the type is sequence</dt>
+          <dd>
+            Sum all the animation durations + start delays (including
+            negatives)
+          </dd>
+          <dt>If the type is media group</dt>
+          <dd>
+            Same as parallel?
+          </dd>
+        </dl>
+      </section>
+      <section>
+        <h3>Calculating the start time of children of a sequence group</h3>
+        <p>
+          The start time for the children of a sequence animation group instance
+          is calculated according to the following procedure:
+        </p>
+        <ol>
+          <li>Let the <var>accumulated start time</var> be zero.
+          <li>
+            Iterate over each child in the group beginning with the first item
+            in the group and proceeding to the last.
+            For each child perform the following steps:
+            <ol>
+              <li>
+                Let the start time of the child be <var>accumulated start
+                time</var>
+              </li>
+              <li>
+                Increment <var>accumulated start time</var> by
+                <code><var>start delay</var> + <var>animation
+                duration</var></code>
+              </li>
+            </ol>
+          </li>
+        </ol>
+        <p class="note">
+          When <var>animation duration</var> is positive infinity the behavior
+          is defined by IEEE 754-2008.
+          In effect, if any of the children of a sequence animation group
+          instance has an infinite animation duration, any children that occur
+          later in the sequence will not play.
+        </p>
       </section>
     </section>
 
