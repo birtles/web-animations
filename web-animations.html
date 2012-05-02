@@ -397,7 +397,7 @@
           <dl title="[Constructor] interface WebAnimation" class="idl">
             <dt>attribute WebTiming timing</dt>
             <dd>
-              The timing parameters to use for generated animations.
+              The timing parameters to use for generated animation instances.
             </dd>
             <dt>attribute WebAnimationFunction function</dt>
             <dd>
@@ -1994,6 +1994,27 @@
           In effect, if any of the children of a sequence animation group
           instance has an infinite animation duration, any children that occur
           later in the sequence will not play.
+        </p>
+      </section>
+      <section>
+        <h3>The <code>WebAnimationGroup</code> interface</h3>
+        <p>
+          <code>WebAnimationGroupInstance</code> objects are not created
+          directly, but rather via a <code>WebAnimationGroup</code> object that
+          acts as a template for creating animation group instances that target
+          different elements.
+        </p>
+        <dl title="[Constructor] interface WebAnimationGroup" class="idl">
+          <dt>attribute WebTiming timing</dt>
+          <dd>
+            The timing parameters to use for generated animation group
+            instances.
+          </dd>
+        </dl>
+        <p class="todo">
+          Need to think about the constructors for this. You really want to be
+          able to just do something like <code>var group = new par(anim1,
+            anim2)</code>.
         </p>
       </section>
     </section>
