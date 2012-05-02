@@ -325,6 +325,14 @@
         </dd>
       </dl>
       <p class="todo">
+        Need to define somewhere how this works for
+        <code>WebAnimationGroup</code> and
+        <code>WebAnimationGroupInstance</code> objects. Does changing one object
+        affect the whole tree? Does changing the children of an
+        <code>WebAnimationGroup</code> affect live
+        <code>WebAnimationGroupInstance</code> objects?
+      </p>
+      <p class="todo">
         Add a non-normative diagram which shows a live animation instance and an
         independent one.
       </p>
@@ -408,10 +416,9 @@
               <p>
                 Creates a series of independent
                 <code>WebAnimationInstance</code> objects, one for each element
-                in <code>target</code>. For each <code>element</code> in
-                <code>target</code> the associated animation is appended to the
-                animation group corresponding to
-                <code>element.ownerDocument.animationTimeline</code>.
+                in <code>target</code>.
+                Each such <code>WebAnimationInstance</code> object is appended
+                to <code>element.ownerDocument.animationTimeline</code>.
               </p>
               <dl class="parameters">
                 <dt>any target</dt>
@@ -427,8 +434,8 @@
                 <dt>optional float startTime</dt>
                 <dd>
                   <p>
-                    The start time for the animation instance expressed in
-                    seconds in the iteration time space of the
+                    The start time for the generated animation instances
+                    expressed in seconds in the iteration time space of the
                     <code>WebAnimationGroupInstance</code> to which it is
                     appended (see <a href="#iteration-time-and-animation-time"
                       class="sectionRef"></a>).
@@ -468,8 +475,8 @@
                 <dt>optional float startTime</dt>
                 <dd>
                   <p>
-                    The start time for the animation instance expressed in
-                    seconds in the iteration time space of the
+                    The start time for the generated animation instances
+                    expressed in seconds in the iteration time space of the
                     <code>WebAnimationGroupInstance</code> to which it is
                     appended (see <a href="#iteration-time-and-animation-time"
                       class="sectionRef"></a>).
@@ -1910,9 +1917,10 @@
             Returns the item at <code>index</code>. If <code>index</code> is
             greater than or equal to <code>length</code> returns
             <code>null</code>. Equivalent to
-            <code>WebAnimationGroup[index]</code>. <span class="todo">(Need to
-            work out how to define this behavior&mdash;i.e. that you can use the
-            subscript operator)</span>
+            <code>WebAnimationGroupInstance[index]</code>.
+            <span class="todo">(Need to work out how to define this
+              behavior&mdash;i.e. that you can use the subscript
+              operator)</span>
           </dd>
           <dt>WebTimedItem? remove (WebTimedItem removedItem)</dt>
           <dd>
@@ -2004,17 +2012,200 @@
           acts as a template for creating animation group instances that target
           different elements.
         </p>
+        <div class="todo">
+          <p>
+            I've introduced a new interface <code>WebTemplateItem</code> because
+            I realised we need so we can treat child groups and child animations
+            alike.
+            This needs to be split out and specified somewhere else.
+            It probably needs the following members:
+          </p>
+          <ul>
+            <li><code>timing</code></li>
+            <li>
+              <code>animate</code>, <code>animateWithParent</code>,
+              <code>animateLive</code>, <code>animateLiveWithParent</code>
+            </li>
+          </ul>
+          <p>
+            Then the signature of <code>animate</code> et. al. will need to be
+            updated to return a sequence of <code>WebTemplateItem</code>
+            objects.
+          </p>
+        </div>
         <dl title="[Constructor] interface WebAnimationGroup" class="idl">
           <dt>attribute WebTiming timing</dt>
           <dd>
             The timing parameters to use for generated animation group
             instances.
           </dd>
+          <dt>void clear ()</dt>
+          <dd>
+            Removes all child templates from the group.
+          </dd>
+          <dt>WebTemplateItem append (WebTemplateItem newItem)</dt>
+          <dd>
+            Add <code>newItem</code> as the last item in the group. If
+            <code>newItem</code> already belongs to a group (including this
+            group) it will first be removed from that group before being added
+            to this group. Returns <code>newItem</code>.
+            <span class="todo">Is that necessary? For templates you could just
+              make them share-able? But better to be consistent?</span>
+          </dd>
+          <dt>WebTemplateItem insertBefore (WebTemplateItem newItem,
+            WebTemplateItem? refItem)</dt>
+          <dd>
+            <p>
+              Inserts <code>newItem</code> before the existing
+              <code>refItem</code>. If <code>refItem</code> is null,
+              <code>newChild</code> is added to the end of the list. If
+              <code>newItem</code> already belongs to a group (including this
+              group) it will first be removed from that group before being added
+              to this group. If <code>newItem</code> and <code>refItem</code>
+              are the same object then no change is made. Returns
+              <code>newItem</code>.
+            </p>
+            <p>Exceptions:</p>
+            <ul>
+              <li>NOT_FOUND_ERR: Raised if <code>refItem</code> is not a child
+              of this group.</li>
+            </ul>
+          </dd>
+          <dt>WebTemplateItem? item (unsigned long index)</dt>
+          <dd>
+            Returns the item at <code>index</code>. If <code>index</code> is
+            greater than or equal to <code>length</code> returns
+            <code>null</code>. Equivalent to
+            <code>WebAnimationGroup[index]</code>.
+            <span class="todo">(Need to work out how to define this
+              behavior&mdash;i.e. that you can use the subscript
+              operator)</span>
+          </dd>
+          <dt>WebTemplateItem? remove (WebTemplateItem removedItem)</dt>
+          <dd>
+            Removes <code>removedItem</code> from the group and returns it. If
+            <code>removedItem</code> is not part of this group, returns
+            <code>null</code>.
+          </dd>
+          <dt>sequence&lt;WebAnimationGroupInstance&gt; animate ()</dt>
+          <dd>
+            <p>
+              Creates a series of independent
+              <code>WebAnimationGroupInstance</code> objects, one for each
+              element in <code>target</code> using the following procedure:
+            </p>
+            <ol>
+              <li>
+                For each <var>element</var> in <code>target</code>:
+                <ol>
+                  <li>
+                    Create a new <code>WebAnimationGroupInstance</code> object,
+                    <var>group</var>.
+                  </li>
+                  <li>
+                    For each <var>child</var> in this
+                    <code>WebAnimationGroup</code>, call
+                    <code><var>child</var>.animateWithParent(<var>element</var>,
+                    <var>group</var>, <code>startTime</code>)</code>
+                  </li>
+                  <li>
+                    Append <var>group</var> to
+                    <code>element.ownerDocument.animationTimeline</code>.
+                    <span class="todo">(Should we do this first? Will it make
+                      any difference in implementation?)</span>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+            <dl class="parameters">
+              <dt>any target</dt>
+              <dd>
+                The element(s) to be animated.
+                May be one of the following types:
+                <code>Element</code>, <code>NodeList</code>,
+                <code>Element[]</code>.
+                If <code>target</code> is of type
+                <code>NodeList</code> all nodes in the list that are not of
+                type <code>ELEMENT_NODE</code> are ignored.
+              </dd>
+              <dt>optional float startTime</dt>
+              <dd>
+                <p>
+                  The start time for the generated animation group instances
+                  expressed in seconds in the iteration time space of the
+                  <code>WebAnimationGroupInstance</code> to which it is appended
+                  (see <a href="#iteration-time-and-animation-time"
+                    class="sectionRef"></a>).
+                </p>
+                <p>
+                  If this parameter is not specified it will default to the
+                  current iteration time of the
+                  <code>WebAnimationGroupInstance</code> to which it is
+                  appended if it is not <code>null</code>, otherwise it will
+                  default to zero.
+                </p>
+              </dd>
+            </dl>
+          </dd>
+          <dt>sequence&lt;WebAnimationGroupInstance&gt; animateWithParent
+          ()</dt>
+          <dd>
+            <p>
+              As with <code>animate</code> except that instead of appending the
+              created <code>WebAnimationGroupInstance</code> objects to
+              <code>element.ownerDocument.animationTimeline</code> the passed in
+              <code>parentGroup</code> is used.
+              If <code>parentGroup</code> is <code>null</code>, the
+              <code>WebAnimationGroupInstance</code> objects will not be added
+              to any group.
+            </p>
+            <dl class="parameters">
+              <dt>any target</dt>
+              <dd>
+                As with <code>animate</code>.
+              </dd>
+              <dt>WebAnimationGroupInstance? parentGroup</dt>
+              <dd>
+                The animation group instance to which animation instances
+                should be appended.
+              </dd>
+              <dt>optional float startTime</dt>
+              <dd>
+                <p>
+                  The start time for the generated animation group instances
+                  expressed in seconds in the iteration time space of the
+                  <code>WebAnimationGroupInstance</code> to which it is appended
+                  (see <a href="#iteration-time-and-animation-time"
+                    class="sectionRef"></a>).
+                </p>
+                <p>
+                  If this parameter is not specified it will default to the
+                  current iteration time of the
+                  <code>WebAnimationGroupInstance</code> to which it is
+                  appended if it is not <code>null</code>, otherwise it will
+                  default to zero.
+                </p>
+              </dd>
+            </dl>
+          </dd>
+          <dt>sequence&lt;WebAnimationGroupInstance&gt; animateLive (any target,
+            optional float startTime)</dt>
+          <dd>
+            As with <code>animate</code> with the exception that the animation
+            group instances generated by this method are live.
+          </dd>
+          <dt>sequence&lt;WebAnimationGroupInstance&gt; animateLiveWithParent
+            (any target, WebAnimationGroupInstance? parentGroup,
+             optional float startTime)</dt>
+          <dd>
+            As with <code>animateWithParent</code> with the exception that the
+            group animation instances generated by this method are live.
+          </dd>
         </dl>
         <p class="todo">
           Need to think about the constructors for this. You really want to be
           able to just do something like <code>var group = new par(anim1,
-            anim2)</code>.
+          anim2)</code>.
         </p>
       </section>
     </section>
