@@ -1966,10 +1966,11 @@
       </section>
       <section>
         <h3>The <code>WebPathAnimationFunction</code> interface</h3>
-        <p class="todo">
-          Need to fill this out.
-        </p>
         <dl title="[Constructor] interface WebPathAnimationFunction : WebAnimationFunction" class="idl">
+          <dt>attribute SVGPathSegList segments</dt>
+          <dd>
+            The list of segments that make up this path.
+          </dd>
         </dl>
       </section>
       <section>
@@ -2095,6 +2096,22 @@
               </p>
           </ol>
 
+        </p>
+      </section>
+      <section>
+        <h3>Calculating the animation value for a <code>WebPathAnimationFunction</code></h3>
+      </section>
+      <section>
+        <h3>Calculating the animation value for a <code>WebGroupedAnimationFunction</code></h3>
+        <p>
+          When a <code>WebAnimation</code> contains a pointer to a
+          <code>WebGroupedAnimationFunction</code>, the <var>animation
+          value</var> for that animation at given current time <var>t</var> is
+          calculated by following the procedure outlined in
+          <a href="#combining-animations" class="sectionRef"></a>, treating
+          the list of <code>WebAnimationFunction</code> objects contained
+          within the <code>WebGroupedAnimationFunction</code> as the animation
+          stack.
         </p>
       </section>
       <p>
