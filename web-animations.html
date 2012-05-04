@@ -2466,137 +2466,143 @@
         </div>
       </section>
       <section>
-        <h3>Calculating the animation value for a <code>WebKeyframesAnimationFunction</code></h3>
-          When a <code>WebAnimation</code> contains a pointer to a
-          <code>WebKeyframesAnimationFunction</code>, the <var>animation
-          value</var> for that animation at given current time <var>t</var> is
-          calculated according to the following steps:
+        <h3>Calculating animation values</h3>
+          <section>
+            <h4>Calculating the animation value for a 
+              <code>WebKeyframesAnimationFunction</code></h4>
+              When a <code>WebAnimation</code> contains a pointer to a
+              <code>WebKeyframesAnimationFunction</code>, the <var>animation
+              value</var> for that animation at given current time <var>t</var>
+              is calculated according to the following steps:
 
-          <ol>
-            <li>
-              Convert <var>t</var> to the <var>current time fraction</var>.
-            </li>
-            <li>
-              Generate a <var>sorted frame list</var> by sorting the list of
-              <code>WebAnimationFrame</code> objects contained within the
-              <code>WebAnimationFrameList</code> object by their 
-              <var>offset</var>.
-              If there are no frames in the <var>sorted frame list</var> then
-              no animation occurs and the <var>animation value</var> is just
-              the <var>baseVal</var> of the property being animated.
-              <p class="todo">
-                Need to define the "<code>WebAnimationFrame</code> objects
-                contained within the <code>WebAnimationFrameList</code> object"
-                better.
-              </p>
-            </li>
-            <li>
-              Find the <var>after frame</var> by iterating through the 
-              <var>sorted frame list</var> until the last
-              <code>WebAnimationFrame</code> with an <var>offset</var> larger 
-              than the <var>current time fraction</var> is encountered.
-            </li>
-            <li>
-              If the <var>after frame</var> is the first frame in the
-              <var>sorted frame list</var>, then construct a 
-              <var>before frame</var> with an <var>offset</var> of 0 and a
-              value equal to the <var>baseVal</var> of the property being
-              animated.
-              <p class="todo">
-                Need to define baseVal and animVal somewhere.
-              </p>
-            </li>
-            <li>
-              If the <var>after frame</var> does not exist (i.e. all frames
-              have an <var>offset</var> less than the <var>current time 
-              fraction</var>) then construct an <var>after frame</var> with
-              an <var>offset</var> of 1 and a value equal to the
-              <var>baseVal</var> of the property being animated, and
-              Set the <var>before frame</var> to the last frame in the 
-              <var>sorted frame list</var>.
-            </li> 
-            <li>
-              Otherwise (the <var>after frame</var> exists and is not the first
-              frame in the <var>sorted frame list</var>) ste the <var>before 
-              frame</var> to the frame immediately prior to the <var>after 
-              frame</var> in the <var>sorted frame list</var>.
-            </li>
-            <li>
-              The <var>local time function</var> is the
-              <var>timingFunction</var> of the <var>before frame</var>, if it
-              exists; otherwise the <var>timingFunction</var> of the
-              <code>WebAnimationInstance</code> interface's <var>timing</var> 
-              attribute.
-            </li>
-            <li>
-              Find the <var>local time fraction</var> by subtracting
-              the <var>offset</var> of the <var>before frame</var> from
-              the <var>current time fraction</var>, then dividing the result
-              by the difference between the <var>offset</var> of the
-              <var>after frame</var> and the <var>offset</var> of the
-              <var>before frame</var>.
-            <li>
-              Calculate the <var>effective time fraction</var> by applying
-              the <var>local time function</var> to the <var>local time
-              fraction</var>.
-            <li>
-              Calculate the <var>animation value</var> by linearly 
-              interpolating the values of the <var>before frame</var> and
-              <var>after frame</var>, using the 
-              <var>effective time fraction</var> as interpolation parameter.
-              <p class="todo">
-                Need a rigorous definition of linear interpolation - could
-                just reference the relevant specifications.
-              </p>
-          </ol>
+              <ol>
+                <li>
+                  Convert <var>t</var> to the <var>current time fraction</var>.
+                </li>
+                <li>
+                  Generate a <var>sorted frame list</var> by sorting the list of
+                  <code>WebAnimationFrame</code> objects contained within the
+                  <code>WebAnimationFrameList</code> object by their 
+                  <var>offset</var>.
+                  If there are no frames in the <var>sorted frame list</var>
+                  then no animation occurs and the <var>animation value</var> is
+                  just the <var>baseVal</var> of the property being animated.
+                  <p class="todo">
+                    Need to define the "<code>WebAnimationFrame</code> objects
+                    contained within the <code>WebAnimationFrameList</code>
+                    object" better.
+                  </p>
+                </li>
+                <li>
+                  Find the <var>after frame</var> by iterating through the 
+                  <var>sorted frame list</var> until the last
+                  <code>WebAnimationFrame</code> with an <var>offset</var>
+                  larger than the <var>current time fraction</var> is
+                  encountered.
+                </li>
+                <li>
+                  If the <var>after frame</var> is the first frame in the
+                  <var>sorted frame list</var>, then construct a 
+                  <var>before frame</var> with an <var>offset</var> of 0 and a
+                  value equal to the <var>baseVal</var> of the property being
+                  animated.
+                  <p class="todo">
+                    Need to define baseVal and animVal somewhere.
+                  </p>
+                </li>
+                <li>
+                  If the <var>after frame</var> does not exist (i.e. all frames
+                  have an <var>offset</var> less than the <var>current time 
+                  fraction</var>) then construct an <var>after frame</var> with
+                  an <var>offset</var> of 1 and a value equal to the
+                  <var>baseVal</var> of the property being animated, and
+                  Set the <var>before frame</var> to the last frame in the 
+                  <var>sorted frame list</var>.
+                </li> 
+                <li>
+                  Otherwise (the <var>after frame</var> exists and is not the
+                  first frame in the <var>sorted frame list</var>) ste the 
+                  <var>before frame</var> to the frame immediately prior to the
+                  <var>after frame</var> in the <var>sorted frame list</var>.
+                </li>
+                <li>
+                  The <var>local time function</var> is the
+                  <var>timingFunction</var> of the <var>before frame</var>, if 
+                  it exists; otherwise the <var>timingFunction</var> of the
+                  <code>WebAnimationInstance</code> interface's
+                  <var>timing</var> attribute.
+                </li>
+                <li>
+                  Find the <var>local time fraction</var> by subtracting
+                  the <var>offset</var> of the <var>before frame</var> from
+                  the <var>current time fraction</var>, then dividing the result
+                  by the difference between the <var>offset</var> of the
+                  <var>after frame</var> and the <var>offset</var> of the
+                  <var>before frame</var>.
+                <li>
+                  Calculate the <var>effective time fraction</var> by applying
+                  the <var>local time function</var> to the <var>local time
+                  fraction</var>.
+                <li>
+                  Calculate the <var>animation value</var> by linearly 
+                  interpolating the values of the <var>before frame</var> and
+                  <var>after frame</var>, using the 
+                  <var>effective time fraction</var> as interpolation parameter.
+                  <p class="todo">
+                    Need a rigorous definition of linear interpolation - could
+                    just reference the relevant specifications.
+                  </p>
+              </ol>
 
-        </p>
-      </section>
-      <section>
-        <h3>Calculating the animation value for a 
-          <code>WebPathAnimationFunction</code></h3>
-        <p>
-          When a <code>WebAnimation</code> contains a pointer to a
-          <code>WebPathAnimationFunction</code> and <var>rotate</var> is set to
-          false, the <var>animation value</var> for that animation at given 
-          current time <var>t</var> is the transform defined by a translation
-          equal to the location on the path at <var>t</var>.
-        </p>
-        <p>
-          When <var>rotate</var> is set to true, the <var>animation value</var>
-          is the transform defined by the above translation followed by a 
-          rotation defined by the following process:
-        </p>
-        <ol>
-          <li>
-            Calculate the <var>normal</var> to the path at <var>t</var>.
-          </li>
-          <p class="todo">define how to calculate the normal</p>
-          <li>
-            Determine the <var>normal rotation</var>, which is given by 
-            <var>atan2(normal.y, normal.x).
-          </li>
-          <li>
-            The <var>rotation</var> is the transform that rotates by
-            the <var>normal rotation</var>.
-          </li>
-        </ol>
+            </p>
+          </section>
+          <section>
+            <h4>Calculating the animation value for a 
+              <code>WebPathAnimationFunction</code></h4>
+            <p>
+              When a <code>WebAnimation</code> contains a pointer to a
+              <code>WebPathAnimationFunction</code> and <var>rotate</var> is set
+              to false, the <var>animation value</var> for that animation at
+              given current time <var>t</var> is the transform defined by a
+              translation equal to the location on the path at <var>t</var>.
+            </p>
+            <p>
+              When <var>rotate</var> is set to true, the
+              <var>animation value</var> is the transform defined by the above
+              translation followed by a rotation defined by the following
+              process:
+            </p>
+            <ol>
+              <li>
+                Calculate the <var>normal</var> to the path at <var>t</var>.
+              </li>
+              <p class="todo">define how to calculate the normal</p>
+              <li>
+                Determine the <var>normal rotation</var>, which is given by 
+                <var>atan2(normal.y, normal.x).
+              </li>
+              <li>
+                The <var>rotation</var> is the transform that rotates by
+                the <var>normal rotation</var>.
+              </li>
+            </ol>
 
-      </section>
-      <section>
-        <h3>Calculating the animation value for a 
-          <code>WebGroupedAnimationFunction</code></h3>
-        <p>
-          When a <code>WebAnimation</code> contains a pointer to a
-          <code>WebGroupedAnimationFunction</code>, the <var>animation
-          value</var> for that animation at given current time <var>t</var> is
-          calculated by following the procedure outlined in
-          <a href="#combining-animations" class="sectionRef"></a>, treating
-          the list of <code>WebAnimationFunction</code> objects contained
-          within the <code>WebGroupedAnimationFunction</code> as the animation
-          stack.
-        </p>
-      </section>
+          </section>
+          <section>
+            <h4>Calculating the animation value for a 
+              <code>WebGroupedAnimationFunction</code></h4>
+            <p>
+              When a <code>WebAnimation</code> contains a pointer to a
+              <code>WebGroupedAnimationFunction</code>, the <var>animation
+              value</var> for that animation at given current time <var>t</var> 
+              is calculated by following the procedure outlined in
+              <a href="#resolving-animation-stacks" class="sectionRef"></a>, 
+              treating the list of <code>WebAnimationFunction</code> objects 
+              contained within the <code>WebGroupedAnimationFunction</code> as 
+              the animation stack and using an initial animation value 
+              of 0 for all simple properties and id for transform.
+            </p>
+          </section>
       <p>
         Need to add:
         <ul>
@@ -2604,7 +2610,6 @@
           (want to allow a series of splines, not just four points)</li>
           <li>Custom easing functions</li>
           <li>Pace control (e.g. <code>pace="10px/s"</code>?)</li>
-          <li>Motion on a path</li>
           <li>General functional syntax</li>
           <li>&lsquo;to&rsquo; animation</li>
         </ul>
@@ -2623,7 +2628,7 @@
     <section>
       <h2>Combining animations</h2>
       <section>
-        <h3>The Animation Stack</h3>
+        <h3>The Global Animation Stack</h3>
         <p>
           When multiple active animations target the same element, the
           animations are ordered into a stack which resolves how those 
@@ -2634,7 +2639,12 @@
           sorted after DOM animations.
         </p>
         <p>
-          The animation stack may be thought of as a single stack with all
+          Other operations also generate animation stacks - for example, 
+          grouping multiple animations using a 
+          <code>WebGroupedAnimationFunction</code>.
+        </p>
+        <p>
+          An animation stack may be thought of as a single stack with all
           animations sorted into it, or a stack per animating element, as
           animations on one element cannot effect the course of animations on 
           another element.
@@ -2654,28 +2664,25 @@
         </p>
       </section>
       <section>
-        <h3>Resolving the Animation Stack</h3>
+        <h3>Resolving Animation Stacks</h3>
         <p>
-          To calculate the current animation value for elements and properties
-          from the animation stack, an animation value is generated for each
-          animation in the stack.
+          In order to resolve an animation stack, an initial animation
+          value is required for each element and property animated by the
+          stack.
+          To calculate a current animation value for elements and properties
+          from an animation stack, an animation value is generated for each
+          animation in the stack 
+          (see <a href="#calculating-animation-values" class="sectionRef"></a>).
+          The cumulative animation result for each element and property is first
+          initialised to the relevant initial animation value.
           Starting at the bottom of the stack (i.e. earliest start time) and
-          working up, the first encountered value relevant to each property of
-          an element is adopted as the cumulative animation result for that
-          element and property.
-          As subsequent animation results are encountered for the same element
+          working up, as animation results are encountered for an element
           and property, these are merged into the cumulative animation result
           using the animation combinator stored in the 
-          <code>WebAnimationFunction</code>s that generate each subsequent
-          result.
+          <code>WebAnimationFunction</code> that generated the result.
           Once all animation results in the stack are processed, the resulting
           cumulative animation values are the current animation values for
           each property of each element that is animated.
-        </p>
-        <p class="todo">
-          Are we going to go down the path of base- and anim-val, like SVG
-          does?
-          Or direct manipulation of properties, like CSS?
         </p>
       </section>
       <section>
@@ -2701,9 +2708,7 @@
           <p>
             When a path animation <code>a</code> is composited over a
             cumulative animation result <code>c</code> using the ACCUMULATE
-            combinator, the effective transform of <code>a</code> is calculated
-            (see 
-            <a href="#animations-in-the-timeline" class="sectionRef"></a>).
+            combinator, the effective transform of <code>a</code> is calculated.
             This transform is then post-multiplied to the cumulative animation
             result to generate a new cumulative animation result.
           </p>
@@ -2736,21 +2741,17 @@
             When a path animation <code>a</code> is composited over a
             cumulative animation result <code>c</code> using the MERGE
             combinator, the effective transform of <code>a</code> is
-            calculated (see 
-            <a href="#animations-in-the-timeline" class="sectionRef"></a>).
+            calculated.
             This transform is then interpolated with <code>c</code> using the
-            rules provided in ??? to provide the new cumulative animation
-            result.
-          </p>
-          <p class="todo">
-            Reference the CSS Transforms Module Level 3 here and below.
+            rules provided in [[!CSS3-2D-TRANSFORMS]] to provide the new
+            cumulative animation result.
           </p>
           <p>
             When a transform animation <code>a</code> is composited over a
             cumulative animation result <code>c</code> using the MERGE
             combinator, <code>a</code> is interpolated with <code>c</code>
-            using the rules provide in ??? to provide the new cumulative
-            animation result.
+            using the rules provide in [[!CSS3-2D-TRANSFORMS]] to provide the 
+            new cumulative animation result.
           </p>
           <p>
             When a simple animation <code>a</code> is composited over a
@@ -2760,6 +2761,41 @@
             of <code>(1-p)</code> and <code>p</code> respectively.
           </p>
         </section>
+      </section>
+      <section>
+        <h3>Computing the override stylesheet</h3>
+        <p>
+          The override stylesheet contains output animation values and
+          acts with a higher priority than all other stylesheets. However,
+          !important rules from all other stylesheets act with a higher priority
+          than the override stylesheet.
+          The override stylesheet is regenerated for each timepoint in a
+          document using the following process:
+        </p>
+        <ol>
+          <li>
+            A global animation stack is generated as described in 
+            <a href="#the-global-animation-stack" class="sectionRef"></a>.
+          </li>
+          <li>
+            An initial animation value is generated by taking the current
+            style for each object (ignoring the override stylesheet) and
+            extracting a value for each animated property.
+          </li>
+          <li>
+            The global animation stack is resolved using the initial animation
+            value and the process in 
+            <a class="sectionRef" href="#resolving-animation-stacks"></a>.
+          </li>
+          <li>
+            The current animation values generated by this process are inserted
+            into the override stylesheet.
+          </li>
+          <p class="todo">
+            Do we need to work out how to use the override stylesheet for
+            elements that don't have an id but are targetted for animations?
+          </p>
+        </ol>
       </section>
     </section>
 
