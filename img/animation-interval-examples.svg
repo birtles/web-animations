@@ -5,8 +5,8 @@
   <defs>
     <style type="text/css">
     svg {
-      font-size: 1.2em;
-      font-face: sans-serif;
+      font-size: 19px;
+      font-family: sans-serif;
     }
 
     /*
@@ -21,10 +21,6 @@
     .dottedArrow {
       stroke-dasharray: 4 4;
       stroke-width: 2;
-    }
-    .fillArrowHead {
-      fill: black;
-      stroke: none;
     }
     .bracket {
       stroke: black;
@@ -53,11 +49,19 @@
       fill: navy;
     }
     </style>
-    <!-- Markers -->
+
+    <!-- Arrows -->
+    <style type="text/css">
+      .blackArrowHead {
+        fill: black;
+        stroke: none;
+      }
+    </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
       markerHeight="5">
-      <path d="M0-5l10 5l-10 5z" class="filledArrowHead"/>
+      <path d="M0-5l10 5l-10 5z" class="blackArrowHead"/>
     </marker>
+
     <!-- Star -->
     <style type="text/css">
       .startTimeStar {

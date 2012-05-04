@@ -5,8 +5,13 @@
   <defs>
     <style type="text/css">
     svg {
-      font-size: 1.2em;
+      font-size: 19px;
+      font-family: sans-serif;
     }
+
+    /*
+     * Line work
+     */
     .arrowLine {
       stroke: black;
       stroke-width: 1.5;
@@ -25,12 +30,6 @@
       text-anchor: start;
       font-size: 30px;
     }
-    .startTimeStar {
-      stroke: blue;
-      stroke-linecap: round;
-      stroke-width: 2;
-      fill: none;
-    }
     .startTimeLabel {
       fill: blue;
       text-anchor: start;
@@ -45,14 +44,34 @@
     .tLineLabel {
       fill: red;
       font-size: 35px;
+      font-style: italic;
     }
+    </style>
+
+    <!-- Arrows -->
+    <style type="text/css">
+      .blackArrowHead {
+        fill: black;
+        stroke: none;
+      }
     </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
       markerHeight="5">
-      <path d="M0-5l10 5l-10 5z"/>
+      <path d="M0-5l10 5l-10 5z" class="blackArrowHead"/>
     </marker>
+
+    <!-- Star -->
+    <style type="text/css">
+      .startTimeStar {
+        stroke: blue;
+        stroke-linecap: round;
+        stroke-width: 2;
+        fill: none;
+      }
+    </style>
     <path d="M-3.5-3.5l7 7M3.5-3.5l-7 7M0-5v10M-5 0h10"
       class="startTimeStar" id="star"/>
+
     <!-- Fade out effect -->
     <mask id="fadeout" maskContentUnits="objectBoundingBox">
       <rect x="-0.05" y="-0.05" width="1.1" height="1.1"

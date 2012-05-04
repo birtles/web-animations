@@ -5,8 +5,10 @@
   <defs>
     <style type="text/css">
     svg {
-      font-size: 1.2em;
+      font-size: 19px;
+      font-family: sans-serif;
     }
+
     .line, .arrowLine {
       stroke: black;
       stroke-width: 1.5;
@@ -34,9 +36,17 @@
       fill: chocolate;
     }
     </style>
+
+    <!-- Arrows -->
+    <style type="text/css">
+      .blackArrowHead {
+        fill: black;
+        stroke: none;
+      }
+    </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
       markerHeight="5">
-      <path d="M0-5l10 5l-10 5z"/>
+      <path d="M0-5l10 5l-10 5z" class="blackArrowHead"/>
     </marker>
   </defs>
   <!-- Timeline -->

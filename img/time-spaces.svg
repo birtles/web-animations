@@ -5,11 +5,13 @@
   <defs>
     <style type="text/css">
     svg {
-      font-size: 1.2em;
+      font-size: 19px;
+      font-family: sans-serif;
     }
-    .parentTimelineLabel {
-      font-size: 0.8em;
-    }
+
+    /*
+     * Line work
+     */
     .line, .arrowLine, .dottedArrow, .doubleArrowLine {
       stroke: black;
       stroke-width: 1.5;
@@ -26,15 +28,20 @@
       marker-start: url(#reverseArrow);
       marker-end: url(#arrow);
     }
-    .activeSpan  {
-      fill: aqua;
+
+    /*
+     * Animation spans
+     */
+    .animatingSpan  {
+      fill: paleturquoise;
       stroke: black;
     }
-    .startTimeStar {
-      stroke: blue;
-      stroke-linecap: round;
-      stroke-width: 2;
-      fill: none;
+
+    /*
+     * Text labels
+     */
+    .documentTimelineLabel {
+      font-size: 0.8em;
     }
     .timeLabel {
       text-anchor: middle;
@@ -47,6 +54,13 @@
       font-size: 0.6em;
       text-anchor: middle;
     }
+    .legendText {
+      font-size: 0.7em;
+    }
+
+    /*
+     * Time space lines
+     */
     .itemTime {
       stroke: purple;
       stroke-width: 3;
@@ -85,25 +99,42 @@
       stroke: green;
       stroke-width: 2;
     }
-    .legendText {
-      font-size: 0.7em;
-    }
+    </style>
+
+    <!-- Arrows -->
+    <style type="text/css">
+      .blackArrowHead {
+        fill: black;
+        stroke: none;
+      }
     </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
       markerHeight="5">
-      <path d="M0-5l10 5l-10 5z"/>
+      <path d="M0-5l10 5l-10 5z" class="blackArrowHead"/>
     </marker>
     <marker id="reverseArrow" viewBox="-10 -5 10 10" orient="auto"
       markerWidth="5" markerHeight="5">
-      <path d="M0-5l-10 5l10 5z"/>
+      <path d="M0-5l-10 5l10 5z" class="blackArrowHead"/>
     </marker>
+
+    <!-- Star -->
+    <style type="text/css">
+      .startTimeStar {
+        stroke: blue;
+        stroke-linecap: round;
+        stroke-width: 2;
+        fill: none;
+      }
+    </style>
+    <path d="M-3.5-3.5l7 7M3.5-3.5l-7 7M0-5v10M-5 0h10"
+      class="startTimeStar" id="star"/>
+
     <path d="M-3.5-3.5l7 7M3.5-3.5l-7 7M0-5v10M-5 0h10"
       class="startTimeStar" id="star"/>
   </defs>
-  <!-- Parent iteration timeline -->
+  <!-- Document timeline -->
   <g>
-    <text x="43" y="1em" class="parentTimelineLabel">Parent
-      iteration time</text>
+    <text x="43" y="1em" class="documentTimelineLabel">Document time</text>
     <line x1="40" x2="95%" y1="22" y2="22" class="arrowLine"/>
     <path d="M40 20v4" class="line"/>
     <text x="40" y="3em" class="localTimelineTick">0</text>
@@ -125,7 +156,7 @@
     </g>
     <!-- Animation shaded areas -->
     <g transform="translate(0 120)">
-      <rect x="75" width="250" height="100" class="activeSpan"/>
+      <rect x="75" width="250" height="100" class="animatingSpan"/>
       <use xlink:href="#star"/>
     </g>
     <!-- Local timeline -->
@@ -147,7 +178,7 @@
       <path d="M270-108l80-32" class="itemTimeMask"/>
       <path d="M-25 10l375-150" class="itemTime"/>
       <!-- Animation time -->
-      <path d="M75 0l250-100" class="animationTime"/>
+      <path d="M-25 0h100l250-100h25" class="animationTime"/>
       <!-- Iteration time solid parts -->
       <path d="M-25 0h100l100-40m0 40l100-40m0 40l50-20h25"
         class="iterationTime" mask="url(#excludedEndPoints)"/>

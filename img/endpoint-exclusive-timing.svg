@@ -4,20 +4,65 @@
   <defs>
     <style type="text/css">
     svg {
-      font-size: 1.2em;
+      font-size: 19px;
+      font-family: sans-serif;
     }
-    .line, .intervalBoundary, .arrowLine {
+
+    /*
+     * Line work
+     */
+    .line, .arrowLine, .dottedArrow, .doubleArrowLine {
       stroke: black;
       stroke-width: 1.5;
       fill: none;
     }
-    .arrowLine {
+    .arrowLine, .dottedArrow {
       marker-end: url(#arrow);
     }
-    .intervalBoundary {
-      stroke: darkblue;
-      stroke-opacity: 0.5;
+    .dottedArrow {
+      stroke-dasharray: 4 4;
+      stroke-width: 2;
     }
+    .doubleArrowLine {
+      marker-start: url(#reverseArrow);
+      marker-end: url(#arrow);
+    }
+    .bracket {
+      stroke: black;
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    /*
+     * Animation spans
+     */
+    .animatingSpan  {
+      fill: paleturquoise;
+      stroke: black;
+    }
+    .groupRepeatBoundary, .animRepeatBoundary {
+      stroke-dasharray: 4 4;
+    }
+    .groupRepeatBoundary {
+      stroke: darkgreen;
+      stroke-width: 3;
+    }
+    .animRepeatBoundary {
+      stroke: navy;
+      stroke-width: 2;
+    }
+    .animationA  {
+      fill: paleturquoise;
+      stroke: black;
+    }
+    .animationB  {
+      fill: mistyrose;
+      stroke: black;
+    }
+
+    /*
+     * Text labels
+     */
     .timelineLabel {
       font-size: 0.7em;
     }
@@ -25,12 +70,14 @@
       font-size: 0.6em;
       text-anchor: middle;
     }
-    .animatingSpan  {
-      fill: aqua;
-      stroke: black;
+    .legendText {
+      font-size: 0.7em;
     }
-    .iterationTime, .animationATime, .animationBTime
-    {
+
+    /*
+     * Time values
+     */
+    .iterationTime, .animationATime, .animationBTime {
       stroke-width: 3;
       fill: none;
       stroke-linecap: round;
@@ -53,17 +100,6 @@
     .iterationTimeIncludedPoint {
       fill: green;
     }
-    .legendText {
-      font-size: 0.7em;
-    }
-    .animationA  {
-      fill: paleturquoise;
-      stroke: black;
-    }
-    .animationB  {
-      fill: mistyrose;
-      stroke: black;
-    }
     .animationATime,
     .animationAExcludedPoint,
     .animationAIncludedPoint {
@@ -81,9 +117,17 @@
       fill: red;
     }
     </style>
+
+    <!-- Arrows -->
+    <style type="text/css">
+      .blackArrowHead {
+        fill: black;
+        stroke: none;
+      }
+    </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
       markerHeight="5">
-      <path d="M0-5l10 5l-10 5z"/>
+      <path d="M0-5l10 5l-10 5z" class="blackArrowHead"/>
     </marker>
   </defs>
   <!-- Repeated -->
@@ -112,7 +156,7 @@
       <!-- Animation shaded areas -->
       <g transform="translate(0 55)">
         <rect width="400" height="100" class="animatingSpan"/>
-        <path d="M160 0v100m160-100v100" class="intervalBoundary"/>
+        <path d="M160 0v100m160-100v100" class="animRepeatBoundary"/>
       </g>
       <!-- Iteration time -->
       <g transform="translate(0 155)">

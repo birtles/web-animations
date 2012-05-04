@@ -64,6 +64,8 @@
               company: "Adobe Systems", companyURL: "http://www.adobe.com/" },
             { name: "Alex Danilo", mailto: "adanilo@google.com",
               company: "Google, Inc", companyURL: "http://www.google.com/" },
+            { name: "Dmitry Baranovskiy", mailto: "baranovs@adobe.com",
+              company: "Adobe Systems", companyURL: "http://www.adobe.com/" },
         ],
 
         // authors, add as many as you like.
@@ -166,6 +168,61 @@
     </section>
 
     <section class="informative">
+      <h2>Web Animations overview</h2>
+      <p>
+        At a glance, Web Animations can be considered in two largely independent
+        pieces, a <em>timing model</em> and a <em>animation model</em>. The role
+        of these pieces is as follows:
+      </p>
+      <dl>
+        <dt>Timing model</dt>
+        <dd>
+          Takes a moment in time and converts it to a proportional distance
+          within a single iteration of an animation.
+        </dd>
+        <dt>Animation model</dt>
+        <dd>
+          Takes the distances produced by the timing model and converts them
+          into a series of values to apply to the target properties and
+          attributes.
+        </dd>
+      </dl>
+      <p>
+        Graphically, this flow can be represented as follows:
+      </p>
+      <div class="figure">
+        <object data="img/timing-and-animation-models.svg" width="700"></object>
+      </div>
+      <p class="caption">
+        Overview of the operation of Web Animations.<br>
+        The current time is input to the timing model which produces a distance
+        within an iteration.<br>
+        This distance is used as input to the animation model which produces the
+        values to apply.
+      </p>
+      <p>
+        For example, consider an animation that:
+      </p>
+      <ul>
+        <li>starts after 3 seconds,</li>
+        <li>runs twice,</li>
+        <li>takes 2 seconds every time, and</li>
+        <li>changes the width of a rectangle from 50 to 100.</li>
+      </ul>
+      <p>
+        The first three points apply to the timing model.
+        At a time of 6 seconds, it will calculate that the animation should be
+        half way through its second iteration and produces the result 0.5.
+        The animation model then uses that information to calculate a width for
+        the rectangle of 75.
+      </p>
+      <p>
+        This specification begins with the timing model and then proceeds to the
+        animation model.
+      </p>
+    </section>
+
+    <section class="informative">
       <h2>The animation timeline</h2>
       <p>
         Each document contains a timeline to which animations may be added.
@@ -176,8 +233,8 @@
       </div>
       <p class="caption">
         At time <em>t</em> animations A and B are animating.
-        Animation C has finished animating and is now inactive.
-        Animation D has yet to begin and is also inactive.
+        Animation C has finished animating.
+        Animation D has yet to begin and is not animating.
       </p>
       <section>
         <h3>Start of the timeline</h3>
@@ -268,6 +325,14 @@
         </dd>
       </dl>
       <p class="todo">
+        Need to define somewhere how this works for
+        <code>WebAnimationGroup</code> and
+        <code>WebAnimationGroupInstance</code> objects. Does changing one object
+        affect the whole tree? Does changing the children of an
+        <code>WebAnimationGroup</code> affect live
+        <code>WebAnimationGroupInstance</code> objects?
+      </p>
+      <p class="todo">
         Add a non-normative diagram which shows a live animation instance and an
         independent one.
       </p>
@@ -340,7 +405,7 @@
           <dl title="[Constructor] interface WebAnimation" class="idl">
             <dt>attribute WebTiming timing</dt>
             <dd>
-              The timing parameters to use for generated animations.
+              The timing parameters to use for generated animation instances.
             </dd>
             <dt>attribute WebAnimationFunction function</dt>
             <dd>
@@ -351,10 +416,9 @@
               <p>
                 Creates a series of independent
                 <code>WebAnimationInstance</code> objects, one for each element
-                in <code>target</code>. For each <code>element</code> in
-                <code>target</code> the associated animation is appended to the
-                animation group corresponding to
-                <code>element.ownerDocument.animationRoot</code>.
+                in <code>target</code>.
+                Each such <code>WebAnimationInstance</code> object is appended
+                to <code>element.ownerDocument.animationTimeline</code>.
               </p>
               <dl class="parameters">
                 <dt>any target</dt>
@@ -369,12 +433,20 @@
                 </dd>
                 <dt>optional float startTime</dt>
                 <dd>
-                  The start time for the animation instance in the time space of
-                  the <code>WebAnimationGroupInstance</code> to which it is
-                  appended.
-                  If this parameter is not specified it will default to the
-                  current time of the <code>WebAnimationGroupInstance</code> to
-                  which it is appended.
+                  <p>
+                    The start time for the generated animation instances
+                    expressed in seconds in the iteration time space of the
+                    <code>WebAnimationGroupInstance</code> to which it is
+                    appended (see <a href="#iteration-time-and-animation-time"
+                      class="sectionRef"></a>).
+                  </p>
+                  <p>
+                    If this parameter is not specified it will default to the
+                    current iteration time of the
+                    <code>WebAnimationGroupInstance</code> to which it is
+                    appended if it is not <code>null</code>, otherwise it will
+                    default to zero.
+                  </p>
                 </dd>
               </dl>
             </dd>
@@ -403,15 +475,18 @@
                 <dt>optional float startTime</dt>
                 <dd>
                   <p>
-                    Represents a time in the context of the
-                    <code>WebAnimationGroupInstance</code> to which the
-                    generated <code>WebAnimationInstance</code> objects will be
-                    appended.
+                    The start time for the generated animation instances
+                    expressed in seconds in the iteration time space of the
+                    <code>WebAnimationGroupInstance</code> to which it is
+                    appended (see <a href="#iteration-time-and-animation-time"
+                      class="sectionRef"></a>).
                   </p>
                   <p>
                     If this parameter is not specified it will default to the
-                    current time of <code>parentGroup</code> if it is not
-                    <code>null</code>, otherwise it will default to zero.
+                    current iteration time of the
+                    <code>WebAnimationGroupInstance</code> to which it is
+                    appended if it is not <code>null</code>, otherwise it will
+                    default to zero.
                   </p>
                 </dd>
               </dl>
@@ -462,8 +537,10 @@
             </p>
             <ul>
               <li>Specify an explicit parent group</li>
-              <li>Use the default animation group (<code>animationRoot</code>)
-              of the element's <code>ownerDocument</code></li>
+              <li>
+                Use the default animation group (<code>animationTimeline</code>)
+                of the element's <code>ownerDocument</code>
+              </li>
               <li>Have no parent group (This is particularly important
               animations destined for sequential animation groups containers
               where the order of children is important and so you might want to
@@ -526,11 +603,26 @@
           An animation instance is considered <em>active</em> if it is in either
           the <em>animating</em> or <em>filling</em> state.
         </p>
-        <div class="todo">
-          <p>
-            Add a diagram showing these states.
-          </p>
+        <p>
+          An animation may not enter all of these states depending on when it
+          starts, its duration, and the fill behavior defined (see <a
+          href="#animation-fill-behavior" class="sectionRef"></a>). An example
+          sequence of states is illustrated below.
+        </p>
+        <div class="figure">
+          <object data="img/animation-states.svg" width="600"></object>
         </div>
+        <p class="caption">
+          An example of the animation states for an animation with a forwards
+          fill.<br>
+          The animation is initially inactive. This may be due to a positive
+          delay or positive start time (see <a href="#the-animation-interval"
+          class="sectionRef"></a>).<br>
+          Then the animation begins executing and enters the animating
+          state.<br>
+          When the animation has completed, a forwards fill is applied and the
+          animation enters the filling state.
+        </p>
         <section>
           <h3>The animation interval</h3>
           <p>
@@ -567,10 +659,71 @@
           </p>
         </section>
       </section>
-      <section>
+      <section class="informative">
         <h3>Animation fill behavior</h3>
-        <p class="todo">
-          TBD.
+        <p>
+          Outside of the animation interval, an animation instance may still
+          effect its target depending on its fill mode. The different modes are
+          as follows:
+        </p>
+        <dl>
+          <dt>none</dt>
+          <dd>
+            The animation instance does not effect its target outside the active
+            interval.
+          </dd>
+          <dt>forwards</dt>
+          <dd>
+            For times that occur later than the animation interval, the
+            animation instance will continue to apply to its target the
+            animation value that was used at the end of the animation interval.
+
+            For times that occur before the animation interval, the animation
+            instance will not effect its target.
+          </dd>
+          <dt>backwards</dt>
+          <dd>
+            For times that occur before the animation interval, the animation
+            instance will apply the same animation value that will be used at
+            the start of the animation interval.
+
+            For times that occur later than the animation interval, the
+            animation instance will not effect its target.
+          </dd>
+          <dt>both</dt>
+          <dd>
+            For times that occur before the animation interval, the backwards
+            fill behavior is used.
+
+            For times that occur after the animation interval, the forwards fill
+            behavior is used.
+          </dd>
+        </dl>
+        <p>
+          Some examples of the these fill modes and the corresponding animation
+          states are illustrated below.
+        </p>
+        <div class="figure">
+          <object data="img/animation-state-and-fill-behavior.svg"
+            width="600"></object>
+        </div>
+        <p class="caption">
+          Examples of various fill modes and the animation states produced.<br>
+          (a) fill mode &lsquo;none&rsquo;. The animation instance never enters
+          the filling state.<br>
+          (b) fill mode &lsquo;forwards&rsquo;. The animation instance enters
+          the filling state after the animation interval has complete.<br>
+          (c) fill mode &lsquo;backwards&rsquo;. The animation instance enter
+          the filling state until the start of the animation interval.<br>
+          (d) fill mode &lsquo;both&rsquo;. Outside of the animation interval
+          the animation instance is in the filling state.
+        </p>
+        <p>
+          The normative definition of fill behavior is incorporated in the
+          calculation of the animation time in <a
+          href="#calculating-the-animation-time" class="sectionRef"></a> and the
+          calculation of the iteration time in <a
+          href="#calculating-the-iteration-time" class="sectionRef"></a>.
         </p>
       </section>
       <section class="informative">
@@ -579,34 +732,31 @@
           Times in Web Animations are relative to some point of reference. These
           different points of reference produce different time spaces.
         </p>
-        <p class="todo">
-          Re-introduce coordinate space analogue? Drop "document time space" and
-          "parent iteration time space" ?
+        <p>
+          This can be compared to coordinate spaces as used in computer
+          graphics.
+          The zero time of a time space is analogous to the origin of
+          a coordinate space.
         </p>
         <p>
-          Within Web Animations, the following time spaces are used:
+          Within Web Animations, some of the common time spaces are:
         </p>
         <dl>
           <dt>Document time space</dt>
           <dd>
-            A time space whose zero point is the start time of the document
+            A time space whose zero time is the start time of the document
             timeline as defined in <a href="#start-of-the-timeline"
             class="sectionRef"></a>.
           </dd>
-          <dt>Parent iteration time space</dt>
-          <dd>
-            A time space whose zero time is the beginning of the parent
-            animation group's current iteration.
-            Unless the document creates additional animation groups, this will
-            be equivalent to document time.
-          </dd>
           <dt>Item time space</dt>
           <dd>
-            A time space whose zero time is when the item becomes active.
+            A time space whose zero time is the timed item's (e.g. an animation
+            instance) start time.
           </dd>
           <dt>Animation time space</dt>
           <dd>
-            A time space whose zero time is when the item begins animating.
+            A time space whose zero time is the beginning of a timed item's
+            animation interval.
           </dd>
           <dt>Iteration time space</dt>
           <dd>
@@ -618,7 +768,15 @@
           </dd>
         </dl>
         <p>
-          Some of these time spaces are demonstrated below.
+          In addition to these time spaces, when animation groups are used (see
+          <a href="#grouping-and-synchronization" class="sectionRef"></a>) we
+          can talk about the <em>parent iteration time space</em>. The zero time
+          of <em>parent iteration time space</em> is the beginning of the parent
+          animation group's current iteration. When animation groups are not
+          used, this is equivalent to <em>document time space</em>.
+        </p>
+        <p>
+          Some of these time spaces are illustrated below.
         </p>
         <div class="figure">
           <object data="img/time-spaces.svg" width="600"></object>
@@ -628,10 +786,16 @@
           animation with a iteration duration of 1s and an iteration count of
           2.5.
         </p>
-        <p class="todo">
-          Need to explain that while the time space is unbounded, some times
-          as-used-in-Web-Animations are clamped??? Either that or just remove
-          the clamped parts from the diagram.
+        <p>
+          Note that while the time spaces themselves are not bounded, Web
+          Animations defines <var>animation time</var> and <var>iteration
+          time</var> such that they are clamped to a set range as shown in the
+          diagram.
+          For example, whilst a time of -1 second is a valid time in
+          <em>animation time space</em>, querying the <var>animation time</var>
+          of an animation instance will never return a negative value due to the
+          clamping performed when this value is calculated (see <a
+          href="#calculating-the-animation-time" class="sectionRef"></a>).
         </p>
         <section>
           <h4>Iteration duration and animation duration</h4>
@@ -875,8 +1039,18 @@
           <dt>readonly attribute float startTime</dt>
           <dd>
             <p>
-              The time at which the animation becomes active expressed in
-              seconds relative to the parent animation group.
+              The start of the animation interval before applying
+              <code>startDelay</code> expressed in seconds in the iteration time
+              space of <code>parentGroup</code>.
+            </p>
+            <p>
+              The value returned may not correspond to the value specified when
+              creating the item (e.g. using <code>WebAnimation.animate</code>).
+              For example, when the parent animation group instance is
+              a sequence group, the value will be determined by the procedure
+              defined in <a
+              href="#calculating-the-start-time-of-children-of-a-sequence-group"
+              class="sectionRef"></a>.
             </p>
             <p class="todo">
               As with <code>endTime</code> and the proposed <code>stop()</code>
@@ -979,7 +1153,7 @@
         </div>
         <div class="todo">
           <p>
-            Do we need means for getting the startTime etc. in document
+            Do we need a means for getting the startTime etc. in document
             time (i.e. in terms of the root time container)?
           </p>
         </div>
@@ -1266,7 +1440,7 @@
                 If the <var>iteration duration</var> is infinite, the
                 result of <code>floor(<var>animation time</var> /
                 <var>iteration duration</var>)</code> will be zero as defined by
-                IEEE 754.
+                IEEE 754-2008.
               </p>
             </li>
           </ol>
@@ -1532,27 +1706,42 @@
         <dl>
           <dt>Parallel groups</dt>
           <dd>
-            TBD
+            Children of the group play simultaneously.
+            The start time of children is taken as relative to the start of the
+            current iteration of the group, that is, it is in the group's
+            <em>iteration time space</em>.
           </dd>
           <dt>Sequence groups</dt>
           <dd>
-            TBD
+            Children of the group play in turn beginning with the first child
+            and proceeding to the last.
+            Any start time specified on children is ignored and replaced with
+            the time calculated using the procedure in <a
+              href="#calculating-the-start-time-of-children-of-a-sequence-group"
+              class="sectionRef"></a>.
           </dd>
           <dt>Media groups</dt>
           <dd>
-            TBD
+            Children of the group play simultaneously as with parallel groups,
+            however, any seek or pause operations performed on a child of
+            a media group are delegated to the group itself. As such, all
+            children remain in strict synchronization.
           </dd>
         </dl>
+        <p class="todo">
+          Need to explain (with diagrams) that by using negative start delays
+          on children of a sequence group you make the animation intervals of
+          the children overlap.
+        </p>
       </section>
-      <p>
-        Integration with <code>&lt;video&gt;</code> etc.
-      </p>
       <section>
         <h3>The document timeline</h3>
         <p>
-          TBD.
-          Describe how the document timeline is just an animation group instance
-          with the following special properties:
+          We have previously referred to the document timeline as the context in
+          which animation takes places. Likewise we have referred to the
+          <em>document time space</em> as the master time space which contains
+          other time spaces. The document timeline is, in fact, a parallel
+          animation group instance with the following special properties:
         </p>
         <ul>
           <li>
@@ -1560,40 +1749,26 @@
             <code>parentGroup</code> property returns <code>null</code>.
           </li>
           <li>
-            A lot of other properties are read-only like
-            <code>iterationCount</code> etc.
+            Attempting to set the <code>type</code> property will result in a
+            DOMException (code: NO_MODIFICATION_ALLOWED_ERR) being thrown.
           </li>
           <li>
-            Its startTime represents real-world time??? Can we align with the
-            timestamps used in DOM (e.g. for events) here?
+            Calls to <code>cancel()</code> will result in a DOMException (code:
+            HIERARCHY_REQUEST_ERR) being thrown.
+          </li>
+          <li>
+            For properties that represent times in <em>parent iteration time
+            space</em> a time space whose zero time is 00:00:00 UTC on 1 January
+            1970 is used instead.
+            For example, the <code>startTime</code> property of the document
+            timeline represents the number of seconds between 00:00:00 UTC on
+            1 January 1970 and when the timeline started (see <a
+              href="#start-of-the-timeline" class="sectionRef"></a>).
           </li>
         </ul>
-      </section>
-      <section>
-        <h3>Calculating the intrinsic duration of an animation group instance
-        </h3>
-        <p>
-          TBD, but basically:
+        <p class="todo">
+          Move/copy exception behavior to the relevant properties / methods.
         </p>
-        <dl class="switch">
-          <dt>If the type is parallel,</dt>
-          <dd>
-            Calc the endTime for each child and take the max
-          </dd>
-          <dt>If the type is sequence</dt>
-          <dd>
-            Sum all the animation durations + start delays (including
-            negatives)
-          </dd>
-          <dt>If the type is media group</dt>
-          <dd>
-            Same as parallel?
-          </dd>
-        </dl>
-      </section>
-      <section>
-        <h3>Calculating the start time for children of a sequence group</h3>
-        <p>TBD</p>
       </section>
       <section>
         <h3>The <code>WebAnimationGroupInstance</code> interface</h3>
@@ -1641,18 +1816,6 @@
         <dl title="[Constructor] interface WebAnimationGroupInstance
                    : WebTimedItem"
           class="idl">
-          <dt>const unsigned short WEBA_SYNC_PAR = 0</dt>
-          <dd>
-            Parallel synchronization.
-          </dd>
-          <dt>const unsigned short WEBA_SYNC_SEQ = 1</dt>
-          <dd>
-            Sequence synchronization.
-          </dd>
-          <dt>const unsigned short WEBA_SYNC_MEDIA = 2</dt>
-          <dd>
-            Media group synchronization.
-          </dd>
           <dt>readonly attribute unsigned long length</dt>
           <dd>
             The number of timed items in the group.
@@ -1662,7 +1825,7 @@
             <p>
               The type of synchronization provided by this animation group
               instance as specified by one of the <code>WEBA_SYNC_*</code>
-              constants defined in this interface.
+              constants defined on the WebAnimationGroup interface.
             </p>
             <p>
               Setting this value has the following effect:
@@ -1682,11 +1845,8 @@
                 Seek the container time to zero.
               </li>
               <li>
-                Calculate the effective start time of each child in the
+                Calculate effective start time of each child in the
                 animation group instance using the new synchronization type.
-                <span class="todo">(Need a cross-reference to somewhere where we
-                describe this behavior and define things like "effective
-                start time".)</span>
               </li>
               <li>
                 Seek the container time to the previously recorded time.
@@ -1734,8 +1894,8 @@
             <p>Exceptions:</p>
             <ul>
               <li>HIERARCHY_REQUEST_ERR: Raised if <code>newItem</code> is
-              a root animation group for a document <span class="todo">(need
-              cross-ref here)</span>.</li>
+              the document timeline for a document (see <a
+                href="#the-document-timeline" class="sectionRef"></a>).</li>
               <li>NOT_FOUND_ERR: Raised if <code>refItem</code> is not a child
               of this group.</li>
             </ul>
@@ -1745,9 +1905,10 @@
             Returns the item at <code>index</code>. If <code>index</code> is
             greater than or equal to <code>length</code> returns
             <code>null</code>. Equivalent to
-            <code>WebAnimationGroup[index]</code>. <span class="todo">(Need to
-            work out how to define this behavior&mdash;i.e. that you can use the
-            subscript operator)</span>
+            <code>WebAnimationGroupInstance[index]</code>.
+            <span class="todo">(Need to work out how to define this
+              behavior&mdash;i.e. that you can use the subscript
+              operator)</span>
           </dd>
           <dt>WebTimedItem? remove (WebTimedItem removedItem)</dt>
           <dd>
@@ -1775,6 +1936,284 @@
             when this method was called.
           </dd>
         </dl>
+      </section>
+      <section>
+        <h3>Calculating the intrinsic duration of an animation group instance
+        </h3>
+        <p>
+          TBD, but basically:
+        </p>
+        <dl class="switch">
+          <dt>If the type is parallel,</dt>
+          <dd>
+            Calc the endTime for each child and take the max
+          </dd>
+          <dt>If the type is sequence</dt>
+          <dd>
+            Sum all the animation durations + start delays (including
+            negatives)
+          </dd>
+          <dt>If the type is media group</dt>
+          <dd>
+            Same as parallel
+          </dd>
+        </dl>
+      </section>
+      <section>
+        <h3>Calculating the start time of children of a sequence group</h3>
+        <p>
+          The start time for the children of a sequence animation group instance
+          is calculated according to the following procedure:
+        </p>
+        <ol>
+          <li>Let the <var>accumulated start time</var> be zero.
+          <li>
+            Iterate over each child in the group beginning with the first item
+            in the group and proceeding to the last.
+            For each child perform the following steps:
+            <ol>
+              <li>
+                Let the start time of the child be <var>accumulated start
+                time</var>
+              </li>
+              <li>
+                Increment <var>accumulated start time</var> by
+                <code><var>start delay</var> + <var>animation
+                duration</var></code>
+              </li>
+            </ol>
+          </li>
+        </ol>
+        <p class="note">
+          When <var>animation duration</var> is positive infinity the behavior
+          is defined by IEEE 754-2008.
+          In effect, if any of the children of a sequence animation group
+          instance has an infinite animation duration, any children that occur
+          later in the sequence will not play.
+        </p>
+      </section>
+      <section>
+        <h3>The <code>WebAnimationGroup</code> interface</h3>
+        <p>
+          <code>WebAnimationGroupInstance</code> objects are not created
+          directly, but rather via a <code>WebAnimationGroup</code> object that
+          acts as a template for creating animation group instances that target
+          different elements.
+        </p>
+        <div class="todo">
+          <p>
+            I've introduced a new interface <code>WebTemplateItem</code> because
+            I realised we need so we can treat child groups and child animations
+            alike.
+            This needs to be split out and specified somewhere else.
+            It probably needs the following members:
+          </p>
+          <ul>
+            <li><code>timing</code></li>
+            <li>
+              <code>animate</code>, <code>animateWithParent</code>,
+              <code>animateLive</code>, <code>animateLiveWithParent</code>
+            </li>
+          </ul>
+          <p>
+            Then the signature of <code>animate</code> et. al. will need to be
+            updated to return a sequence of <code>WebTemplateItem</code>
+            objects.
+          </p>
+        </div>
+        <dl title="[Constructor] interface WebAnimationGroup" class="idl">
+          <dt>const unsigned short WEBA_SYNC_PAR = 0</dt>
+          <dd>
+            Parallel synchronization.
+          </dd>
+          <dt>const unsigned short WEBA_SYNC_SEQ = 1</dt>
+          <dd>
+            Sequence synchronization.
+          </dd>
+          <dt>const unsigned short WEBA_SYNC_MEDIA = 2</dt>
+          <dd>
+            Media group synchronization.
+          </dd>
+          <dt>attribute WebTiming timing</dt>
+          <dd>
+            The timing parameters to use for generated animation group
+            instances.
+          </dd>
+          <dt>attribute unsigned short type</dt>
+          <dd>
+            <p>
+              The type of synchronization provided by instances of this
+              animation group as specified by one of the
+              <code>WEBA_SYNC_*</code> constants defined in this interface.
+            </p>
+          <dt>void clear ()</dt>
+          <dd>
+            Removes all child templates from the group.
+          </dd>
+          <dt>WebTemplateItem append (WebTemplateItem newItem)</dt>
+          <dd>
+            Add <code>newItem</code> as the last item in the group. If
+            <code>newItem</code> already belongs to a group (including this
+            group) it will first be removed from that group before being added
+            to this group. Returns <code>newItem</code>.
+            <span class="todo">Is that necessary? For templates you could just
+              make them share-able? But better to be consistent?</span>
+          </dd>
+          <dt>WebTemplateItem insertBefore (WebTemplateItem newItem,
+            WebTemplateItem? refItem)</dt>
+          <dd>
+            <p>
+              Inserts <code>newItem</code> before the existing
+              <code>refItem</code>. If <code>refItem</code> is null,
+              <code>newChild</code> is added to the end of the list. If
+              <code>newItem</code> already belongs to a group (including this
+              group) it will first be removed from that group before being added
+              to this group. If <code>newItem</code> and <code>refItem</code>
+              are the same object then no change is made. Returns
+              <code>newItem</code>.
+            </p>
+            <p>Exceptions:</p>
+            <ul>
+              <li>NOT_FOUND_ERR: Raised if <code>refItem</code> is not a child
+              of this group.</li>
+            </ul>
+          </dd>
+          <dt>WebTemplateItem? item (unsigned long index)</dt>
+          <dd>
+            Returns the item at <code>index</code>. If <code>index</code> is
+            greater than or equal to <code>length</code> returns
+            <code>null</code>. Equivalent to
+            <code>WebAnimationGroup[index]</code>.
+            <span class="todo">(Need to work out how to define this
+              behavior&mdash;i.e. that you can use the subscript
+              operator)</span>
+          </dd>
+          <dt>WebTemplateItem? remove (WebTemplateItem removedItem)</dt>
+          <dd>
+            Removes <code>removedItem</code> from the group and returns it. If
+            <code>removedItem</code> is not part of this group, returns
+            <code>null</code>.
+          </dd>
+          <dt>sequence&lt;WebAnimationGroupInstance&gt; animate ()</dt>
+          <dd>
+            <p>
+              Creates a series of independent
+              <code>WebAnimationGroupInstance</code> objects, one for each
+              element in <code>target</code> using the following procedure:
+            </p>
+            <ol>
+              <li>
+                For each <var>element</var> in <code>target</code>:
+                <ol>
+                  <li>
+                    Create a new <code>WebAnimationGroupInstance</code> object,
+                    <var>group</var>.
+                  </li>
+                  <li>
+                    For each <var>child</var> in this
+                    <code>WebAnimationGroup</code>, call
+                    <code><var>child</var>.animateWithParent(<var>element</var>,
+                    <var>group</var>, <code>startTime</code>)</code>
+                  </li>
+                  <li>
+                    Append <var>group</var> to
+                    <code>element.ownerDocument.animationTimeline</code>.
+                    <span class="todo">(Should we do this first? Will it make
+                      any difference in implementation?)</span>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+            <dl class="parameters">
+              <dt>any target</dt>
+              <dd>
+                The element(s) to be animated.
+                May be one of the following types:
+                <code>Element</code>, <code>NodeList</code>,
+                <code>Element[]</code>.
+                If <code>target</code> is of type
+                <code>NodeList</code> all nodes in the list that are not of
+                type <code>ELEMENT_NODE</code> are ignored.
+              </dd>
+              <dt>optional float startTime</dt>
+              <dd>
+                <p>
+                  The start time for the generated animation group instances
+                  expressed in seconds in the iteration time space of the
+                  <code>WebAnimationGroupInstance</code> to which it is appended
+                  (see <a href="#iteration-time-and-animation-time"
+                    class="sectionRef"></a>).
+                </p>
+                <p>
+                  If this parameter is not specified it will default to the
+                  current iteration time of the
+                  <code>WebAnimationGroupInstance</code> to which it is
+                  appended if it is not <code>null</code>, otherwise it will
+                  default to zero.
+                </p>
+              </dd>
+            </dl>
+          </dd>
+          <dt>sequence&lt;WebAnimationGroupInstance&gt; animateWithParent
+          ()</dt>
+          <dd>
+            <p>
+              As with <code>animate</code> except that instead of appending the
+              created <code>WebAnimationGroupInstance</code> objects to
+              <code>element.ownerDocument.animationTimeline</code> the passed in
+              <code>parentGroup</code> is used.
+              If <code>parentGroup</code> is <code>null</code>, the
+              <code>WebAnimationGroupInstance</code> objects will not be added
+              to any group.
+            </p>
+            <dl class="parameters">
+              <dt>any target</dt>
+              <dd>
+                As with <code>animate</code>.
+              </dd>
+              <dt>WebAnimationGroupInstance? parentGroup</dt>
+              <dd>
+                The animation group instance to which animation instances
+                should be appended.
+              </dd>
+              <dt>optional float startTime</dt>
+              <dd>
+                <p>
+                  The start time for the generated animation group instances
+                  expressed in seconds in the iteration time space of the
+                  <code>WebAnimationGroupInstance</code> to which it is appended
+                  (see <a href="#iteration-time-and-animation-time"
+                    class="sectionRef"></a>).
+                </p>
+                <p>
+                  If this parameter is not specified it will default to the
+                  current iteration time of the
+                  <code>WebAnimationGroupInstance</code> to which it is
+                  appended if it is not <code>null</code>, otherwise it will
+                  default to zero.
+                </p>
+              </dd>
+            </dl>
+          </dd>
+          <dt>sequence&lt;WebAnimationGroupInstance&gt; animateLive (any target,
+            optional float startTime)</dt>
+          <dd>
+            As with <code>animate</code> with the exception that the animation
+            group instances generated by this method are live.
+          </dd>
+          <dt>sequence&lt;WebAnimationGroupInstance&gt; animateLiveWithParent
+            (any target, WebAnimationGroupInstance? parentGroup,
+             optional float startTime)</dt>
+          <dd>
+            As with <code>animateWithParent</code> with the exception that the
+            group animation instances generated by this method are live.
+          </dd>
+        </dl>
+        <p class="todo">
+          Need to think about the constructors for this. You really want to be
+          able to just do something like <code>var group = new par(anim1,
+          anim2)</code>.
+        </p>
       </section>
     </section>
 
@@ -1842,8 +2281,6 @@
             The example here could take values <code>null</code> (default),
             "auto", or something like "1px/s" (not sure what the datatype
             should be here).
-            Not sure yet how this will work with adaptive duration if other
-            animation functions use also this.
           </dd>
         </dl>
       </section>
@@ -2007,15 +2444,26 @@
       </section>
       <section>
         <h3>Calculating the current time fraction</h3>
-        <p class="todo">
-          Essentially, this section will describe how the timingFunction is 
-          used to convert an absolute current time into a fractional time (0 
-          for pre-animate, 0-1 for animating, 1 for post-animate).
-          This is basically taking the current time, subtracting the start
-          time, dividing by the duration, then clipping to the range [0, 1].
-          However, it's complicated somewhat by needing to take iterations
-          and iteration reversal into account. 
-        </p>
+        <div class="todo">
+          <p>
+            This is just <var>iteration time</var> (as defined in <a
+              href="#calculating-the-iteration-time" class="sectionRef"></a>)
+            divided by <var>iteration duration</var> (as defined in <a
+              href="#calculating-the-iteration-duration"
+              class="sectionRef"></a>).
+            This isn't the job of the animation model to calculate, this is the
+            output of the timing model.
+            I've called this the iteration distance elsewhere.
+          </p>
+          <p>
+            To be more specific, the two pieces of output needed from the timing
+            model are the iteration distance (<code>iteration time / iteration
+              duration</code>) and the current iteration (needed for accumulate
+            behavior etc., see definition in <a
+              href="#calculating-the-current-iteration"
+              class="sectionRef"></a>).
+          </p>
+        </div>
       </section>
       <section>
         <h3>Calculating the animation value for a <code>WebKeyframesAnimationFunction</code></h3>
@@ -2357,9 +2805,46 @@
       </p>
       <section>
         <h3>Synchronizing event handlers</h3>
-        <p>
-          Your text...
-        </p>
+        <div class="todo">
+          <p>
+            The proposal to-date is as follows.
+            Requirements for dispatch of animation events:
+          </p>
+          <ol>
+            <li>
+              Animations triggered by an event handler appear to have started at
+              the time the event was scheduled to be triggered.
+            </li>
+            <li>
+              No effect of an animation for any time 't' can be reflected in
+              style, DOM or animation object until any animation event handlers
+              associated with dispatch times at or before 't' have returned from
+              execution.
+            </li>
+          </ol>
+          <p>In effect this is roughly the same as saying:</p>
+          <blockquote>
+            When event handlers due to  animation events run, the state of the
+            world (DOM properties etc.) so  far as it is influenced by
+            animation, is as if the current time was the time when the event was
+            scheduled to be triggered.
+          </blockquote>
+          <p>
+            There may be many ways to realise this, including:
+          </p>
+          <ul>
+            <li>
+              dispatching animation events synchronously
+            </li>
+            <li>
+              careful updating of the animation time (after waiting for
+              corresponding animation events to return)
+            </li>
+            <li>
+              pausing the world
+            </li>
+          </ul>
+        </div>
       </section>
     </section>
 
@@ -2367,20 +2852,21 @@
       <h2>Extensions to Document interfaces</h2>
       <p>
         Since the document acts as a root animation group user agents MUST add
-        an <code>animationRoot</code> member to the document interface for each
-        document type where animation is supported. For example, HTMLDocument
-        and SVGDocument.
+        an <code>animationTimeline</code> member to the document interface for
+        each document type where animation is supported.
+        For example, HTMLDocument and SVGDocument.
       </p>
       <p>
         The definition of this member is given below.
       </p>
       <dl title="partial interface HTMLDocument" class="idl">
-        <dt>readonly attribute WebAnimationGroup animationRoot</dt>
+        <dt>readonly attribute WebAnimationGroupInstance animationTimeline</dt>
         <dd>
-          The animation group corresponding to the root of the document. This
-          group exhibits the special behavior described for a root animation
-          group in
-          <a href="#grouping-and-synchronization" class="sectionRef"></a>.
+          The animation group instance corresponding to the root of the
+          document.
+          This group instance exhibits the special behavior described for the
+          root animation group in <a href="#the-document-timeline"
+          class="sectionRef"></a>.
         </dd>
       </dl>
     </section>

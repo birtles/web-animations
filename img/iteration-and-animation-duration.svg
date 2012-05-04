@@ -4,35 +4,72 @@
   <defs>
     <style type="text/css">
     svg {
-      font-size: 1.2em;
+      font-size: 19px;
+      font-family: sans-serif;
     }
-    .intervalBoundary, .arrowLine {
+
+    /*
+     * Line work
+     */
+    .line, .arrowLine, .dottedArrow, .doubleArrowLine {
       stroke: black;
       stroke-width: 1.5;
       fill: none;
     }
-    .arrowLine {
+    .arrowLine, .dottedArrow {
       marker-end: url(#arrow);
     }
-    .intervalBoundary {
-      stroke: darkblue;
+    .dottedArrow {
+      stroke-dasharray: 4 4;
+      stroke-width: 2;
     }
-    .animatingSpan  {
-      fill: aqua;
-      stroke: black;
+    .doubleArrowLine {
+      marker-start: url(#reverseArrow);
+      marker-end: url(#arrow);
     }
     .bracket {
       stroke: black;
       stroke-width: 1.5;
       fill: none;
     }
+
+    /*
+     * Animation spans
+     */
+    .animatingSpan  {
+      fill: paleturquoise;
+      stroke: black;
+    }
+    .groupRepeatBoundary, .animRepeatBoundary {
+      stroke-dasharray: 4 4;
+    }
+    .groupRepeatBoundary {
+      stroke: darkgreen;
+      stroke-width: 3;
+    }
+    .animRepeatBoundary {
+      stroke: navy;
+      stroke-width: 2;
+    }
+
+    /*
+     * Text labels
+     */
     .durationLabel {
       text-anchor: middle;
     }
     </style>
+
+    <!-- Arrows -->
+    <style type="text/css">
+      .blackArrowHead {
+        fill: black;
+        stroke: none;
+      }
+    </style>
     <marker id="arrow" viewBox="0 -5 10 10" orient="auto" markerWidth="5"
       markerHeight="5">
-      <path d="M0-5l10 5l-10 5z"/>
+      <path d="M0-5l10 5l-10 5z" class="blackArrowHead"/>
     </marker>
   </defs>
   <!-- Timeline -->
@@ -53,7 +90,7 @@
     <!-- Animation shaded areas -->
     <g transform="translate(0 70)">
       <rect width="400" height="80" class="animatingSpan"/>
-      <path d="M160 0v80m160-80v80" class="intervalBoundary"/>
+      <path d="M160 0v80m160-80v80" class="animRepeatBoundary"/>
     </g>
     <!-- Iteration duration label -->
     <g transform="translate(0 160)">
