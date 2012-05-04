@@ -2844,6 +2844,41 @@
               pausing the world
             </li>
           </ul>
+          <p>
+            Shane and Tab feel that this approach is not very webby, and might
+            be going to too much effort in order to support a programming
+            model that should be discouraged.
+          </p>
+          <p>
+            In the current model, the animation timeline is essentially
+            static unless modified by script, which means that interrogating
+            this timeline for information should be safe even in the absence
+            of enforced synchronization.
+            So if correct handling of an event requires precise knowledge
+            about which animations have started or finished, then the timeline
+            can be inspected at the time given in the event. 
+          </p>
+          <p>
+            Furthermore, triggering animations off complex functions involving
+            current animation state is probably not the right way to go - 
+            instead some kind of model of the state should be used and the
+            animations derived from that.
+          </p>
+          <p>
+            In short, in the absence of strong use cases for synchronous events
+            we feel we should go with a simpler model.
+          </p>
+          <p>
+            Some alternative approaches are:
+          </p>
+          <ul>
+            <li>
+              Standard asynchronous events with no guarantees about the
+              state of the world when event handlers are called.
+            </li>
+            <li>
+              Event logs like those proposed to replace DOM events.
+            </li>
         </div>
       </section>
     </section>
