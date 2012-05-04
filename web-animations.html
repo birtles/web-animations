@@ -1971,6 +1971,12 @@
           <dd>
             The list of segments that make up this path.
           </dd>
+          <dt>attribute boolean rotate</dt>
+          <dd>
+            True if objects animating along this path should be rotated
+            such that their positive x axis is aligned with the direction of
+            movement along the path.
+          </dd>
         </dl>
       </section>
       <section>
@@ -2099,10 +2105,39 @@
         </p>
       </section>
       <section>
-        <h3>Calculating the animation value for a <code>WebPathAnimationFunction</code></h3>
+        <h3>Calculating the animation value for a 
+          <code>WebPathAnimationFunction</code></h3>
+        <p>
+          When a <code>WebAnimation</code> contains a pointer to a
+          <code>WebPathAnimationFunction</code> and <var>rotate</var> is set to
+          false, the <var>animation value</var> for that animation at given 
+          current time <var>t</var> is the transform defined by a translation
+          equal to the location on the path at <var>t</var>.
+        </p>
+        <p>
+          When <var>rotate</var> is set to true, the <var>animation value</var>
+          is the transform defined by the above translation followed by a 
+          rotation defined by the following process:
+        </p>
+        <ol>
+          <li>
+            Calculate the <var>normal</var> to the path at <var>t</var>.
+          </li>
+          <p class="todo">define how to calculate the normal</p>
+          <li>
+            Determine the <var>normal rotation</var>, which is given by 
+            <var>atan2(normal.y, normal.x).
+          </li>
+          <li>
+            The <var>rotation</var> is the transform that rotates by
+            the <var>normal rotation</var>.
+          </li>
+        </ol>
+
       </section>
       <section>
-        <h3>Calculating the animation value for a <code>WebGroupedAnimationFunction</code></h3>
+        <h3>Calculating the animation value for a 
+          <code>WebGroupedAnimationFunction</code></h3>
         <p>
           When a <code>WebAnimation</code> contains a pointer to a
           <code>WebGroupedAnimationFunction</code>, the <var>animation
