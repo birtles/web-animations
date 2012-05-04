@@ -2467,7 +2467,13 @@
       </section>
       <section>
         <h3>Calculating animation values</h3>
-          <section>
+          <p class="todo">
+            Need to work out how accumulateOp works here. In particular,
+            with a path with rotate="auto" and an accumulateOperation of 
+            ACCUMULATE, should each subsequent iteration of the path be
+            oriented in the final orientation of the previous iteration?
+          </p>
+          <section>              
             <h4>Calculating the animation value for a 
               <code>WebKeyframesAnimationFunction</code></h4>
               When a <code>WebAnimation</code> contains a pointer to a
