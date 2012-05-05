@@ -152,7 +152,42 @@
       </p>
     </section>
     <section>
-      <h2>@keyframes rules</h2>
+      <h2><code>@keyframes</code> rules</h2>
+      <p>
+        An <code>@keyframe</code> rule can be converted to a <code>WebGroupedAnimationFunction</code> using the following steps:
+      </p>
+      <ol>
+        <li>
+          For each <var>property</var> referenced in the @keyframes rule:
+          <ol>
+            <li>
+              For each keyframe that <var>property</var> is referenced in:
+              <ol>
+                <li>
+                  Construct a <code>WebAnimationFrame</code> with <var>offset</var> equal to
+                  the selector value of the keyframe, <var>value</var> equal to the value of
+                  <var>property</var> within the keyframe, and <var>timingFunction</var> equivalent
+                  to the timing function desribed by the keyframe (if any).
+                </li>
+              </ol>
+            </li>
+            <li>
+              If there is no keyframe at 0, or if there is a keyframe at 0 but it does not reference <var>property</var>, construct a <code>WebAnimationFrame</code> with an <var>offset</var> of 0, a <var>value</var> equal to the current computed value of <var>property</var>, and a null <var>timingFunction</var>.
+            </li>
+            <li>
+              If there is no keyframe at 1, or if there is a keyframe at 1 but it does not reference <var>property</var>, construct a <code>WebAnimationFrame</code> with an <var>offset</var> of 1, a <var>value</var> equal to the current computed value of <var>property</var>, and a null <var>timingFunction</var>.
+            </li>
+            <li>
+                Construct a <code>WebAnimationFrameList</code> and add each of the constructed <code>WebAnimationFrame</code> objects to it.
+            </li>
+            <li>
+              Construct a <code>WebKeyframeAnimationFunction</code> with <var>property</var> equal to the <var>property</var> from the @keyframes rule, <var>frames</var> equal to the constructed <code>WebAnimationFrameList</code>, and all other values at their defaults.
+            </li>
+          </ol>
+        </li>
+        <li>
+          Construct a <code>WebGroupedAnimationFunction</code> and add each of the constructed <code>WebKeyframeAniamtionFunction</code> objects to it. This is the resulting <code>WebGroupedAnimationFunction</code> object.
+      </ol>
     </section>
     <section>
       <h2>CSS Animations</h2>
@@ -161,23 +196,27 @@
         <ul>
  
           <li>
-            A set of <var>animation functions</var>, constructed from the <code>@keyframes</code> declaration referenced by <var>animation-name</var> as described in section ??.
+            An <var>animation function</var>, constructed from the <code>@keyframes</code> declaration referenced by <var>animation-name</var> as described in <a class="sectionRef" href="#keyframes-rules"></a>.
           </li>
           <li>
-            For each <var>animation function</var> in the set of <var>animation functions</var>, the following objects:
-            <ul>
-              <li>
-                An <var>animation timing</var>, a <code>WebTiming</code> with a <var>iterationDuration</var> equal to the <var>animation-duration</var>, a <var>timingFunction</var> equivalent to <var>animation-timing-function</var> (see section ??), and all other properties left at their default values.
-              </li> 
-              <li>
-                An <var>animation</var>, a <code>WebAnimation</code> associating <var>animation function</var> with <var>animation timing</var>.
-              </li>
-              <li>
-                An <var>animation instance</var>, a <code>WebAnimationInstance</code> that is equivalent to one constructed by calling <var>animation.animateLive(element)</var>
-              </li>
-            </ul>
+            An <var>animation timing</var>, a <code>WebTiming</code> with a <var>iterationDuration</var> equal to the <var>animation-duration</var>, a <var>timingFunction</var> equivalent to <var>animation-timing-function</var> (see <a class="sectionRef" href="#generating-equivalent-timing-functions"></a>), and all other properties left at their default values.
+            <p class="todo">
+              Put this object in a par group.
+            </p>
+          </li>           
+          <li>
+            An <var>animation</var>, a <code>WebAnimation</code> associating <var>animation function</var> with <var>animation timing</var>.
+          </li>
+          <li>
+            An <var>animation instance</var>, a <code>WebAnimationInstance</code> that is equivalent to one constructed by calling <var>animation.animateLive(element)</var>
           </li>
         </ul>
+      </p>
+    </section>
+    <section>
+      <h2>Generating Equivalent Timing Functions</h2>
+      <p class="todo">
+        Can't do this until we've defined the interface for timing functions in the main spec.
       </p>
     </section>
   </body>
