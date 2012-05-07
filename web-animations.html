@@ -184,13 +184,14 @@
         <dt>Timing model</dt>
         <dd>
           Takes a moment in time and converts it to a proportional distance
-          within a single iteration of an animation.
+          within a single iteration of an animation called the <em>time
+          fraction</em>.
         </dd>
         <dt>Animation model</dt>
         <dd>
-          Takes the distances produced by the timing model and converts them
-          into a series of values to apply to the target properties and
-          attributes.
+          Takes the <em>time fractions</em> produced by the timing model and
+          converts them into a series of values to apply to the target
+          properties and attributes.
         </dd>
       </dl>
       <p>
@@ -218,7 +219,7 @@
       <p>
         The first three points apply to the timing model.
         At a time of 6 seconds, it will calculate that the animation should be
-        half way through its second iteration and produces the result 0.5.
+        half-way through its second iteration and produces the result 0.5.
         The animation model then uses that information to calculate a width for
         the rectangle of 75.
       </p>

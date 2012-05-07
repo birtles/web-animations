@@ -71,9 +71,8 @@
     </g>
     <path d="M230 0H275" class="arrowLine"/>
     <g transform="translate(330 0)">
-      <text y="-0.75em" text-anchor="middle">distance<tspan x="0"
-      dy="1em">within an</tspan><tspan x="0"
-      dy="1em">iteration</tspan></text>
+      <text text-anchor="middle">time<tspan x="0"
+      dy="1em">fraction</tspan></text>
     </g>
     <path d="M375 0H425" class="arrowLine"/>
     <rect x="440" width="120" y="-50" height="100" rx="5" ry="5"
