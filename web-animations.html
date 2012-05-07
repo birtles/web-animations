@@ -214,7 +214,7 @@
         <li>starts after 3 seconds,</li>
         <li>runs twice,</li>
         <li>takes 2 seconds every time, and</li>
-        <li>changes the width of a rectangle from 50 to 100.</li>
+        <li>changes the width of a rectangle from 50 pixels to 100 pixels.</li>
       </ul>
       <p>
         The first three points apply to the timing model.
@@ -247,7 +247,10 @@
         <h3>Start of the timeline</h3>
         <p class="todo">
           Define when the timeline starts&mdash;is it document load, or can it
-          start beforehand?
+          start beforehand?<br>
+          Time moments are defined in <a
+          href="http://test.w3.org/webperf/specs/NavigationTiming/#processing-model">Navigation
+          Timing spec</a>. We should re-use one of those definitions here.
         </p>
       </section>
     </section>
@@ -263,7 +266,8 @@
         <dl title="interface WebAnimationInstance : WebTimedItem" class="idl">
           <dt>attribute WebAnimationFunction function</dt>
           <dd>
-            The animation function to apply.
+            The animation function to apply (see <a href="#animation-values"
+            class="sectionRef"></a>).
           </dd>
           <dt>readonly attribute WebAnimation? animation</dt>
           <dd>
