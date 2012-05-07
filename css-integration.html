@@ -125,30 +125,36 @@
         Section 3 of [[!CSS3-TRANSITIONS]] defines the conditions under which a CSS Transition should occur. When these conditions are met, an implementation will behave as if the following objects were constructed via the Web Animation JS API:
         <ul>
           <li>
-            The <var>from frame</var>, a <code>WebAnimationFrame</code> with an <var>offset</var> of 0 and a <var>value</var> of the computed style of the property referenced by <var>transition-property</var> just before the transition occurs. 
+            For each <var>property</var> referenced by <var>transition-property</var> that has a different
+            computed style before and after the transition occurs:
+            <ul>
+              <li>
+                The <var>from frame</var>, a <code>WebAnimationFrame</code> with an <var>offset</var> of 0 and a <var>value</var> of the computed style of <var>property</var> just before the transition occurs. 
+              </li>
+              <li>
+                The <var>to frame</var>, a <code>WebAnimationFrame</code> with an <var>offset</var> of 1 and a <var>value</var> of the current computed style of <var>property</var>.
+              </li>
+              <li>
+                The <var>frame list</var>, a <code>WebAnimationFrameList</code> containing the <var>from frame</var>  and <var>to frame</var>.
+              </li>
+              <li>
+                The <var>animation function</var>, a <code>WebKeyframesAnimationFunction</code> with a <var>property</var> equal to the property being transitioned, <var>frames</var> set to the <var>frame list</var>, an <var>operation</var> of "replace", an <var>accumulateOperation</var> of "replace", and a <var>pace</var> of undefined.
+              </li>
+            </ul>
           </li>
           <li>
-            The <var>to frame</var>, a <code>WebAnimationFrame</code> with an <var>offset</var> of 1 and a <var>value</var> of the current computed style of the property referenced by <var>transition-property</var>.
-          </li>
-          <li>
-            The <var>frame list</var>, a <code>WebAnimationFrameList</code> containing the <var>from frame</var>  and <var>to frame</var>.
-          </li>
-          <li>
-            The <var>animation function</var>, a <code>WebKeyframesAnimationFunction</code> with a <var>property</var> equal to the property being transitioned, <var>frames</var> set to the <var>frame list</var>, an <var>operation</var> of "replace", an <var>accumulateOperation</var> of "replace", and a <var>pace</var> of undefined.
-          </li>
+            The <var>group animation function</var>, a <code>WebGroupedAnimationFunction</code> that contains
+            all of the <var>animation function</var> objects generated in the previous step.
           <li>
             The <var>animation timing</var>, a <code>WebTiming</code> with a <var>iterationDuration</var> equal to the <var>transition-duration</var>, a <var>timingFunction</var> equivalent to <var>transition-timing-function</var> (see section ??), and all other properties left at their default values.
           </li> 
           <li>
-            The <var>animation</var>, a <code>WebAnimation</code> associating <var>animation function</var> with <var>animation timing</var>.
+            The <var>animation</var>, a <code>WebAnimation</code> associating <var>group animation function</var> with <var>animation timing</var>.
           </li>
           <li>
             The <var>animation instance</var>, a <code>WebAnimationInstance</code> that is equivalent to one constructed by calling <var>animation.animateLive(element)</var>
           </li>
         </ul>
-      </p>
-      <p class="note">
-        This process implies that when <var>transition-property</var> is set to a list of property names, or the special keyword "all", multiple <code>WebAnimationInstance</code> objects will end up being generated.
       </p>
     </section>
     <section>
