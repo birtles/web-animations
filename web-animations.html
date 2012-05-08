@@ -425,7 +425,7 @@
           (see <a href="#grouping-and-synchronization" class="sectionRef"></a>).
         </p>
         <dl title="[Constructor] interface TimedTemplate" class="idl">
-          <dt>attribute WebTiming timing</dt>
+          <dt>attribute Timing timing</dt>
           <dd>
             The timing parameters to use for generated timed items.
           </dd>
@@ -1007,14 +1007,14 @@
       <section>
         <h3>Specifying timing properties</h3>
         <p>
-          Timing properties are collected under the <code>WebTiming</code>
+          Timing properties are collected under the <code>Timing</code>
           interface.
           All properties have a default value associated with them with is the
-          value used when a new <code>WebTiming</code> object is constructed.
+          value used when a new <code>Timing</code> object is constructed.
         </p>
         <section>
-          <h3>The <code>WebTiming</code> interface</h3>
-          <dl title="interface WebTiming" class="idl">
+          <h3>The <code>Timing</code> interface</h3>
+          <dl title="interface Timing" class="idl">
             <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
             <dd>
               No fill.
@@ -1114,7 +1114,7 @@
                 <code>WEBA_DIRECTION_NORMAL</code>.
               </p>
             </dd>
-            <dt>attribute WebTimingFunction timingFunction</dt>
+            <dt>attribute TimingFunction timingFunction</dt>
             <dd class="todo">
               TBD.
             </dd>
@@ -1135,11 +1135,11 @@
         <h3>The <code>WebTimedItem</code> interface</h3>
         <p>
           The application of the timing properties specified in
-          a <code>WebTiming</code> object to an actor in the animation timeline
+          a <code>Timing</code> object to an actor in the animation timeline
           is represented by the <code>WebTimedItem</code> interface.
         </p>
         <dl title="interface WebTimedItem" class="idl">
-          <dt>readonly attribute WebTiming timing</dt>
+          <dt>readonly attribute Timing timing</dt>
           <dd>
             The timing parameters for this item.
           </dd>
@@ -1694,11 +1694,11 @@
         subsection of the previous section.
         &ldquo;Scaling the time&rdquo;?
       </p>
-      <h3>The <code>WebTimingFunction</code> interface</h3>
+      <h3>The <code>TimingFunction</code> interface</h3>
       <p class="todo">
         TBD.
       </p>
-      <dl title="interface WebTimingFunction" class="idl">
+      <dl title="interface TimingFunction" class="idl">
       </dl>
     </section>
 
@@ -2395,7 +2395,7 @@
               in the air (since the more you leave undefined, the more you let
               the Web define it for you).
             </dd>
-            <dt>attribute WebTimingFunction timingFunction</dt>
+            <dt>attribute TimingFunction timingFunction</dt>
             <dd>
               The function to use for this segment. Would a string do here? E.g.
               "ease" or "cubic-bezier(1 0 0.3 1)"? Probably not. It's a little
