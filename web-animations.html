@@ -405,7 +405,7 @@
       <section>
         <h3>The <code>Anim</code> interface</h3>
         <p>
-          <dl title="[Constructor] interface Anim : WebTimedTemplate"
+          <dl title="[Constructor] interface Anim : TimedTemplate"
             class="idl">
             <dt>attribute AnimFunction function</dt>
             <dd>
@@ -415,16 +415,16 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebTimedTemplate</code> interface</h3>
+        <h3>The <code>TimedTemplate</code> interface</h3>
         <p>
           Both the timing of an <code>Anim</code> and the methods for
           creating an <code>AnimInstance</code> from
           an <code>Anim</code> are specified on the
-          <code>WebTimedTemplate</code> since this behaviour is shared with
+          <code>TimedTemplate</code> since this behaviour is shared with
           animation groups
           (see <a href="#grouping-and-synchronization" class="sectionRef"></a>).
         </p>
-        <dl title="[Constructor] interface WebTimedTemplate" class="idl">
+        <dl title="[Constructor] interface TimedTemplate" class="idl">
           <dt>attribute WebTiming timing</dt>
           <dd>
             The timing parameters to use for generated timed items.
@@ -443,7 +443,7 @@
             </pre>
             <p>
               The specific steps for instantiating a
-              <code>WebTimedTemplate</code> depends on its concrete type and is
+              <code>TimedTemplate</code> depends on its concrete type and is
               described in <a href="#instantiating-an-Anim"
               class="sectionRef"></a> and <a
               href="#instantiating-an-Animgroup"
@@ -490,7 +490,7 @@
             </pre>
             <p>
               The specific steps for instantiating a
-              <code>WebTimedTemplate</code> depends on its concrete type and is
+              <code>TimedTemplate</code> depends on its concrete type and is
               described in <a href="#instantiating-an-Anim"
               class="sectionRef"></a> and <a
               href="#instantiating-an-Animgroup"
@@ -525,7 +525,7 @@
             </pre>
             <p>
               The specific steps for instantiating a
-              <code>WebTimedTemplate</code> depends on its concrete type and is
+              <code>TimedTemplate</code> depends on its concrete type and is
               described in <a href="#instantiating-an-Anim"
               class="sectionRef"></a> and <a
               href="#instantiating-an-Animgroup"
@@ -2129,7 +2129,7 @@
           acts as a template for creating animation group instances that target
           different elements.
         </p>
-        <dl title="[Constructor] interface AnimGroup : WebTimedTemplate"
+        <dl title="[Constructor] interface AnimGroup : TimedTemplate"
           class="idl">
           <dt>const unsigned short WEBA_SYNC_PAR = 0</dt>
           <dd>
