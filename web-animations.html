@@ -2323,7 +2323,7 @@
         </dl>
       </section>
       <section>
-        <h3>The <code>WebKeyframesAnimationFunction</code> interface</h3>
+        <h3>The <code>KeyframesAnimFunction</code> interface</h3>
         <div class="todo">
           <p>
             It seems like it might even be
@@ -2359,7 +2359,7 @@
           an <code>Anim</code>, however, are live.
         </p>
         <p>
-          <dl title="[Constructor] interface WebKeyframesAnimationFunction : AnimFunction" class="idl">
+          <dl title="[Constructor] interface KeyframesAnimFunction : AnimFunction" class="idl">
             <dt>attribute DOMString property</dt>
             <dd>
               The target attribute / property. <code>property</code> is probably
@@ -2440,8 +2440,8 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebPathAnimationFunction</code> interface</h3>
-        <dl title="[Constructor] interface WebPathAnimationFunction : AnimFunction" class="idl">
+        <h3>The <code>PathAnimFunction</code> interface</h3>
+        <dl title="[Constructor] interface PathAnimFunction : AnimFunction" class="idl">
           <dt>attribute SVGPathSegList segments</dt>
           <dd>
             The list of segments that make up this path.
@@ -2455,13 +2455,13 @@
         </dl>
       </section>
       <section>
-        <h3>The <code>WebGroupedAnimationFunction</code> interface</h3>
+        <h3>The <code>GroupedAnimFunction</code> interface</h3>
         <p>
-          The <code>WebGroupedAnimationFunction</code> interface represents a
+          The <code>GroupedAnimFunction</code> interface represents a
           set of animation functions that share the same
           <code>Anim</code> parent.
         </p>
-        <dl title="[Constructor] interface WebGroupedAnimationFunction : AnimFunction" class="idl">
+        <dl title="[Constructor] interface GroupedAnimFunction : AnimFunction" class="idl">
           <dt>readonly attribute unsigned long length</dt>
           <dd>
             The number of animation functions in the group.
@@ -2539,10 +2539,10 @@
           </section>
           <section>              
             <h4>Calculating the iteration value for a 
-              <code>WebKeyframesAnimationFunction</code></h4>
+              <code>KeyframesAnimFunction</code></h4>
             <p>
               When an <code>Anim</code> contains a pointer to a
-              <code>WebKeyframesAnimationFunction</code>, the <var>animation
+              <code>KeyframesAnimFunction</code>, the <var>animation
               value</var> for that animation at given current time 
               <var>t</var> is calculated according to the following steps:
             </p>
@@ -2628,10 +2628,10 @@
           </section>
           <section>
             <h4>Calculating the iteration value for a 
-              <code>WebPathAnimationFunction</code></h4>
+              <code>PathAnimFunction</code></h4>
             <p>
               When an <code>Anim</code> contains a pointer to a
-              <code>WebPathAnimationFunction</code> and <var>rotate</var> is set
+              <code>PathAnimFunction</code> and <var>rotate</var> is set
               to false, the <var>animation value</var> for that animation at
               given current time <var>t</var> is the transform defined by a
               translation equal to the location on the path at <var>t</var>.
@@ -2660,15 +2660,15 @@
           </section>
           <section>
             <h4>Calculating the iteration value for a 
-              <code>WebGroupedAnimationFunction</code></h4>
+              <code>GroupedAnimFunction</code></h4>
             <p>
               When an <code>Anim</code> contains a pointer to a
-              <code>WebGroupedAnimationFunction</code>, the <var>animation
+              <code>GroupedAnimFunction</code>, the <var>animation
               value</var> for that animation at given current time <var>t</var> 
               is calculated by following the procedure outlined in
               <a href="#resolving-animation-stacks" class="sectionRef"></a>, 
               treating the list of <code>AnimFunction</code> objects 
-              contained within the <code>WebGroupedAnimationFunction</code> as 
+              contained within the <code>GroupedAnimFunction</code> as 
               the animation stack and using an initial animation value 
               of 0 for all simple properties and id for transform.
             </p>
@@ -2712,7 +2712,7 @@
         <p>
           Other operations also generate animation stacks - for example, 
           grouping multiple animations using a 
-          <code>WebGroupedAnimationFunction</code>.
+          <code>GroupedAnimFunction</code>.
         </p>
         <p>
           An animation stack may be thought of as a single stack with all
