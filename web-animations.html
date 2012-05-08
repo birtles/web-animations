@@ -259,20 +259,20 @@
       <h2>Animations in the timeline</h2>
       <p>
         Animations in the timeline are represented by
-        <code>WebAnimationInstance</code> objects.
+        <code>AnimInstance</code> objects.
       </p>
       <section>
-        <h3>The <code>WebAnimationInstance</code> interface</h3>
-        <dl title="interface WebAnimationInstance : WebTimedItem" class="idl">
-          <dt>attribute WebAnimationFunction function</dt>
+        <h3>The <code>AnimInstance</code> interface</h3>
+        <dl title="interface AnimInstance : TimedItem" class="idl">
+          <dt>attribute AnimFunction function</dt>
           <dd>
             The animation function to apply (see <a href="#animation-values"
             class="sectionRef"></a>).
           </dd>
-          <dt>readonly attribute WebAnimation? template</dt>
+          <dt>readonly attribute Anim? template</dt>
           <dd>
             For live animation instances (see <a href="#creating-animations"
-            class="sectionRef"></a>), the <code>WebAnimation</code> object from
+            class="sectionRef"></a>), the <code>Anim</code> object from
             which this object was minted. For independent animation instances,
             this property is <code>null</code>.
           </dd>
@@ -298,41 +298,33 @@
             </p>
           </dd>
         </dl>
-        <div class="feedbackWanted">
-          We've used <code>Web*</code> as a prefix on all interfaces in this
-          specification. Is this required? Are we likely to get clashes with
-          existing content if we define, for example, <code>Animation</code>? Is
-          <code>Web*</code> a suitable prefix? An alternative might be
-          <code>FX*</code> but <code>FXAnimation</code> sounds tacky and very
-          80s.
-        </div>
       </section>
     </section>
 
     <section>
       <h2>Creating animations</h2>
       <p>
-        <code>WebAnimationInstance</code> objects are not created directly, but
-        via a separate <code>WebAnimation</code> object. The
-        <code>WebAnimation</code> object acts a template allowing the same set
+        <code>AnimInstance</code> objects are not created directly, but
+        via a separate <code>Anim</code> object. The
+        <code>Anim</code> object acts a template allowing the same set
         of animation parameters to be used multiple times with multiple target
         elements.
       </p>
       <p>
-        A <code>WebAnimationInstance</code> can be in one of two states with
-        regards to the relationship between it and the <code>WebAnimation</code>
+        An <code>AnimInstance</code> can be in one of two states with
+        regards to the relationship between it and the <code>Anim</code>
         that produced it.
       </p>
       <dl>
         <dt>Live animation instance</dt>
         <dd>
-          Changes made to the <code>WebAnimation</code> object are reflected in
-          the <code>WebAnimationInstance</code> object.
+          Changes made to the <code>Anim</code> object are reflected in
+          the <code>AnimInstance</code> object.
         </dd>
         <dt>Independent animation instance</dt>
         <dd>
-          Changes made to the <code>WebAnimation</code> object have no effect on
-          the <code>WebAnimationInstance</code> object.
+          Changes made to the <code>Anim</code> object have no effect on
+          the <code>AnimInstance</code> object.
         </dd>
       </dl>
       <p class="todo">
@@ -347,7 +339,7 @@
         <li>
           Modifying any of the members of the <code>function</code> or
           <code>timing</code> properties of the
-          <code>WebAnimationInstance</code> object. This includes redundant
+          <code>AnimInstance</code> object. This includes redundant
           modifications, that is, setting a property to its current value.
           <!--
            The redundant modification condition is an attempt to eliminate an
@@ -368,7 +360,7 @@
         </li>
         <li>
           Calling the <code>makeIndependent</code> method of the
-          <code>WebAnimationInstance</code> object.
+          <code>AnimInstance</code> object.
         </li>
       </ol>
       <p>
@@ -386,7 +378,7 @@
       </p>
       <pre class="example sh_javascript">
         // Create a new animation
-        var anim = new WebAnimation();
+        var anim = new Anim();
         anim.timing.duration = 1;
 
         // Create a live instance
@@ -403,11 +395,11 @@
         alert(instance.timing.duration); // Displays "3"
       </pre>
       <section>
-        <h3>The <code>WebAnimation</code> interface</h3>
+        <h3>The <code>Anim</code> interface</h3>
         <p>
-          <dl title="[Constructor] interface WebAnimation : WebTimedTemplate"
+          <dl title="[Constructor] interface Anim : TimedTemplate"
             class="idl">
-            <dt>attribute WebAnimationFunction function</dt>
+            <dt>attribute AnimFunction function</dt>
             <dd>
               The animation function to apply.
             </dd>
@@ -415,24 +407,24 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebTimedTemplate</code> interface</h3>
+        <h3>The <code>TimedTemplate</code> interface</h3>
         <p>
-          Both the timing of a <code>WebAnimation</code> and the methods for
-          creating a <code>WebAnimationInstance</code> from
-          a <code>WebAnimation</code> are specified on the
-          <code>WebTimedTemplate</code> since this behaviour is shared with
+          Both the timing of an <code>Anim</code> and the methods for
+          creating an <code>AnimInstance</code> from
+          an <code>Anim</code> are specified on the
+          <code>TimedTemplate</code> since this behaviour is shared with
           animation groups
           (see <a href="#grouping-and-synchronization" class="sectionRef"></a>).
         </p>
-        <dl title="[Constructor] interface WebTimedTemplate" class="idl">
-          <dt>attribute WebTiming timing</dt>
+        <dl title="[Constructor] interface TimedTemplate" class="idl">
+          <dt>attribute Timing timing</dt>
           <dd>
             The timing parameters to use for generated timed items.
           </dd>
-          <dt>WebTimedItem animate ()</dt>
+          <dt>TimedItem animate ()</dt>
           <dd>
             <p>
-              Creates an independent <code>WebTimedItem</code> and appends it
+              Creates an independent <code>TimedItem</code> and appends it
               to <code>element.ownerDocument.animationTimeline</code>.
             </p>
             <p>
@@ -443,10 +435,10 @@
             </pre>
             <p>
               The specific steps for instantiating a
-              <code>WebTimedTemplate</code> depends on its concrete type and is
-              described in <a href="#instantiating-a-webanimation"
+              <code>TimedTemplate</code> depends on its concrete type and is
+              described in <a href="#instantiating-an-Anim"
               class="sectionRef"></a> and <a
-              href="#instantiating-a-webanimationgroup"
+              href="#instantiating-an-Animgroup"
               class="sectionRef"></a>.
             </p>
             <dl class="parameters">
@@ -459,27 +451,27 @@
                 <p>
                   The start time for the generated animation instances
                   expressed in seconds in the iteration time space of the
-                  <code>WebAnimationGroupInstance</code> to which it is
+                  <code>AnimGroupInstance</code> to which it is
                   appended (see <a href="#iteration-time-and-animation-time"
                     class="sectionRef"></a>).
                 </p>
                 <p>
                   If this parameter is not specified it will default to the
                   current iteration time of the
-                  <code>WebAnimationGroupInstance</code> to which it is
+                  <code>AnimGroupInstance</code> to which it is
                   appended if it is not <code>null</code>, otherwise it will
                   default to zero.
                 </p>
               </dd>
             </dl>
           </dd>
-          <dt>sequence&lt;WebTimedItem&gt; animate ()</dt>
+          <dt>sequence&lt;TimedItem&gt; animate ()</dt>
           <dd>
             <p>
-              Creates a series of independent <code>WebTimedItem</code>
+              Creates a series of independent <code>TimedItem</code>
               objects, one for each element in <code>target</code>.
               As with <code>animate(Element target, float startTime)</code>
-              each such <code>WebTimedItem</code> object is appended
+              each such <code>TimedItem</code> object is appended
               to <code>element.ownerDocument.animationTimeline</code>.
             </p>
             <p>
@@ -490,10 +482,10 @@
             </pre>
             <p>
               The specific steps for instantiating a
-              <code>WebTimedTemplate</code> depends on its concrete type and is
-              described in <a href="#instantiating-a-webanimation"
+              <code>TimedTemplate</code> depends on its concrete type and is
+              described in <a href="#instantiating-an-Anim"
               class="sectionRef"></a> and <a
-              href="#instantiating-a-webanimationgroup"
+              href="#instantiating-an-Animgroup"
               class="sectionRef"></a>.
             </p>
             <dl class="parameters">
@@ -508,13 +500,13 @@
               </dd>
             </dl>
           </dd>
-          <dt>sequence&lt;WebTimedItem&gt; animate ()</dt>
+          <dt>sequence&lt;TimedItem&gt; animate ()</dt>
           <dd>
             <p>
-              Creates a series of independent <code>WebTimedItem</code>
+              Creates a series of independent <code>TimedItem</code>
               objects, one for each element in <code>target</code>.
               As with <code>animate(Element target, float startTime)</code>
-              each such <code>WebTimedItem</code> object is appended
+              each such <code>TimedItem</code> object is appended
               to <code>element.ownerDocument.animationTimeline</code>.
             </p>
             <p>
@@ -525,10 +517,10 @@
             </pre>
             <p>
               The specific steps for instantiating a
-              <code>WebTimedTemplate</code> depends on its concrete type and is
-              described in <a href="#instantiating-a-webanimation"
+              <code>TimedTemplate</code> depends on its concrete type and is
+              described in <a href="#instantiating-an-Anim"
               class="sectionRef"></a> and <a
-              href="#instantiating-a-webanimationgroup"
+              href="#instantiating-an-Animgroup"
               class="sectionRef"></a>.
             </p>
             <dl class="parameters">
@@ -546,16 +538,16 @@
               </dd>
             </dl>
           </dd>
-          <dt>WebTimedItem animateWithParent ()</dt>
+          <dt>TimedItem animateWithParent ()</dt>
           <dd>
             <p>
               Similar to <code>animate</code>, this method creates
-              independent <code>WebTimedItem</code> object(s) for the
+              independent <code>TimedItem</code> object(s) for the
               elements in <code>target</code>.
               However, the resulting items are appended to the given
               <code>parentGroup</code>, if provided.
               If <code>parentGroup</code> is <code>null</code>, the
-              <code>WebTimedItem</code> objects will not be added to any
+              <code>TimedItem</code> objects will not be added to any
               group.
             </p>
             <dl class="parameters">
@@ -563,7 +555,7 @@
               <dd>
                 As with <code>animate</code>.
               </dd>
-              <dt>WebAnimationGroupInstance? parentGroup</dt>
+              <dt>AnimGroupInstance? parentGroup</dt>
               <dd>
                 The animation group instance to which animation instances
                 should be appended.
@@ -573,7 +565,7 @@
                 <p>
                   The start time for the generated animation instances
                   expressed in seconds in the iteration time space of the
-                  <code>WebAnimationGroupInstance</code> to which it is
+                  <code>AnimGroupInstance</code> to which it is
                   appended (see <a href="#iteration-time-and-animation-time"
                     class="sectionRef"></a>).
                 </p>
@@ -586,66 +578,66 @@
               </dd>
             </dl>
           </dd>
-          <dt>sequence&lt;WebTimedItem&gt; animateWithParent (
+          <dt>sequence&lt;TimedItem&gt; animateWithParent (
             Element[] target,
-            WebAnimationGroupInstance? parentGroup,
+            AnimGroupInstance? parentGroup,
             optional float startTime)</dt>
           <dd>
             As with <code>animateWithParent(Element target,
-              WebAnimationGroupInstance? parentGroup,
+              AnimGroupInstance? parentGroup,
               optional float startTime)</code> except
-            one <code>WebTimedItem</code> is created for each
+            one <code>TimedItem</code> is created for each
             <code>Element</code> in <code>target</code>.
           </dd>
-          <dt>sequence&lt;WebTimedItem&gt; animateWithParent (
+          <dt>sequence&lt;TimedItem&gt; animateWithParent (
             NodeList target,
-            WebAnimationGroupInstance? parentGroup,
+            AnimGroupInstance? parentGroup,
             optional float startTime)</dt>
           <dd>
             As with <code>animateWithParent(Element target,
-              WebAnimationGroupInstance? parentGroup,
+              AnimGroupInstance? parentGroup,
               optional float startTime)</code> except
-            one <code>WebTimedItem</code> is created for each
+            one <code>TimedItem</code> is created for each
             <code>Node</code> in <code>target</code> that is of type
             <code>ELEMENT_NODE</code>.
           </dd>
-          <dt>WebTimedItem animateLive (Element target,
+          <dt>TimedItem animateLive (Element target,
             optional float startTime)</dt>
           <dd>
             As with <code>animate</code> with the exception that the
-            <code>WebTimedItem</code> objects generated by this method are
+            <code>TimedItem</code> objects generated by this method are
             live.
           </dd>
-          <dt>sequence&lt;WebTimedItem&gt; animateLive (Element[] target,
+          <dt>sequence&lt;TimedItem&gt; animateLive (Element[] target,
             optional float startTime)</dt>
           <dd>
             As with <code>animate</code> with the exception that the
-            <code>WebTimedItem</code> objects generated by this method are
+            <code>TimedItem</code> objects generated by this method are
             live.
           </dd>
-          <dt>sequence&lt;WebTimedItem&gt; animateLive (NodeList target,
+          <dt>sequence&lt;TimedItem&gt; animateLive (NodeList target,
             optional float startTime)</dt>
           <dd>
             As with <code>animate</code> with the exception that the
-            <code>WebTimedItem</code> objects generated by this method are
+            <code>TimedItem</code> objects generated by this method are
             live.
           </dd>
-          <dt>WebTimedItem animateLiveWithParent
-            (Element target, WebAnimationGroupInstance? parentGroup,
+          <dt>TimedItem animateLiveWithParent
+            (Element target, AnimGroupInstance? parentGroup,
              optional float startTime)</dt>
           <dd>
             As with <code>animateWithParent</code> with the exception that the
             animation instances generated by this method are live.
           </dd>
-          <dt>sequence&lt;WebTimedItem&gt; animateLiveWithParent
-            (Element[] target, WebAnimationGroupInstance? parentGroup,
+          <dt>sequence&lt;TimedItem&gt; animateLiveWithParent
+            (Element[] target, AnimGroupInstance? parentGroup,
              optional float startTime)</dt>
           <dd>
             As with <code>animateWithParent</code> with the exception that the
             animation instances generated by this method are live.
           </dd>
-          <dt>sequence&lt;WebTimedItem&gt; animateLiveWithParent
-            (NodeList target, WebAnimationGroupInstance? parentGroup,
+          <dt>sequence&lt;TimedItem&gt; animateLiveWithParent
+            (NodeList target, AnimGroupInstance? parentGroup,
              optional float startTime)</dt>
           <dd>
             As with <code>animateWithParent</code> with the exception that the
@@ -654,22 +646,22 @@
         </dl>
       </section>
       <section>
-        <h3>Instantiating a <code>WebAnimation</code></h3>
+        <h3>Instantiating an <code>Anim</code></h3>
         <p>
-          The procedure for instantiating a <code>WebAnimation</code>,
+          The procedure for instantiating an <code>Anim</code>,
           <var>template</var>, given a list of target elements and an optional
           <var>parent group</var>, is as follows:
         </p>
         <ol>
           <li>
-            Create an empty sequence of <code>WebAnimationInstance</code>
+            Create an empty sequence of <code>AnimInstance</code>
             objects.
           </li>
           <li>
             For each <var>element</var> in the list of target elements:
             <ol>
               <li>
-                Create a new <code>WebAnimationInstance</code> object,
+                Create a new <code>AnimInstance</code> object,
                 <var>instance</var>.
               </li>
               <li>
@@ -687,12 +679,12 @@
               </li>
               <li>
                 Append <var>group</var> to the sequence of
-                <code>WebAnimationInstance</code> objects.
+                <code>AnimInstance</code> objects.
               </li>
             </ol>
           </li>
           <li>
-            Return the sequence of <code>WebAnimationInstance</code> objects.
+            Return the sequence of <code>AnimInstance</code> objects.
           </li>
         </ol>
       </section>
@@ -1007,14 +999,14 @@
       <section>
         <h3>Specifying timing properties</h3>
         <p>
-          Timing properties are collected under the <code>WebTiming</code>
+          Timing properties are collected under the <code>Timing</code>
           interface.
           All properties have a default value associated with them with is the
-          value used when a new <code>WebTiming</code> object is constructed.
+          value used when a new <code>Timing</code> object is constructed.
         </p>
         <section>
-          <h3>The <code>WebTiming</code> interface</h3>
-          <dl title="interface WebTiming" class="idl">
+          <h3>The <code>Timing</code> interface</h3>
+          <dl title="interface Timing" class="idl">
             <dt>const unsigned short WEBA_FILL_NONE = 0</dt>
             <dd>
               No fill.
@@ -1114,7 +1106,7 @@
                 <code>WEBA_DIRECTION_NORMAL</code>.
               </p>
             </dd>
-            <dt>attribute WebTimingFunction timingFunction</dt>
+            <dt>attribute TimingFunction timingFunction</dt>
             <dd class="todo">
               TBD.
             </dd>
@@ -1132,14 +1124,14 @@
         </section>
       </section>
       <section>
-        <h3>The <code>WebTimedItem</code> interface</h3>
+        <h3>The <code>TimedItem</code> interface</h3>
         <p>
           The application of the timing properties specified in
-          a <code>WebTiming</code> object to an actor in the animation timeline
-          is represented by the <code>WebTimedItem</code> interface.
+          a <code>Timing</code> object to an actor in the animation timeline
+          is represented by the <code>TimedItem</code> interface.
         </p>
-        <dl title="interface WebTimedItem" class="idl">
-          <dt>readonly attribute WebTiming timing</dt>
+        <dl title="interface TimedItem" class="idl">
+          <dt>readonly attribute Timing timing</dt>
           <dd>
             The timing parameters for this item.
           </dd>
@@ -1174,7 +1166,7 @@
             </p>
             <p>
               The value returned may not correspond to the value specified when
-              creating the item (e.g. using <code>WebAnimation.animate</code>).
+              creating the item (e.g. using <code>Anim.animate</code>).
               For example, when the parent animation group instance is
               a sequence group, the value will be determined by the procedure
               defined in <a
@@ -1220,7 +1212,7 @@
             active state (see <a href="#animation-states"
             class="sectionRef"></a>).
           </dd>
-          <dt>readonly attribute WebAnimationGroupInstance parentGroup</dt>
+          <dt>readonly attribute AnimGroupInstance parentGroup</dt>
           <dd>
             The parent animation group instance.
           </dd>
@@ -1694,11 +1686,11 @@
         subsection of the previous section.
         &ldquo;Scaling the time&rdquo;?
       </p>
-      <h3>The <code>WebTimingFunction</code> interface</h3>
+      <h3>The <code>TimingFunction</code> interface</h3>
       <p class="todo">
         TBD.
       </p>
-      <dl title="interface WebTimingFunction" class="idl">
+      <dl title="interface TimingFunction" class="idl">
       </dl>
     </section>
 
@@ -1914,9 +1906,9 @@
         </p>
         <ul>
           <li>
-            Modifying any of the members of the <code>timing</code> property
-            or modifying the <code>type</code> property of the
-            <code>WebAnimationGroupInstance</code> object.
+            Modifying any of the members of the <code>timing</code> property or
+            modifying the <code>type</code> property of the
+            <code>AnimGroupInstance</code> object.
             This includes redundant modifications, that is, setting a property
             to its current value.
           </li>
@@ -1927,12 +1919,12 @@
           </li>
           <li>
             Calling the <code>makeIndependent</code> method of the
-            <code>WebAnimationGroupInstance</code> object.
+            <code>AnimGroupInstance</code> object.
           </li>
         </ul>
         <p>
           Note that making an animation group instance independent does
-          <em>NOT</em> cause its child <code>WebTimedTemplate</code> objects
+          <em>NOT</em> cause its child <code>TimedTemplate</code> objects
           to become independent.
         </p>
         <p>
@@ -1942,7 +1934,7 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebAnimationGroupInstance</code> interface</h3>
+        <h3>The <code>AnimGroupInstance</code> interface</h3>
         <p>
           Represents a list of timed items which may be animation instances or
           nested animation group instances. Order is significant only when
@@ -1951,7 +1943,7 @@
         <div class="feedbackWanted">
           <p>
             For adding and removing items this interface relies on passing in
-            actual <a>WebTimedItem</a> objects. This is similar to the Element
+            actual <a>TimedItem</a> objects. This is similar to the Element
             interface but differs from many SVG interfaces which use numeric
             indices instead.
           </p>
@@ -1984,8 +1976,8 @@
             an exception if it belongs to another group?
           </p>
         </div>
-        <dl title="[Constructor] interface WebAnimationGroupInstance
-                   : WebTimedItem"
+        <dl title="[Constructor] interface AnimGroupInstance
+                   : TimedItem"
           class="idl">
           <dt>readonly attribute unsigned long length</dt>
           <dd>
@@ -1996,7 +1988,7 @@
             <p>
               The type of synchronization provided by this animation group
               instance as specified by one of the <code>WEBA_SYNC_*</code>
-              constants defined on the WebAnimationGroup interface.
+              constants defined on the AnimGroup interface.
             </p>
             <p>
               Setting this value has the following effect:
@@ -2034,11 +2026,11 @@
               dispatches the appropriate events.
             </p>
           </dd>
-          <dt>readonly attribute WebAnimationGroup? template</dt>
+          <dt>readonly attribute AnimGroup? template</dt>
           <dd>
             For live animation group instances (see <a
             href="#creating-animations" class="sectionRef"></a>), the
-            <code>WebAnimationGroup</code> object from which this object was
+            <code>AnimGroup</code> object from which this object was
             minted.
             For independent animation group instances, this property is
             <code>null</code>.
@@ -2047,15 +2039,15 @@
           <dd>
             Removes all child timed items from the group.
           </dd>
-          <dt>WebTimedItem append (WebTimedItem newItem)</dt>
+          <dt>TimedItem append (TimedItem newItem)</dt>
           <dd>
             Add <code>newItem</code> as the last item in the group. If
             <code>newItem</code> already belongs to a group (including this
             group) it will first be removed from that group before being added
             to this group. Returns <code>newItem</code>.
           </dd>
-          <dt>WebTimedItem insertBefore (WebTimedItem newItem,
-            WebTimedItem? refItem)</dt>
+          <dt>TimedItem insertBefore (TimedItem newItem,
+            TimedItem? refItem)</dt>
           <dd>
             <p>
               Inserts <code>newItem</code> before the existing
@@ -2080,17 +2072,17 @@
               of this group.</li>
             </ul>
           </dd>
-          <dt>WebTimedItem? item (unsigned long index)</dt>
+          <dt>TimedItem? item (unsigned long index)</dt>
           <dd>
             Returns the item at <code>index</code>. If <code>index</code> is
             greater than or equal to <code>length</code> returns
             <code>null</code>. Equivalent to
-            <code>WebAnimationGroupInstance[index]</code>.
+            <code>AnimGroupInstance[index]</code>.
             <span class="todo">(Need to work out how to define this
               behavior&mdash;i.e. that you can use the subscript
               operator)</span>
           </dd>
-          <dt>WebTimedItem? remove (WebTimedItem removedItem)</dt>
+          <dt>TimedItem? remove (TimedItem removedItem)</dt>
           <dd>
             Removes <code>removedItem</code> from the group and returns it. If
             <code>removedItem</code> is not part of this group, returns
@@ -2113,20 +2105,20 @@
               already an independent animation group instance.
             </p>
           </dd>
-          <dt>sequence&lt;WebAnimationInstance&gt; getActiveAnimations ()</dt>
+          <dt>sequence&lt;AnimInstance&gt; getActiveAnimations ()</dt>
           <dd>
-            Returns all descendent <code>WebAnimationInstance</code> objects
+            Returns all descendent <code>AnimInstance</code> objects
             that are active.
             The returned sequence is a snapshot (i.e. not live) representing the
             state of animations that corresponds to the time returned by the
             <code>iterationTime</code> property of this
-            <code>WebAnimationGroupInstance</code> object when this method was
+            <code>AnimGroupInstance</code> object when this method was
             called.
           </dd>
-          <dt>sequence&lt;WebAnimationInstance&gt; getAnimationsForElement
+          <dt>sequence&lt;AnimInstance&gt; getAnimationsForElement
             (Element elem)</dt>
           <dd>
-            Returns all descendent <code>WebAnimationInstance</code> objects
+            Returns all descendent <code>AnimInstance</code> objects
             whose <code>targetElement</code> is <code>elem</code>.
             As with <code>getActiveAnimations</code>, the returned sequence is
             a snapshot (i.e. not live) representing the state of animation
@@ -2190,14 +2182,14 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebAnimationGroup</code> interface</h3>
+        <h3>The <code>AnimGroup</code> interface</h3>
         <p>
-          <code>WebAnimationGroupInstance</code> objects are not created
-          directly, but rather via a <code>WebAnimationGroup</code> object that
+          <code>AnimGroupInstance</code> objects are not created
+          directly, but rather via a <code>AnimGroup</code> object that
           acts as a template for creating animation group instances that target
           different elements.
         </p>
-        <dl title="[Constructor] interface WebAnimationGroup : WebTimedTemplate"
+        <dl title="[Constructor] interface AnimGroup : TimedTemplate"
           class="idl">
           <dt>const unsigned short WEBA_SYNC_PAR = 0</dt>
           <dd>
@@ -2222,7 +2214,7 @@
           <dd>
             Removes all child templates from the group.
           </dd>
-          <dt>WebTemplateItem append (WebTemplateItem newItem)</dt>
+          <dt>TemplateItem append (TemplateItem newItem)</dt>
           <dd>
             Add <code>newItem</code> as the last item in the group. If
             <code>newItem</code> already belongs to a group (including this
@@ -2231,8 +2223,8 @@
             <span class="todo">Is that necessary? For templates you could just
               make them share-able? But better to be consistent?</span>
           </dd>
-          <dt>WebTemplateItem insertBefore (WebTemplateItem newItem,
-            WebTemplateItem? refItem)</dt>
+          <dt>TemplateItem insertBefore (TemplateItem newItem,
+            TemplateItem? refItem)</dt>
           <dd>
             <p>
               Inserts <code>newItem</code> before the existing
@@ -2250,17 +2242,17 @@
               of this group.</li>
             </ul>
           </dd>
-          <dt>WebTemplateItem? item (unsigned long index)</dt>
+          <dt>TemplateItem? item (unsigned long index)</dt>
           <dd>
             Returns the item at <code>index</code>. If <code>index</code> is
             greater than or equal to <code>length</code> returns
             <code>null</code>. Equivalent to
-            <code>WebAnimationGroup[index]</code>.
+            <code>AnimGroup[index]</code>.
             <span class="todo">(Need to work out how to define this
               behavior&mdash;i.e. that you can use the subscript
               operator)</span>
           </dd>
-          <dt>WebTemplateItem? remove (WebTemplateItem removedItem)</dt>
+          <dt>TemplateItem? remove (TemplateItem removedItem)</dt>
           <dd>
             Removes <code>removedItem</code> from the group and returns it. If
             <code>removedItem</code> is not part of this group, returns
@@ -2274,22 +2266,22 @@
         </p>
       </section>
       <section>
-        <h3>Instantiating a <code>WebAnimationGroup</code></h3>
+        <h3>Instantiating an <code>AnimGroup</code></h3>
         <p>
-          The procedure for instantiating a <code>WebAnimationGroup</code>,
+          The procedure for instantiating an <code>AnimGroup</code>,
           <var>template</var>, given a list of target elements, and optionally
           given a <var>parent group</var>, is as follows:
         </p>
         <ol>
           <li>
-            Create an empty sequence of <code>WebAnimationGroupInstance</code>
+            Create an empty sequence of <code>AnimGroupInstance</code>
             objects.
           </li>
           <li>
             For each <var>element</var> in the list of target elements:
             <ol>
               <li>
-                Create a new <code>WebAnimationGroupInstance</code> object,
+                Create a new <code>AnimGroupInstance</code> object,
                 <var>group</var>.
               </li>
               <li>
@@ -2311,12 +2303,12 @@
               </li>
               <li>
                 Append <var>group</var> to the sequence of
-                <code>WebAnimationGroupInstance</code> objects.
+                <code>AnimGroupInstance</code> objects.
               </li>
             </ol>
           </li>
           <li>
-            Return the sequence of <code>WebAnimationGroupInstance</code>
+            Return the sequence of <code>AnimGroupInstance</code>
             objects.
           </li>
         </ol>
@@ -2328,15 +2320,15 @@
 
       <section class="informative">
       <p>
-        Each <code>WebAnimation</code> object contains an object which
-        subclasses <code>WebAnimationFunction</code>. These objects describe
+        Each <code>Anim</code> object contains an object which
+        subclasses <code>AnimFunction</code>. These objects describe
         how animation values should be calculated for the
-        <code>WebAnimation</code> for any given time.
+        <code>Anim</code> for any given time.
       </p>
       </section>
       <section>
-        <h3>The <code>WebAnimationFunction</code> interface</h3>
-        <dl title="[Constructor] interface WebAnimationFunction" class="idl">
+        <h3>The <code>AnimFunction</code> interface</h3>
+        <dl title="[Constructor] interface AnimFunction" class="idl">
           <dt>const unsigned short WEBA_OPERATION_REPLACE = 0</dt>
           <dd>
             This animation should replace the value it is composited with.
@@ -2351,7 +2343,7 @@
             This animation should merge with the value it is composited with.
             The meaning of merge is dependent on the type of animation.
             The duration of the merge is the calculated animation duration
-            of the <code>WebAnimation</code> containing this <code>WebAnimationFunction</code>.
+            of the <code>Anim</code> containing this <code>AnimFunction</code>.
           </dd>
           <dt>attribute unsigned short operation</dt>
           <dd>
@@ -2391,7 +2383,7 @@
         </dl>
       </section>
       <section>
-        <h3>The <code>WebKeyframesAnimationFunction</code> interface</h3>
+        <h3>The <code>KeyframesAnimFunction</code> interface</h3>
         <div class="todo">
           <p>
             It seems like it might even be
@@ -2423,17 +2415,17 @@
         <p>
           I think most of the members of the interface, perhaps all, should be
           readonly when this object is returned from
-          a <code>WebAnimationInstance</code> object. Objects returned from
-          a <code>WebAnimation</code>, however, are live.
+          an <code>AnimInstance</code> object. Objects returned from
+          an <code>Anim</code>, however, are live.
         </p>
         <p>
-          <dl title="[Constructor] interface WebKeyframesAnimationFunction : WebAnimationFunction" class="idl">
+          <dl title="[Constructor] interface KeyframesAnimFunction : AnimFunction" class="idl">
             <dt>attribute DOMString property</dt>
             <dd>
               The target attribute / property. <code>property</code> is probably
               a reserved word we should avoid though.
             </dd>
-            <dt>attribute WebAnimationFrameList frames</dt>
+            <dt>attribute AnimFrameList frames</dt>
             <dd>
               The series of values that make up this function sorted by their
               offset within the iteration duration of the animation.
@@ -2442,9 +2434,9 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebAnimationFrame</code> interface</h3>
+        <h3>The <code>AnimFrame</code> interface</h3>
         <p>
-          <dl title="[Constructor] interface WebAnimationFrame" class="idl">
+          <dl title="[Constructor] interface AnimFrame" class="idl">
             <dt>attribute any value</dt>
             <dd>
               The attribute / property value for the given frame
@@ -2455,7 +2447,7 @@
               the iteration duration of the animation where this value should
               appear. Ignored if we're using paced timing?<br>
               What happens if you change it? The array returned by the
-              <code>WebAnimationFunction</code> is updated? I guess that's fine
+              <code>AnimFunction</code> is updated? I guess that's fine
               if it's just an array. Any already-returned arrays wouldn't need
               to be updated.<br>
               What happens if you have two values with the same offset? It would
@@ -2463,7 +2455,7 @@
               in the air (since the more you leave undefined, the more you let
               the Web define it for you).
             </dd>
-            <dt>attribute WebTimingFunction timingFunction</dt>
+            <dt>attribute TimingFunction timingFunction</dt>
             <dd>
               The function to use for this segment. Would a string do here? E.g.
               "ease" or "cubic-bezier(1 0 0.3 1)"? Probably not. It's a little
@@ -2475,23 +2467,23 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebAnimationFrameList</code> interface</h3>
-        <dl title="interface WebAnimationFrameList" class="idl">
+        <h3>The <code>AnimFrameList</code> interface</h3>
+        <dl title="interface AnimFrameList" class="idl">
           <dt>readonly attribute unsigned long length</dt>
           <dd>
             The number of frames in the list.
           </dd>
-          <dt>WebAnimationFrameList? item(unsigned long index)</dt>
+          <dt>AnimFrameList? item(unsigned long index)</dt>
           <dd>
             Returns the frame at <code>index</code> if it exists or null.
           </dd>
-          <dt>WebAnimationFrameList? add(WebAnimationFrame frame)</dt>
+          <dt>AnimFrameList? add(AnimFrame frame)</dt>
           <dd>
             Adds <code>frame</code> to the list such that the list is sorted
             by the offset of the frames. If there's already a frame with the
             same offset? This one comes after?
           </dd>
-          <dt>WebAnimationFrameList? remove(unsigned long index)</dt>
+          <dt>AnimFrameList? remove(unsigned long index)</dt>
           <dd>
             Adds <code>frame</code> to the list such that the list is sorted
             by the offset of the frames. If there's already a frame with the
@@ -2501,15 +2493,15 @@
         <p>
           Not sure about the <code>remove</code> method. Do we want:
           <ul>
-            <li><code>remove(WebAnimationFrame frame)</code>?</li>
+            <li><code>remove(AnimFrame frame)</code>?</li>
             <li><code>removeAtOffset(unsigned long offset)</code>?</li>
             <li><code>itemAtOffset(unsigned long offset)</code>?</li>
           </ul>
         </p>
       </section>
       <section>
-        <h3>The <code>WebPathAnimationFunction</code> interface</h3>
-        <dl title="[Constructor] interface WebPathAnimationFunction : WebAnimationFunction" class="idl">
+        <h3>The <code>PathAnimFunction</code> interface</h3>
+        <dl title="[Constructor] interface PathAnimFunction : AnimFunction" class="idl">
           <dt>attribute SVGPathSegList segments</dt>
           <dd>
             The list of segments that make up this path.
@@ -2523,22 +2515,22 @@
         </dl>
       </section>
       <section>
-        <h3>The <code>WebGroupedAnimationFunction</code> interface</h3>
+        <h3>The <code>GroupedAnimFunction</code> interface</h3>
         <p>
-          The <code>WebGroupedAnimationFunction</code> interface represents a
+          The <code>GroupedAnimFunction</code> interface represents a
           set of animation functions that share the same
-          <code>WebAnimation</code> parent.
+          <code>Anim</code> parent.
         </p>
-        <dl title="[Constructor] interface WebGroupedAnimationFunction : WebAnimationFunction" class="idl">
+        <dl title="[Constructor] interface GroupedAnimFunction : AnimFunction" class="idl">
           <dt>readonly attribute unsigned long length</dt>
           <dd>
             The number of animation functions in the group.
           </dd>
-          <dt>WebAnimationFunction? item(unsigned long index)</dt>
+          <dt>AnimFunction? item(unsigned long index)</dt>
           <dd>
             Returns the function at <code>index</code> if it exists, or null.
           </dd>
-          <dt>void add(WebAnimationFunction function)</dt>
+          <dt>void add(AnimFunction function)</dt>
           <dd>
             Adds <code>function</code> to the group.
           </dd>
@@ -2607,10 +2599,10 @@
           </section>
           <section>              
             <h4>Calculating the iteration value for a 
-              <code>WebKeyframesAnimationFunction</code></h4>
+              <code>KeyframesAnimFunction</code></h4>
             <p>
-              When a <code>WebAnimation</code> contains a pointer to a
-              <code>WebKeyframesAnimationFunction</code>, the <var>animation
+              When an <code>Anim</code> contains a pointer to a
+              <code>KeyframesAnimFunction</code>, the <var>animation
               value</var> for that animation at given current time 
               <var>t</var> is calculated according to the following steps:
             </p>
@@ -2620,22 +2612,22 @@
               </li>
               <li>
                 Generate a <var>sorted frame list</var> by sorting the list of
-                <code>WebAnimationFrame</code> objects contained within the
-                <code>WebAnimationFrameList</code> object by their 
+                <code>AnimFrame</code> objects contained within the
+                <code>AnimFrameList</code> object by their 
                 <var>offset</var>.
                 If there are no frames in the <var>sorted frame list</var>
                 then no animation occurs and the <var>animation value</var> is
                 just the <var>baseVal</var> of the property being animated.
                 <p class="todo">
-                  Need to define the "<code>WebAnimationFrame</code> objects
-                  contained within the <code>WebAnimationFrameList</code>
+                  Need to define the "<code>AnimFrame</code> objects
+                  contained within the <code>AnimFrameList</code>
                   object" better.
                 </p>
               </li>
               <li>
                 Find the <var>after frame</var> by iterating through the 
                 <var>sorted frame list</var> until the last
-                <code>WebAnimationFrame</code> with an <var>offset</var>
+                <code>AnimFrame</code> with an <var>offset</var>
                 larger than the <var>current time fraction</var> is
                 encountered.
               </li>
@@ -2668,7 +2660,7 @@
                 The <var>local time function</var> is the
                 <var>timingFunction</var> of the <var>before frame</var>, if 
                 it exists; otherwise the <var>timingFunction</var> of the
-                <code>WebAnimationInstance</code> interface's
+                <code>AnimInstance</code> interface's
                 <var>timing</var> attribute.
               </li>
               <li>
@@ -2696,10 +2688,10 @@
           </section>
           <section>
             <h4>Calculating the iteration value for a 
-              <code>WebPathAnimationFunction</code></h4>
+              <code>PathAnimFunction</code></h4>
             <p>
-              When a <code>WebAnimation</code> contains a pointer to a
-              <code>WebPathAnimationFunction</code> and <var>rotate</var> is set
+              When an <code>Anim</code> contains a pointer to a
+              <code>PathAnimFunction</code> and <var>rotate</var> is set
               to false, the <var>animation value</var> for that animation at
               given current time <var>t</var> is the transform defined by a
               translation equal to the location on the path at <var>t</var>.
@@ -2728,15 +2720,15 @@
           </section>
           <section>
             <h4>Calculating the iteration value for a 
-              <code>WebGroupedAnimationFunction</code></h4>
+              <code>GroupedAnimFunction</code></h4>
             <p>
-              When a <code>WebAnimation</code> contains a pointer to a
-              <code>WebGroupedAnimationFunction</code>, the <var>animation
+              When an <code>Anim</code> contains a pointer to a
+              <code>GroupedAnimFunction</code>, the <var>animation
               value</var> for that animation at given current time <var>t</var> 
               is calculated by following the procedure outlined in
               <a href="#resolving-animation-stacks" class="sectionRef"></a>, 
-              treating the list of <code>WebAnimationFunction</code> objects 
-              contained within the <code>WebGroupedAnimationFunction</code> as 
+              treating the list of <code>AnimFunction</code> objects 
+              contained within the <code>GroupedAnimFunction</code> as 
               the animation stack and using an initial animation value 
               of 0 for all simple properties and id for transform.
             </p>
@@ -2780,7 +2772,7 @@
         <p>
           Other operations also generate animation stacks - for example, 
           grouping multiple animations using a 
-          <code>WebGroupedAnimationFunction</code>.
+          <code>GroupedAnimFunction</code>.
         </p>
         <p>
           An animation stack may be thought of as a single stack with all
@@ -2818,7 +2810,7 @@
           working up, as animation results are encountered for an element
           and property, these are merged into the cumulative animation result
           using the animation combinator stored in the 
-          <code>WebAnimationFunction</code> that generated the result.
+          <code>AnimFunction</code> that generated the result.
           Once all animation results in the stack are processed, the resulting
           cumulative animation values are the current animation values for
           each property of each element that is animated.
@@ -2832,7 +2824,7 @@
           cumulative animation result from the stack is composited with the new
           animation to produce a new cumulative animation result.
           The possible combinators are defined as <code>WEBA_OPERATION_*</code>
-          constants in the <code>WebAnimationFunction</code> interface.
+          constants in the <code>AnimFunction</code> interface.
         </p>
         <section>
           <h4>The REPLACE combinator</h4>
@@ -2872,8 +2864,8 @@
             All MERGE operators are governed by an interpolation parameter
             <code>p</code> that is calculated as the ratio of
             <code>(currentTime - parent.startTime) / parent.animationDuration</code>,
-            where <code>parent</code> is the <code>WebAnimation</code> which
-            references the <code>WebAnimationFunction</code> that is being
+            where <code>parent</code> is the <code>Anim</code> which
+            references the <code>AnimFunction</code> that is being
             composited.
           </p>
           <p>
@@ -2991,8 +2983,8 @@
         </p>
       </section>
       <section>
-        <h3>The <code>WebMediaItem</code> interface</h3>
-        <dl title="interface WebMediaItem : WebTimedItem" class="idl">
+        <h3>The <code>MediaItem</code> interface</h3>
+        <dl title="interface MediaItem : TimedItem" class="idl">
           <dt>attribute HTMLMediaElement element</dt>
           <dd>
             A pointer to the element?
@@ -3112,7 +3104,7 @@
         The definition of this member is given below.
       </p>
       <dl title="partial interface HTMLDocument" class="idl">
-        <dt>readonly attribute WebAnimationGroupInstance animationTimeline</dt>
+        <dt>readonly attribute AnimGroupInstance animationTimeline</dt>
         <dd>
           The animation group instance corresponding to the root of the
           document.
