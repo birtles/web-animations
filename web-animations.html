@@ -2299,7 +2299,7 @@
         how animation values should be calculated for the
         <code>WebAnimation</code> for any given time.
       </p>
-    </section>
+      </section>
       <section>
         <h3>The <code>WebAnimationFunction</code> interface</h3>
         <dl title="[Constructor] interface WebAnimationFunction" class="idl">
@@ -2539,103 +2539,129 @@
       </section>
       <section>
         <h3>Calculating animation values</h3>
-          <p class="todo">
-            Need to work out how accumulateOp works here. In particular,
-            with a path with rotate="auto" and an accumulateOperation of 
-            ACCUMULATE, should each subsequent iteration of the path be
-            oriented in the final orientation of the previous iteration?
-          </p>
-          <section>              
-            <h4>Calculating the animation value for a 
-              <code>WebKeyframesAnimationFunction</code></h4>
-              When a <code>WebAnimation</code> contains a pointer to a
-              <code>WebKeyframesAnimationFunction</code>, the <var>animation
-              value</var> for that animation at given current time <var>t</var>
-              is calculated according to the following steps:
-
-              <ol>
-                <li>
-                  Convert <var>t</var> to the <var>current time fraction</var>.
-                </li>
-                <li>
-                  Generate a <var>sorted frame list</var> by sorting the list of
-                  <code>WebAnimationFrame</code> objects contained within the
-                  <code>WebAnimationFrameList</code> object by their 
-                  <var>offset</var>.
-                  If there are no frames in the <var>sorted frame list</var>
-                  then no animation occurs and the <var>animation value</var> is
-                  just the <var>baseVal</var> of the property being animated.
-                  <p class="todo">
-                    Need to define the "<code>WebAnimationFrame</code> objects
-                    contained within the <code>WebAnimationFrameList</code>
-                    object" better.
-                  </p>
-                </li>
-                <li>
-                  Find the <var>after frame</var> by iterating through the 
-                  <var>sorted frame list</var> until the last
-                  <code>WebAnimationFrame</code> with an <var>offset</var>
-                  larger than the <var>current time fraction</var> is
-                  encountered.
-                </li>
-                <li>
-                  If the <var>after frame</var> is the first frame in the
-                  <var>sorted frame list</var>, then construct a 
-                  <var>before frame</var> with an <var>offset</var> of 0 and a
-                  value equal to the <var>baseVal</var> of the property being
-                  animated.
-                  <p class="todo">
-                    Need to define baseVal and animVal somewhere.
-                  </p>
-                </li>
-                <li>
-                  If the <var>after frame</var> does not exist (i.e. all frames
-                  have an <var>offset</var> less than the <var>current time 
-                  fraction</var>) then construct an <var>after frame</var> with
-                  an <var>offset</var> of 1 and a value equal to the
-                  <var>baseVal</var> of the property being animated, and
-                  Set the <var>before frame</var> to the last frame in the 
-                  <var>sorted frame list</var>.
-                </li> 
-                <li>
-                  Otherwise (the <var>after frame</var> exists and is not the
-                  first frame in the <var>sorted frame list</var>) ste the 
-                  <var>before frame</var> to the frame immediately prior to the
-                  <var>after frame</var> in the <var>sorted frame list</var>.
-                </li>
-                <li>
-                  The <var>local time function</var> is the
-                  <var>timingFunction</var> of the <var>before frame</var>, if 
-                  it exists; otherwise the <var>timingFunction</var> of the
-                  <code>WebAnimationInstance</code> interface's
-                  <var>timing</var> attribute.
-                </li>
-                <li>
-                  Find the <var>local time fraction</var> by subtracting
-                  the <var>offset</var> of the <var>before frame</var> from
-                  the <var>current time fraction</var>, then dividing the result
-                  by the difference between the <var>offset</var> of the
-                  <var>after frame</var> and the <var>offset</var> of the
-                  <var>before frame</var>.
-                <li>
-                  Calculate the <var>effective time fraction</var> by applying
-                  the <var>local time function</var> to the <var>local time
-                  fraction</var>.
-                <li>
-                  Calculate the <var>animation value</var> by linearly 
-                  interpolating the values of the <var>before frame</var> and
-                  <var>after frame</var>, using the 
-                  <var>effective time fraction</var> as interpolation parameter.
-                  <p class="todo">
-                    Need a rigorous definition of linear interpolation - could
-                    just reference the relevant specifications.
-                  </p>
-              </ol>
-
+          <section>
+            <h4>Calculating the animation value from an iteration value</h4>
+            <p>
+              If the <var>current iteration</var> is zero, or the 
+              <var>accumulateOperation</var> is
+               <code>WEBA_OPERATION_REPLACE</code>, then the 
+               <var>animation value</var> is simply the iteration value, as
+              defined below.
+            </p>
+            <p>
+              When the animation time equals the iteration duration for the 
+              first time for an animation, the current 
+              <var>animation value</var> should be retained as the
+              <var>end value</var> for the animation.
+            </p>
+            <p>
+              If the <var>current iteration</var> is not zero and the
+              <var>accumulateOperation</var> is
+              <code>WEBA_OPERATION_ACCUMULATE</code> then the 
+              <var>animation value</var> is the <var>end value</var> accumulated 
+              <var>current iteration</var> times, with the 
+              <var>iteration value</var> accumulated on top.
+            </p>
+            <p>
+              If the <var>current iteration</var> is not zero and the
+              <var>accumulateOperation</var> is
+              <code>WEBA_OPERATION_MERGE</code> then the
+              <var>animation balue</var> is the <var>end value</var> merged
+              with the <var>iteration value</var>, with an interpolation
+              parameter equal to the current <var>time fraction</var>
             </p>
           </section>
+          <section>              
+            <h4>Calculating the iteration value for a 
+              <code>WebKeyframesAnimationFunction</code></h4>
+            <p>
+              When a <code>WebAnimation</code> contains a pointer to a
+              <code>WebKeyframesAnimationFunction</code>, the <var>animation
+              value</var> for that animation at given current time 
+              <var>t</var> is calculated according to the following steps:
+            </p>
+            <ol>
+              <li>
+                Convert <var>t</var> to the <var>current time fraction</var>.
+              </li>
+              <li>
+                Generate a <var>sorted frame list</var> by sorting the list of
+                <code>WebAnimationFrame</code> objects contained within the
+                <code>WebAnimationFrameList</code> object by their 
+                <var>offset</var>.
+                If there are no frames in the <var>sorted frame list</var>
+                then no animation occurs and the <var>animation value</var> is
+                just the <var>baseVal</var> of the property being animated.
+                <p class="todo">
+                  Need to define the "<code>WebAnimationFrame</code> objects
+                  contained within the <code>WebAnimationFrameList</code>
+                  object" better.
+                </p>
+              </li>
+              <li>
+                Find the <var>after frame</var> by iterating through the 
+                <var>sorted frame list</var> until the last
+                <code>WebAnimationFrame</code> with an <var>offset</var>
+                larger than the <var>current time fraction</var> is
+                encountered.
+              </li>
+              <li>
+                If the <var>after frame</var> is the first frame in the
+                <var>sorted frame list</var>, then construct a 
+                <var>before frame</var> with an <var>offset</var> of 0 and a
+                value equal to the <var>baseVal</var> of the property being
+                animated.
+                <p class="todo">
+                  Need to define baseVal and animVal somewhere.
+                </p>
+              </li>
+              <li>
+                If the <var>after frame</var> does not exist (i.e. all frames
+                have an <var>offset</var> less than the <var>current time 
+                fraction</var>) then construct an <var>after frame</var> with
+                an <var>offset</var> of 1 and a value equal to the
+                <var>baseVal</var> of the property being animated, and
+                Set the <var>before frame</var> to the last frame in the 
+                <var>sorted frame list</var>.
+              </li> 
+              <li>
+                Otherwise (the <var>after frame</var> exists and is not the
+                first frame in the <var>sorted frame list</var>) ste the 
+                <var>before frame</var> to the frame immediately prior to the
+                <var>after frame</var> in the <var>sorted frame list</var>.
+              </li>
+              <li>
+                The <var>local time function</var> is the
+                <var>timingFunction</var> of the <var>before frame</var>, if 
+                it exists; otherwise the <var>timingFunction</var> of the
+                <code>WebAnimationInstance</code> interface's
+                <var>timing</var> attribute.
+              </li>
+              <li>
+                Find the <var>local time fraction</var> by subtracting
+                the <var>offset</var> of the <var>before frame</var> from
+                the <var>current time fraction</var>, then dividing the result
+                by the difference between the <var>offset</var> of the
+                <var>after frame</var> and the <var>offset</var> of the
+                <var>before frame</var>.
+              <li>
+                Calculate the <var>effective time fraction</var> by applying
+                the <var>local time function</var> to the <var>local time
+                fraction</var>.
+              <li>
+                Calculate the <var>animation value</var> by linearly 
+                interpolating the values of the <var>before frame</var> and
+                <var>after frame</var>, using the 
+                <var>effective time fraction</var> as interpolation parameter.
+                <p class="todo">
+                  Need a rigorous definition of linear interpolation - could
+                  just reference the relevant specifications.
+                </p>
+              </li>
+            </ol>
+          </section>
           <section>
-            <h4>Calculating the animation value for a 
+            <h4>Calculating the iteration value for a 
               <code>WebPathAnimationFunction</code></h4>
             <p>
               When a <code>WebAnimation</code> contains a pointer to a
@@ -2667,7 +2693,7 @@
 
           </section>
           <section>
-            <h4>Calculating the animation value for a 
+            <h4>Calculating the iteration value for a 
               <code>WebGroupedAnimationFunction</code></h4>
             <p>
               When a <code>WebAnimation</code> contains a pointer to a
@@ -2681,6 +2707,7 @@
               of 0 for all simple properties and id for transform.
             </p>
           </section>
+        </section>
       <p>
         Need to add:
         <ul>
@@ -2879,6 +2906,48 @@
 
     <section>
       <h2>Synchronizing with media</h2>
+      <div class="feedbackWanted">
+        <p>
+          We want to model synchronizing with media as forcing the pause/play 
+          and current time state of content to be synchronized to match the 
+          state of the media. There are two basic possibilities here:
+        </p>
+        <ol>
+          <li>
+            <p>
+              Create a container type that causes all contained items to have
+              synchronized pause/play and current time state. The pause state
+              of such containers would be the union of pause states of children,
+              and calls to set the current time of any child would be diverted
+              to modify the current time of the parent instead.
+            </p>
+            <p>
+              Note that this could be a completely new container type 
+              (e.g. a "synchronized" or "media" container) or an optional
+              parameter modifying existing container types.
+          </li>
+          <li>
+            <p>
+              Add an option to the children that, when set, causes them to be
+              synchronized to the parent state. The pause state of the parent 
+              would need to take the pause state of synchronized children into 
+              account. Calls to set the current time of synchronized children 
+              would be diverted to modify the current time of the parent
+              instead.
+            </p>
+              <p>
+                If this model is adopted, media can be synchronized to the 
+                parent state, causing network-derived delays to propagate to the
+                parent container and hence all children of that container;
+                however other children of the container could still be
+                independently played/paused/seeked.
+              </p>
+          </li>
+        </ol>
+        <p>
+          Which model is better? Are there alternatives we should consider too?
+        </p>
+      </div>
       <section>
         <h3>The intrinsic duration of a media item</h3>
         <p class="todo">
