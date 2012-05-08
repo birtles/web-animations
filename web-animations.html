@@ -432,212 +432,210 @@
           animation groups
           (see <a href="#grouping-and-synchronization" class="sectionRef"></a>).
         </p>
-        <p>
-          <dl title="[Constructor] interface WebTimedTemplate" class="idl">
-            <dt>attribute WebTiming timing</dt>
-            <dd>
-              The timing parameters to use for generated timed items.
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animate ()</dt>
-            <dd>
-              <p>
-                Creates an independent <code>WebTimedItem</code> and appends it
-                to <code>element.ownerDocument.animationTimeline</code>.
-              </p>
-              <p>
-                This allows the following sort of usage:
-              </p>
-              <pre class="example sh_javascript">
-                anim.animate(document.getElementById("a"));
-              </pre>
-              <dl class="parameters">
-                <dt>Element target</dt>
-                <dd>
-                  The <code>Element</code> to be targetted.
-                </dd>
-                <dt>optional float startTime</dt>
-                <dd>
-                  <p>
-                    The start time for the generated animation instances
-                    expressed in seconds in the iteration time space of the
-                    <code>WebAnimationGroupInstance</code> to which it is
-                    appended (see <a href="#iteration-time-and-animation-time"
-                      class="sectionRef"></a>).
-                  </p>
-                  <p>
-                    If this parameter is not specified it will default to the
-                    current iteration time of the
-                    <code>WebAnimationGroupInstance</code> to which it is
-                    appended if it is not <code>null</code>, otherwise it will
-                    default to zero.
-                  </p>
-                </dd>
-              </dl>
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animate ()</dt>
-            <dd>
-              <p>
-                Creates a series of independent <code>WebTimedItem</code>
-                objects, one for each element in <code>target</code>.
-                As with <code>animate(Element target, float startTime)</code>
-                each such <code>WebTimedItem</code> object is appended
-                to <code>element.ownerDocument.animationTimeline</code>.
-              </p>
-              <p>
-                This allows the following sort of usage:
-              </p>
-              <pre class="example sh_javascript">
-    anim.animate([document.getElementById("a"), document.getElementById("b")]);
-              </pre>
-              <dl class="parameters">
-                <dt>Element[] target</dt>
-                <dd>
-                  An array of <code>Element</code>s to be animated.
-                </dd>
-                <dt>optional float startTime</dt>
-                <dd>
-                  As with <code>animate(Element target, optional float
-                    startTime)</code>.
-                </dd>
-              </dl>
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animate ()</dt>
-            <dd>
-              <p>
-                Creates a series of independent <code>WebTimedItem</code>
-                objects, one for each element in <code>target</code>.
-                As with <code>animate(Element target, float startTime)</code>
-                each such <code>WebTimedItem</code> object is appended
-                to <code>element.ownerDocument.animationTimeline</code>.
-              </p>
-              <p>
-                This allows the following sort of usage:
-              </p>
-              <pre class="example sh_javascript">
-                anim.animate(document.querySelectorAll("div.warning"));
-              </pre>
-              <dl class="parameters">
-                <dt>NodeList target</dt>
-                <dd>
-                  A NodeList containing the <code>Element</code>s to be
-                  animated.
-                  All nodes in the list that are not of type
-                  <code>ELEMENT_NODE</code> are ignored.
-                </dd>
-                <dt>optional float startTime</dt>
-                <dd>
-                  As with <code>animate(Element target, optional float
-                    startTime)</code>.
-                </dd>
-              </dl>
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animateWithParent ()</dt>
-            <dd>
-              <p>
-                Similar to <code>animate</code>, this method creates
-                independent <code>WebTimedItem</code> object(s) for the
-                elements in <code>target</code>.
-                However, the resulting items are appended to the given
-                <code>parentGroup</code>, if provided.
-                If <code>parentGroup</code> is <code>null</code>, the
-                <code>WebTimedItem</code> objects will not be added to any
-                group.
-              </p>
-              <dl class="parameters">
-                <dt>Element target</dt>
-                <dd>
-                  As with <code>animate</code>.
-                </dd>
-                <dt>WebAnimationGroupInstance? parentGroup</dt>
-                <dd>
-                  The animation group instance to which animation instances
-                  should be appended.
-                </dd>
-                <dt>optional float startTime</dt>
-                <dd>
-                  <p>
-                    The start time for the generated animation instances
-                    expressed in seconds in the iteration time space of the
-                    <code>WebAnimationGroupInstance</code> to which it is
-                    appended (see <a href="#iteration-time-and-animation-time"
-                      class="sectionRef"></a>).
-                  </p>
-                  <p>
-                    If this parameter is not specified it will default to the
-                    current iteration time of <code>parentGroup</code>.
-                    If <code>parentGroup</code> is <code>null</code>,
-                    this parameter will default to zero.
-                  </p>
-                </dd>
-              </dl>
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animateWithParent (
-              Element[] target,
+        <dl title="[Constructor] interface WebTimedTemplate" class="idl">
+          <dt>attribute WebTiming timing</dt>
+          <dd>
+            The timing parameters to use for generated timed items.
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animate ()</dt>
+          <dd>
+            <p>
+              Creates an independent <code>WebTimedItem</code> and appends it
+              to <code>element.ownerDocument.animationTimeline</code>.
+            </p>
+            <p>
+              This allows the following sort of usage:
+            </p>
+            <pre class="example sh_javascript">
+              anim.animate(document.getElementById("a"));
+            </pre>
+            <dl class="parameters">
+              <dt>Element target</dt>
+              <dd>
+                The <code>Element</code> to be targetted.
+              </dd>
+              <dt>optional float startTime</dt>
+              <dd>
+                <p>
+                  The start time for the generated animation instances
+                  expressed in seconds in the iteration time space of the
+                  <code>WebAnimationGroupInstance</code> to which it is
+                  appended (see <a href="#iteration-time-and-animation-time"
+                    class="sectionRef"></a>).
+                </p>
+                <p>
+                  If this parameter is not specified it will default to the
+                  current iteration time of the
+                  <code>WebAnimationGroupInstance</code> to which it is
+                  appended if it is not <code>null</code>, otherwise it will
+                  default to zero.
+                </p>
+              </dd>
+            </dl>
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animate ()</dt>
+          <dd>
+            <p>
+              Creates a series of independent <code>WebTimedItem</code>
+              objects, one for each element in <code>target</code>.
+              As with <code>animate(Element target, float startTime)</code>
+              each such <code>WebTimedItem</code> object is appended
+              to <code>element.ownerDocument.animationTimeline</code>.
+            </p>
+            <p>
+              This allows the following sort of usage:
+            </p>
+            <pre class="example sh_javascript">
+  anim.animate([document.getElementById("a"), document.getElementById("b")]);
+            </pre>
+            <dl class="parameters">
+              <dt>Element[] target</dt>
+              <dd>
+                An array of <code>Element</code>s to be animated.
+              </dd>
+              <dt>optional float startTime</dt>
+              <dd>
+                As with <code>animate(Element target, optional float
+                  startTime)</code>.
+              </dd>
+            </dl>
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animate ()</dt>
+          <dd>
+            <p>
+              Creates a series of independent <code>WebTimedItem</code>
+              objects, one for each element in <code>target</code>.
+              As with <code>animate(Element target, float startTime)</code>
+              each such <code>WebTimedItem</code> object is appended
+              to <code>element.ownerDocument.animationTimeline</code>.
+            </p>
+            <p>
+              This allows the following sort of usage:
+            </p>
+            <pre class="example sh_javascript">
+              anim.animate(document.querySelectorAll("div.warning"));
+            </pre>
+            <dl class="parameters">
+              <dt>NodeList target</dt>
+              <dd>
+                A NodeList containing the <code>Element</code>s to be
+                animated.
+                All nodes in the list that are not of type
+                <code>ELEMENT_NODE</code> are ignored.
+              </dd>
+              <dt>optional float startTime</dt>
+              <dd>
+                As with <code>animate(Element target, optional float
+                  startTime)</code>.
+              </dd>
+            </dl>
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animateWithParent ()</dt>
+          <dd>
+            <p>
+              Similar to <code>animate</code>, this method creates
+              independent <code>WebTimedItem</code> object(s) for the
+              elements in <code>target</code>.
+              However, the resulting items are appended to the given
+              <code>parentGroup</code>, if provided.
+              If <code>parentGroup</code> is <code>null</code>, the
+              <code>WebTimedItem</code> objects will not be added to any
+              group.
+            </p>
+            <dl class="parameters">
+              <dt>Element target</dt>
+              <dd>
+                As with <code>animate</code>.
+              </dd>
+              <dt>WebAnimationGroupInstance? parentGroup</dt>
+              <dd>
+                The animation group instance to which animation instances
+                should be appended.
+              </dd>
+              <dt>optional float startTime</dt>
+              <dd>
+                <p>
+                  The start time for the generated animation instances
+                  expressed in seconds in the iteration time space of the
+                  <code>WebAnimationGroupInstance</code> to which it is
+                  appended (see <a href="#iteration-time-and-animation-time"
+                    class="sectionRef"></a>).
+                </p>
+                <p>
+                  If this parameter is not specified it will default to the
+                  current iteration time of <code>parentGroup</code>.
+                  If <code>parentGroup</code> is <code>null</code>,
+                  this parameter will default to zero.
+                </p>
+              </dd>
+            </dl>
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animateWithParent (
+            Element[] target,
+            WebAnimationGroupInstance? parentGroup,
+            optional float startTime)</dt>
+          <dd>
+            As with <code>animateWithParent(Element target,
               WebAnimationGroupInstance? parentGroup,
-              optional float startTime)</dt>
-            <dd>
-              As with <code>animateWithParent(Element target,
-                WebAnimationGroupInstance? parentGroup,
-                optional float startTime)</code> except
-              one <code>WebTimedItem</code> is created for each
-              <code>Element</code> in <code>target</code>.
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animateWithParent (
-              NodeList target,
+              optional float startTime)</code> except
+            one <code>WebTimedItem</code> is created for each
+            <code>Element</code> in <code>target</code>.
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animateWithParent (
+            NodeList target,
+            WebAnimationGroupInstance? parentGroup,
+            optional float startTime)</dt>
+          <dd>
+            As with <code>animateWithParent(Element target,
               WebAnimationGroupInstance? parentGroup,
-              optional float startTime)</dt>
-            <dd>
-              As with <code>animateWithParent(Element target,
-                WebAnimationGroupInstance? parentGroup,
-                optional float startTime)</code> except
-              one <code>WebTimedItem</code> is created for each
-              <code>Node</code> in <code>target</code> that is of type
-              <code>ELEMENT_NODE</code>.
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animateLive (Element target,
-              optional float startTime)</dt>
-            <dd>
-              As with <code>animate</code> with the exception that the
-              <code>WebTimedItem</code> objects generated by this method are
-              live.
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animateLive (Element[] target,
-              optional float startTime)</dt>
-            <dd>
-              As with <code>animate</code> with the exception that the
-              <code>WebTimedItem</code> objects generated by this method are
-              live.
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animateLive (NodeList target,
-              optional float startTime)</dt>
-            <dd>
-              As with <code>animate</code> with the exception that the
-              <code>WebTimedItem</code> objects generated by this method are
-              live.
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animateLiveWithParent
-              (Element target, WebAnimationGroupInstance? parentGroup,
-               optional float startTime)</dt>
-            <dd>
-              As with <code>animateWithParent</code> with the exception that the
-              animation instances generated by this method are live.
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animateLiveWithParent
-              (Element[] target, WebAnimationGroupInstance? parentGroup,
-               optional float startTime)</dt>
-            <dd>
-              As with <code>animateWithParent</code> with the exception that the
-              animation instances generated by this method are live.
-            </dd>
-            <dt>sequence&lt;WebTimedItem&gt; animateLiveWithParent
-              (NodeList target, WebAnimationGroupInstance? parentGroup,
-               optional float startTime)</dt>
-            <dd>
-              As with <code>animateWithParent</code> with the exception that the
-              animation instances generated by this method are live.
-            </dd>
-          </dl>
-        </p>
+              optional float startTime)</code> except
+            one <code>WebTimedItem</code> is created for each
+            <code>Node</code> in <code>target</code> that is of type
+            <code>ELEMENT_NODE</code>.
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animateLive (Element target,
+            optional float startTime)</dt>
+          <dd>
+            As with <code>animate</code> with the exception that the
+            <code>WebTimedItem</code> objects generated by this method are
+            live.
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animateLive (Element[] target,
+            optional float startTime)</dt>
+          <dd>
+            As with <code>animate</code> with the exception that the
+            <code>WebTimedItem</code> objects generated by this method are
+            live.
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animateLive (NodeList target,
+            optional float startTime)</dt>
+          <dd>
+            As with <code>animate</code> with the exception that the
+            <code>WebTimedItem</code> objects generated by this method are
+            live.
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animateLiveWithParent
+            (Element target, WebAnimationGroupInstance? parentGroup,
+             optional float startTime)</dt>
+          <dd>
+            As with <code>animateWithParent</code> with the exception that the
+            animation instances generated by this method are live.
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animateLiveWithParent
+            (Element[] target, WebAnimationGroupInstance? parentGroup,
+             optional float startTime)</dt>
+          <dd>
+            As with <code>animateWithParent</code> with the exception that the
+            animation instances generated by this method are live.
+          </dd>
+          <dt>sequence&lt;WebTimedItem&gt; animateLiveWithParent
+            (NodeList target, WebAnimationGroupInstance? parentGroup,
+             optional float startTime)</dt>
+          <dd>
+            As with <code>animateWithParent</code> with the exception that the
+            animation instances generated by this method are live.
+          </dd>
+        </dl>
       </section>
     </section>
 
