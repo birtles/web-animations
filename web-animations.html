@@ -2238,7 +2238,7 @@
         how animation values should be calculated for the
         <code>WebAnimation</code> for any given time.
       </p>
-    </section>
+      </section>
       <section>
         <h3>The <code>WebAnimationFunction</code> interface</h3>
         <dl title="[Constructor] interface WebAnimationFunction" class="idl">
@@ -2646,6 +2646,7 @@
               of 0 for all simple properties and id for transform.
             </p>
           </section>
+        </section>
       <p>
         Need to add:
         <ul>
@@ -2844,6 +2845,48 @@
 
     <section>
       <h2>Synchronizing with media</h2>
+      <div class="feedbackWanted">
+        <p>
+          We want to model synchronizing with media as forcing the pause/play 
+          and current time state of content to be synchronized to match the 
+          state of the media. There are two basic possibilities here:
+        </p>
+        <ol>
+          <li>
+            <p>
+              Create a container type that causes all contained items to have
+              synchronized pause/play and current time state. The pause state
+              of such containers would be the union of pause states of children,
+              and calls to set the current time of any child would be diverted
+              to modify the current time of the parent instead.
+            </p>
+            <p>
+              Note that this could be a completely new container type 
+              (e.g. a "synchronized" or "media" container) or an optional
+              parameter modifying existing container types.
+          </li>
+          <li>
+            <p>
+              Add an option to the children that, when set, causes them to be
+              synchronized to the parent state. The pause state of the parent 
+              would need to take the pause state of synchronized children into 
+              account. Calls to set the current time of synchronized children 
+              would be diverted to modify the current time of the parent
+              instead.
+            </p>
+              <p>
+                If this model is adopted, media can be synchronized to the 
+                parent state, causing network-derived delays to propagate to the
+                parent container and hence all children of that container;
+                however other children of the container could still be
+                independently played/paused/seeked.
+              </p>
+          </li>
+        </ol>
+        <p>
+          Which model is better? Are there alternatives we should consider too?
+        </p>
+      </div>
       <section>
         <h3>The intrinsic duration of a media item</h3>
         <p class="todo">
