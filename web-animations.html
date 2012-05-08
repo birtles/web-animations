@@ -1822,7 +1822,7 @@
           After they have finished the next child of the sequence group plays.
         </p>
         <p>
-          Web Animations defines three types of animation groups.
+          Web Animations defines two types of animation groups.
         </p>
         <dl>
           <dt>Parallel groups</dt>
@@ -1840,13 +1840,6 @@
             the time calculated using the procedure in <a
               href="#calculating-the-start-time-of-children-of-a-sequence-group"
               class="sectionRef"></a>.
-          </dd>
-          <dt>Media groups</dt>
-          <dd>
-            Children of the group play simultaneously as with parallel groups,
-            however, any seek or pause operations performed on a child of
-            a media group are delegated to the group itself. As such, all
-            children remain in strict synchronization.
           </dd>
         </dl>
         <p class="todo">
@@ -2015,16 +2008,22 @@
                 Seek the container time to the previously recorded time.
               </li>
             </ol>
-            <p class="feedbackWanted">
-              Note that a consequence of the above is that, for example, if you
-              change a container from type <code>par</code> to
-              <code>mediaGroup</code> you could potentially generate a lot of
-              end events followed by a lot of begin events despite the fact that
-              the animation might not produce any different visual result. We
-              could change the behavior so that it effectively records the
-              play state of each item before and then after the "seek"
-              dispatches the appropriate events.
-            </p>
+            <div class="feedbackWanted">
+              <p>
+                Note that a consequence of the above is that, for example, if
+                you change a container from type <code>par</code> to
+                <code>seq</code> you could potentially generate a lot of end
+                events followed by a lot of begin events despite the fact that
+                the animation might not produce any different visual result. We
+                could change the behavior so that it effectively records the
+                play state of each item before and then after the "seek"
+                dispatches the appropriate events.
+              </p>
+              <p>
+                Actually, I think we're just going to end up subclassing groups
+                based on type. It solves lots of problems
+              </p>
+            </div>
           </dd>
           <dt>readonly attribute AnimGroup? template</dt>
           <dd>
@@ -2142,10 +2141,6 @@
             Sum all the animation durations + start delays (including
             negatives)
           </dd>
-          <dt>If the type is media group</dt>
-          <dd>
-            Same as parallel
-          </dd>
         </dl>
       </section>
       <section>
@@ -2198,10 +2193,6 @@
           <dt>const unsigned short WEBA_SYNC_SEQ = 1</dt>
           <dd>
             Sequence synchronization.
-          </dd>
-          <dt>const unsigned short WEBA_SYNC_MEDIA = 2</dt>
-          <dd>
-            Media group synchronization.
           </dd>
           <dt>attribute unsigned short type</dt>
           <dd>
