@@ -382,17 +382,17 @@
         anim.timing.duration = 1;
 
         // Create a live instance
-        var instance = a.animateLive(document.getElementById('a'));
-        alert(instance.timing.duration); // Displays "1"
+        var instance = anim.animateLive(document.getElementById('a'));
+        alert(instance.timing.iterationDuration); // Displays "1"
 
         // Modify the animation
         anim.timing.duration = 2;
-        alert(instance.timing.duration); // Displays "2"
+        alert(instance.timing.iterationDuration); // Displays "2"
 
         // Modify both the animation and instance
-        instance.timing.duration = 3;    // instance is now independent
-        anim.timing.duration = 4;
-        alert(instance.timing.duration); // Displays "3"
+        instance.timing.iterationDuration = 3;    // instance is now independent
+        anim.timing.iterationDuration = 4;
+        alert(instance.timing.iterationDuration); // Displays "3"
       </pre>
       <section>
         <h3>The <code>Anim</code> interface</h3>
