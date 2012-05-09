@@ -2027,6 +2027,27 @@
               behavior&mdash;i.e. that you can use the subscript
               operator)</span>
           </dd>
+				  <dt>unsigned long indexOf (TimedItem item)</dt>
+				  <dd>
+				  	Opposite to <code>item()</code> method, returns index of the
+						<code>item</code>. If <code>item</code> is not in the group,
+						returns <code>-1</code>.
+				  </dd>
+				  <dt>
+						array splice (unsigned long start, unsigned long deleteCount,
+						TimedItem item1?, TimedItem item2?, )
+					</dt>
+				  <dd>
+						<!-- pretty much copied from ECMAScript description of splice method for
+						array: Array.prototype.splice -->
+				  	When the <code>splice</code> method is called with two or more
+						arguments <code>start</code>, <code>deleteCount</code> and (optionally)
+						<code>item1</code>, <code>item2</code>, etc., the
+						<code>deleteCount</code> elements of the group starting at group index
+						<code>start</code> are replaced by the arguments <code>item1</code>,
+						<code>item2</code>, etc. An Array object containing the deleted elements
+						(if any) is returned.
+				  </dd>
           <dt>TimedItem? remove (TimedItem removedItem)</dt>
           <dd>
             Removes <code>removedItem</code> from the group and returns it. If
